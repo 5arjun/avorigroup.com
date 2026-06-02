@@ -21,11 +21,11 @@ const slug = (s: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
-// Converts a folder name like "100'-Azimut-Jumbo" into the file slug "100-azimut-jumbo"
+// Converts a folder name into the file slug — strips both straight and curly apostrophes
 const folderToSlug = (folder: string) =>
   folder
     .toLowerCase()
-    .replace(/'/g, "")   // strip apostrophes
+    .replace(/['']/g, "")   // strip straight + curly apostrophes
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
@@ -40,8 +40,8 @@ const r2Car = (folder: string, count: number): MediaItem[] => {
 
 // ─── YACHT helper ─────────────────────────────────────────────────────────────
 // NOTE: The R2 bucket folder is "yacths" (typo) — do not change this constant.
-// Folder names keep apostrophes (e.g. "100'-Azimut-Jumbo") but filenames
-// inside drop them (e.g. "100-azimut-jumbo-1.webp"), so we use folderToSlug().
+// Some folder names use curly apostrophes ('), others use straight (').
+// folderToSlug() strips both for the filename slug.
 const R2_YACHTS = `${R2}/yacths`;
 
 const r2Yacht = (
@@ -70,6 +70,8 @@ const r2Yacht = (
 };
 
 // ─── YACHTS ───────────────────────────────────────────────────────────────────
+// NOTE: folder names must exactly match the R2 bucket folder names.
+// Curly apostrophe (') = %E2%80%99, straight (') = %27 — they are different!
 const yachtsRaw: {
   name: string;
   folder: string;
@@ -81,16 +83,16 @@ const yachtsRaw: {
   { name: "100' Azimut Jumbo",       folder: "100'-Azimut-Jumbo",      length: "100 ft", experience: "Day & Overnight",  images: 99, videos: 0 },
   { name: "128' Angeles III",         folder: "128'-Angeles-III",        length: "128 ft", experience: "Day & Overnight",  images: 42, videos: 0 },
   { name: "130' Azimut",              folder: "130'-Azimut",             length: "130 ft", experience: "Overnight Charter", images: 86, videos: 1 },
-  { name: "48' Princess Gazzela",     folder: "48'-Princess-Gazzela",    length: "48 ft",  experience: "Day Charter",       images: 19, videos: 1 },
+  { name: "48' Princess Gazzela",     folder: "48\u2019-Princess-Gazzela",    length: "48 ft",  experience: "Day Charter",       images: 19, videos: 1 },
   { name: "50' Flybridge",            folder: "50'-Flybridge",           length: "50 ft",  experience: "Day Charter",       images: 15, videos: 1 },
   { name: "53' 2025 Galeon",          folder: "53'-2025-Galeon",         length: "53 ft",  experience: "Day Charter",       images: 33, videos: 0 },
-  { name: "70' Money Wave",           folder: "70'-Money-Wave",          length: "70 ft",  experience: "Day Charter",       images: 16, videos: 3 },
+  { name: "70' Money Wave",           folder: "70\u2019-Money-Wave",          length: "70 ft",  experience: "Day Charter",       images: 16, videos: 3 },
   { name: "75' Aicon",                folder: "75'-Aicon",               length: "75 ft",  experience: "Day Charter",       images: 19, videos: 3 },
   { name: "75' Ferretti",             folder: "75'-Ferreti",             length: "75 ft",  experience: "Day & Sunset",      images: 19, videos: 2 },
   { name: "90' Pershing",             folder: "90'-Pershing",            length: "90 ft",  experience: "Day Charter",       images: 58, videos: 2 },
-  { name: "90' Sunseeker",            folder: "90'-Sunseeker",           length: "90 ft",  experience: "Day & Overnight",   images: 54, videos: 4 },
+  { name: "90' Sunseeker",            folder: "90\u2019-Sunseeker",           length: "90 ft",  experience: "Day & Overnight",   images: 54, videos: 4 },
   { name: "94' Pershing Jerico V",    folder: "94'-Pershing-Jerico-V",   length: "94 ft",  experience: "Day & Sunset",      images: 82, videos: 1 },
-  { name: "94' Churri",               folder: "94'-Churri",              length: "94 ft",  experience: "Day Charter",       images: 14, videos: 1 },
+  { name: "94' Churri",               folder: "94\u2019-Churri",              length: "94 ft",  experience: "Day Charter",       images: 14, videos: 1 },
   { name: "Acqua Alberti",            folder: "Acqua-Alberti",           length: "—",      experience: "Day & Overnight",   images: 73, videos: 2 },
   { name: "Deep Blue",                folder: "Deep-Blue",               length: "—",      experience: "Day Charter",       images: 30, videos: 0 },
   { name: "Del Mar",                  folder: "Del-Mar",                 length: "—",      experience: "Day Charter",       images: 69, videos: 0 },
