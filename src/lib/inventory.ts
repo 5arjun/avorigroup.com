@@ -41,25 +41,26 @@ const r2Car = (folder: string, count: number): MediaItem[] => {
 // ─── YACHT helper ─────────────────────────────────────────────────────────────
 // NOTE: The R2 bucket folder is "yacths" (typo) — do not change this constant.
 // Some folder names use curly apostrophes ('), others use straight (').
-// folderToSlug() strips both for the filename slug.
+// Video pattern: always a -hero file first, then -video-1, -video-2, etc.
+// Extensions are mixed (.mp4 / .mov) — specified explicitly per yacht via the
+// `videos` array: first entry is the hero ext, rest are the numbered extras.
 const R2_YACHTS = `${R2}/yacths`;
 
 const r2Yacht = (
   folder: string,
   imageCount: number,
-  videoCount: number = 0
+  videoExts: string[] = []   // e.g. ["mp4"] or ["mov", "mp4", "mov"] — hero first, then video-1, video-2...
 ): MediaItem[] => {
   const s = folderToSlug(folder);
   const base = `${R2_YACHTS}/${folder}/${s}`;
   const items: MediaItem[] = [];
 
-  // videos first
-  for (let i = 1; i <= videoCount; i++)
-    items.push({
-      type: "video",
-      src: `${base}-${i}.mp4`,
-      poster: `${base}-cover.webp`,
-    });
+  videoExts.forEach((ext, i) => {
+    const src = i === 0
+      ? `${base}-hero.${ext}`
+      : `${base}-video-${i}.${ext}`;
+    items.push({ type: "video", src, poster: `${base}-cover.webp` });
+  });
 
   // cover thumbnail + numbered images
   items.push({ type: "image", src: `${base}-cover.webp` });
@@ -72,36 +73,37 @@ const r2Yacht = (
 // ─── YACHTS ───────────────────────────────────────────────────────────────────
 // NOTE: folder names must exactly match the R2 bucket folder names.
 // Curly apostrophe (') = %E2%80%99, straight (') = %27 — they are different!
+// videoExts: first = hero ext, subsequent = video-1, video-2... exts
 const yachtsRaw: {
   name: string;
   folder: string;
   length: string;
   experience: string;
   images: number;
-  videos: number;
+  videoExts: string[];
 }[] = [
-  { name: "100' Azimut Jumbo",       folder: "100'-Azimut-Jumbo",      length: "100 ft", experience: "Day & Overnight",  images: 99, videos: 0 },
-  { name: "128' Angeles III",         folder: "128'-Angeles-III",        length: "128 ft", experience: "Day & Overnight",  images: 42, videos: 0 },
-  { name: "130' Azimut",              folder: "130'-Azimut",             length: "130 ft", experience: "Overnight Charter", images: 86, videos: 1 },
-  { name: "48' Princess Gazzela",     folder: "48\u2019-Princess-Gazzela",    length: "48 ft",  experience: "Day Charter",       images: 19, videos: 1 },
-  { name: "50' Flybridge",            folder: "50'-Flybridge",           length: "50 ft",  experience: "Day Charter",       images: 15, videos: 1 },
-  { name: "53' 2025 Galeon",          folder: "53'-2025-Galeon",         length: "53 ft",  experience: "Day Charter",       images: 33, videos: 0 },
-  { name: "70' Money Wave",           folder: "70\u2019-Money-Wave",          length: "70 ft",  experience: "Day Charter",       images: 16, videos: 3 },
-  { name: "75' Aicon",                folder: "75'-Aicon",               length: "75 ft",  experience: "Day Charter",       images: 19, videos: 3 },
-  { name: "75' Ferretti",             folder: "75'-Ferreti",             length: "75 ft",  experience: "Day & Sunset",      images: 19, videos: 2 },
-  { name: "90' Pershing",             folder: "90'-Pershing",            length: "90 ft",  experience: "Day Charter",       images: 58, videos: 2 },
-  { name: "90' Sunseeker",            folder: "90\u2019-Sunseeker",           length: "90 ft",  experience: "Day & Overnight",   images: 54, videos: 4 },
-  { name: "94' Pershing Jerico V",    folder: "94'-Pershing-Jerico-V",   length: "94 ft",  experience: "Day & Sunset",      images: 82, videos: 1 },
-  { name: "94' Churri",               folder: "94\u2019-Churri",              length: "94 ft",  experience: "Day Charter",       images: 14, videos: 1 },
-  { name: "Acqua Alberti",            folder: "Acqua-Alberti",           length: "—",      experience: "Day & Overnight",   images: 73, videos: 2 },
-  { name: "Deep Blue",                folder: "Deep-Blue",               length: "—",      experience: "Day Charter",       images: 30, videos: 0 },
-  { name: "Del Mar",                  folder: "Del-Mar",                 length: "—",      experience: "Day Charter",       images: 69, videos: 0 },
-  { name: "Moonlight",                folder: "Moonlight",               length: "—",      experience: "Day Charter",       images: 14, videos: 1 },
-  { name: "Warrior Flybridge",        folder: "Warrior-Flybridge",       length: "—",      experience: "Day Charter",       images: 98, videos: 2 },
+  { name: "100' Azimut Jumbo",       folder: "100'-Azimut-Jumbo",      length: "100 ft", experience: "Day & Overnight",   images: 99, videoExts: [] },
+  { name: "128' Angeles III",         folder: "128'-Angeles-III",        length: "128 ft", experience: "Day & Overnight",   images: 42, videoExts: [] },
+  { name: "130' Azimut",              folder: "130'-Azimut",             length: "130 ft", experience: "Overnight Charter", images: 86, videoExts: ["mov"] },
+  { name: "48' Princess Gazzela",     folder: "48’-Princess-Gazzela",    length: "48 ft",  experience: "Day Charter",       images: 19, videoExts: ["mov"] },
+  { name: "50' Flybridge",            folder: "50'-Flybridge",           length: "50 ft",  experience: "Day Charter",       images: 15, videoExts: ["mov"] },
+  { name: "53' 2025 Galeon",          folder: "53'-2025-Galeon",         length: "53 ft",  experience: "Day Charter",       images: 33, videoExts: [] },
+  { name: "70' Money Wave",           folder: "70’-Money-Wave",          length: "70 ft",  experience: "Day Charter",       images: 16, videoExts: ["mov", "mp4", "mov"] },
+  { name: "75' Aicon",                folder: "75'-Aicon",               length: "75 ft",  experience: "Day Charter",       images: 19, videoExts: ["mp4", "mp4", "mp4"] },
+  { name: "75' Ferretti",             folder: "75'-Ferreti",             length: "75 ft",  experience: "Day & Sunset",      images: 19, videoExts: ["mp4", "mp4"] },
+  { name: "90' Pershing",             folder: "90'-Pershing",            length: "90 ft",  experience: "Day Charter",       images: 58, videoExts: ["mp4", "mp4"] },
+  { name: "90' Sunseeker",            folder: "90’-Sunseeker",           length: "90 ft",  experience: "Day & Overnight",   images: 54, videoExts: ["mp4", "mp4", "mp4", "mov"] },
+  { name: "94' Pershing Jerico V",    folder: "94'-Pershing-Jerico-V",   length: "94 ft",  experience: "Day & Sunset",      images: 82, videoExts: ["mp4"] },
+  { name: "94' Churri",               folder: "94’-Churri",              length: "94 ft",  experience: "Day Charter",       images: 14, videoExts: ["mp4"] },
+  { name: "Acqua Alberti",            folder: "Acqua-Alberti",           length: "—",      experience: "Day & Overnight",   images: 73, videoExts: ["mp4", "mp4"] },
+  { name: "Deep Blue",                folder: "Deep-Blue",               length: "—",      experience: "Day Charter",       images: 30, videoExts: [] },
+  { name: "Del Mar",                  folder: "Del-Mar",                 length: "—",      experience: "Day Charter",       images: 69, videoExts: [] },
+  { name: "Moonlight",                folder: "Moonlight",               length: "—",      experience: "Day Charter",       images: 14, videoExts: ["mp4"] },
+  { name: "Warrior Flybridge",        folder: "Warrior-Flybridge",       length: "—",      experience: "Day Charter",       images: 98, videoExts: ["mp4", "mov"] },
 ];
 
 export const yachts: InventoryItem[] = yachtsRaw.map((y) => {
-  const gallery = r2Yacht(y.folder, y.images, y.videos);
+  const gallery = r2Yacht(y.folder, y.images, y.videoExts);
   const cover = `${R2_YACHTS}/${y.folder}/${folderToSlug(y.folder)}-cover.webp`;
   return {
     id: slug(y.name),
