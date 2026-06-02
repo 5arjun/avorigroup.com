@@ -1,5 +1,11 @@
-import heroYacht from "@/assets/hero-yacht.jpg";
-import heroCar from "@/assets/hero-car.jpg";
+const R2 = "https://pub-ffee12d8734e4754ab62e41195b2330b.r2.dev";
+
+const r2Car = (folder: string, count: number): string[] => {
+  const slug = folder.toLowerCase();
+  const imgs: string[] = [`${R2}/cars/${folder}/${slug}-cover.webp`];
+  for (let i = 1; i < count; i++) imgs.push(`${R2}/cars/${folder}/${slug}-${i}.webp`);
+  return imgs;
+};
 
 export type InventoryItem = {
   id: string;
@@ -10,6 +16,16 @@ export type InventoryItem = {
   gallery: string[];
 };
 
+const slug = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[''\"`]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+// ─── YACHTS (still placeholder until R2 yacht upload) ───────────────────────
+import heroYacht from "@/assets/hero-yacht.jpg";
+
 const yachtGallery = (seed: number) => [
   heroYacht,
   `https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=1400&q=80&sig=${seed}`,
@@ -18,22 +34,6 @@ const yachtGallery = (seed: number) => [
   `https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1400&q=80&sig=${seed}`,
   `https://images.unsplash.com/photo-1605281317010-fe5ffe798166?auto=format&fit=crop&w=1400&q=80&sig=${seed}`,
 ];
-
-const carGallery = (seed: number) => [
-  heroCar,
-  `https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=80&sig=${seed}`,
-  `https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1400&q=80&sig=${seed}`,
-  `https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1400&q=80&sig=${seed}`,
-  `https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1400&q=80&sig=${seed}`,
-  `https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=1400&q=80&sig=${seed}`,
-];
-
-const slug = (s: string) =>
-  s
-    .toLowerCase()
-    .replace(/['’"`]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
 
 const yachtsRaw: { name: string; tagline: string; length: string; guests: string; experience: string }[] = [
   { name: "75 Ft Icon", tagline: "Modern sport-yacht silhouette with sun-pad bow.", length: "75 ft", guests: "12", experience: "Day Charter" },
@@ -60,49 +60,62 @@ export const yachts: InventoryItem[] = yachtsRaw.map((y, i) => ({
   ],
 }));
 
-const carsRaw: { name: string; tagline: string; cat: string }[] = [
-  { name: "Audi S5 White", tagline: "Crisp white S5 coupe — daily-driver luxury.", cat: "Coupe" },
-  { name: "BMW M3 Competition Blue", tagline: "M3 Competition in signature blue.", cat: "Sedan" },
-  { name: "BMW M3 Competition Yellow", tagline: "Bold yellow M3 Competition, head-turner spec.", cat: "Sedan" },
-  { name: "BMW M3 Competition Frozen White", tagline: "Matte frozen white finish, blacked-out trim.", cat: "Sedan" },
-  { name: "BMW M4 Convertible Grey", tagline: "Top-down M4 with carbon accents.", cat: "Convertible" },
-  { name: "BMW M5 Blue", tagline: "Twin-turbo V8 super-sedan in deep blue.", cat: "Sedan" },
-  { name: "BMW M5 2026 Blue", tagline: "Latest-gen M5, hybrid V8, executive spec.", cat: "Sedan" },
-  { name: "Corvette C8 2026 Black", tagline: "Mid-engine C8 in stealth black.", cat: "Coupe" },
-  { name: "Cadillac Escalade ESV Black", tagline: "Long-wheelbase ESV — group transfers in comfort.", cat: "SUV" },
-  { name: "Ferrari F8 Black", tagline: "Twin-turbo V8 F8 Tributo in nero.", cat: "Supercar" },
-  { name: "Ferrari 296 GTS Red", tagline: "Hybrid V6 Spider in Rosso Corsa, top down.", cat: "Convertible" },
-  { name: "Ferrari SF90 Satin Black", tagline: "Plug-in hybrid flagship, satin black wrap.", cat: "Hypercar" },
-  { name: "McLaren 750S Spider Orange", tagline: "Papaya orange Spider with dihedral doors.", cat: "Supercar" },
-  { name: "Mercedes G63 AMG Black", tagline: "G-Wagon in classic blacked-out spec.", cat: "SUV" },
-  { name: "Porsche GTS Grey", tagline: "Balanced GTS spec, grey on black.", cat: "Coupe" },
-  { name: "Porsche 911 Turbo S Techart White", tagline: "Techart-tuned Turbo S in pearl white.", cat: "Coupe" },
-  { name: "Porsche GT3 992 Grey", tagline: "Track-bred GT3 992, naturally aspirated flat-six.", cat: "Coupe" },
-  { name: "Lamborghini Evo Spider Grey", tagline: "Huracán EVO Spider in grigio, sound on demand.", cat: "Convertible" },
-  { name: "Lamborghini Urus Black", tagline: "Performance SUV in stealth black.", cat: "SUV" },
-  { name: "Lamborghini Urus Performante Purple", tagline: "Track-tuned Urus Performante in viola.", cat: "SUV" },
-  { name: "Rolls-Royce Cullinan Black", tagline: "Coachwork luxury, twin-turbo V12 in black.", cat: "SUV" },
+// ─── CARS ────────────────────────────────────────────────────────────────────
+// r2Car(folderName, totalFiles) — count includes cover, so gallery = count - 1 numbered imgs
+
+const carsRaw: {
+  name: string;
+  tagline: string;
+  cat: string;
+  drive: string;
+  folder: string;
+  count: number;
+}[] = [
+  { name: "Audi S5 White",                         tagline: "Crisp white S5 coupe — daily-driver luxury.",              cat: "Coupe",       drive: "Self-drive available",  folder: "Audi-S5-White",                        count: 11 },
+  { name: "BMW M3 Competition Blue",                tagline: "M3 Competition in signature blue.",                       cat: "Sedan",       drive: "Self-drive available",  folder: "BMW-M3-Competition-Blue",               count: 14 },
+  { name: "BMW M3 Competition Frozen White",        tagline: "Matte frozen white finish, blacked-out trim.",            cat: "Sedan",       drive: "Self-drive available",  folder: "BMW-M3-Competition-Frozen-White",       count: 12 },
+  { name: "BMW M3 Competition Yellow",              tagline: "Bold yellow M3 Competition, head-turner spec.",           cat: "Sedan",       drive: "Self-drive available",  folder: "BMW-M3-Competition-Yellow",             count: 18 },
+  { name: "BMW M4 Convertible Grey",                tagline: "Top-down M4 with carbon accents.",                       cat: "Convertible", drive: "Self-drive available",  folder: "BMW-M4-Convertible-Grey",               count: 14 },
+  { name: "BMW M5 Blue",                            tagline: "Twin-turbo V8 super-sedan in deep blue.",                 cat: "Sedan",       drive: "Self-drive available",  folder: "BMW-M5-Blue",                           count: 14 },
+  { name: "Cadillac Escalade ESV Black",            tagline: "Long-wheelbase ESV — group transfers in comfort.",        cat: "SUV",         drive: "Chauffeured",           folder: "Cadillac-Escalade-ESV-Black",           count: 14 },
+  { name: "Corvette C8 2026 Black",                 tagline: "Mid-engine C8 in stealth black.",                        cat: "Coupe",       drive: "Self-drive available",  folder: "Corvette-C8-2026-Black",                count: 10 },
+  { name: "Ferrari 296 GTS Red",                    tagline: "Hybrid V6 Spider in Rosso Corsa, top down.",             cat: "Convertible", drive: "Self-drive available",  folder: "Ferrari-296-GTS-Red",                   count: 16 },
+  { name: "Ferrari F8 Black",                       tagline: "Twin-turbo V8 F8 Tributo in nero.",                      cat: "Supercar",    drive: "Self-drive available",  folder: "Ferrari-F8-Black",                      count: 12 },
+  { name: "Ferrari SF90 Satin Black",               tagline: "Plug-in hybrid flagship, satin black wrap.",             cat: "Hypercar",    drive: "Chauffeured",           folder: "Ferrari-SF90-Satin-Black",              count: 10 },
+  { name: "Lamborghini Evo Spider Grey",            tagline: "Huracán EVO Spider in grigio, sound on demand.",         cat: "Convertible", drive: "Self-drive available",  folder: "Lamborghini-Evo-Spider-Grey",           count: 14 },
+  { name: "Lamborghini Urus Black",                 tagline: "Performance SUV in stealth black.",                      cat: "SUV",         drive: "Self-drive available",  folder: "Lamborghini-Urus-Black",                count: 17 },
+  { name: "Lamborghini Urus Performante Purple",    tagline: "Track-tuned Urus Performante in viola.",                 cat: "SUV",         drive: "Self-drive available",  folder: "Lamborghini-Urus-Performante-Purple",   count: 10 },
+  { name: "McLaren 750S Spider Orange",             tagline: "Papaya orange Spider with dihedral doors.",              cat: "Supercar",    drive: "Self-drive available",  folder: "Mclaren-750S-Spider-Orange",            count: 8  },
+  { name: "Mercedes G63 AMG Black",                 tagline: "G-Wagon in classic blacked-out spec.",                   cat: "SUV",         drive: "Self-drive available",  folder: "Mercedes-G63-AMG-Black",                count: 13 },
+  { name: "Porsche 911 Turbo S Techart White",      tagline: "Techart-tuned Turbo S in pearl white.",                  cat: "Coupe",       drive: "Self-drive available",  folder: "Porsche-911-Turbo-S-Techart-White",     count: 19 },
+  { name: "Porsche GT3 992 Grey",                   tagline: "Track-bred GT3 992, naturally aspirated flat-six.",      cat: "Coupe",       drive: "Self-drive available",  folder: "Porsche-GT3-992-Grey",                  count: 12 },
+  { name: "Porsche GTS Grey",                       tagline: "Balanced GTS spec, grey on black.",                      cat: "Coupe",       drive: "Self-drive available",  folder: "Porsche-GTS-Grey",                      count: 11 },
+  { name: "Rolls-Royce Cullinan Black",             tagline: "Coachwork luxury, twin-turbo V12 in black.",             cat: "SUV",         drive: "Chauffeured",           folder: "Rolls-Royce-Cullinan-Black",            count: 16 },
 ];
 
-export const cars: InventoryItem[] = carsRaw.map((c, i) => ({
-  id: slug(c.name),
-  name: c.name,
-  tagline: c.tagline,
-  cover: heroCar,
-  gallery: carGallery(i + 1),
-  facts: [
-    { label: "Category", value: c.cat },
-    { label: "Rental", value: i % 2 === 0 ? "Daily" : "Daily / Weekly" },
-    { label: "Drive", value: i % 3 === 0 ? "Chauffeured" : "Self-drive available" },
-  ],
-}));
+export const cars: InventoryItem[] = carsRaw.map((c) => {
+  const imgs = r2Car(c.folder, c.count);
+  return {
+    id: slug(c.name),
+    name: c.name,
+    tagline: c.tagline,
+    cover: imgs[0],
+    gallery: imgs,
+    facts: [
+      { label: "Category", value: c.cat },
+      { label: "Rental",   value: "Daily / Weekly" },
+      { label: "Drive",    value: c.drive },
+    ],
+  };
+});
 
+// ─── CLUBS ───────────────────────────────────────────────────────────────────
 export type Club = { name: string; vibe: string; note: string };
 export const clubs: Club[] = [
-  { name: "LIV", vibe: "Stadium-energy main room", note: "Fontainebleau · Saturdays peak." },
-  { name: "E11EVEN", vibe: "24/7 ultraclub theatre", note: "Downtown · late-night signature." },
-  { name: "Vendôme", vibe: "Old-world supper club", note: "Brickell · dinner into dancing." },
-  { name: "Mr. Jones", vibe: "Cinematic Wynwood lounge", note: "Wynwood · curated guestlist." },
-  { name: "Coco", vibe: "Asian-inspired night garden", note: "Wynwood · weekday revival." },
-  { name: "Kiki on the River", vibe: "Greek riverside daytime", note: "River District · brunch to dusk." },
+  { name: "LIV",              vibe: "Stadium-energy main room",      note: "Fontainebleau · Saturdays peak."     },
+  { name: "E11EVEN",          vibe: "24/7 ultraclub theatre",        note: "Downtown · late-night signature."    },
+  { name: "Vendôme",          vibe: "Old-world supper club",         note: "Brickell · dinner into dancing."     },
+  { name: "Mr. Jones",        vibe: "Cinematic Wynwood lounge",      note: "Wynwood · curated guestlist."        },
+  { name: "Coco",             vibe: "Asian-inspired night garden",   note: "Wynwood · weekday revival."          },
+  { name: "Kiki on the River",vibe: "Greek riverside daytime",       note: "River District · brunch to dusk."    },
 ];
