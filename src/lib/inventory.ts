@@ -21,6 +21,14 @@ const slug = (s: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
+// Converts a folder name like "100'-Azimut-Jumbo" into the file slug "100-azimut-jumbo"
+const folderToSlug = (folder: string) =>
+  folder
+    .toLowerCase()
+    .replace(/'/g, "")   // strip apostrophes
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
 // ─── CAR helper ──────────────────────────────────────────────────────────────
 const r2Car = (folder: string, count: number): MediaItem[] => {
   const s = folder.toLowerCase();
@@ -31,15 +39,15 @@ const r2Car = (folder: string, count: number): MediaItem[] => {
 };
 
 // ─── YACHT helper ─────────────────────────────────────────────────────────────
-// Naming convention in R2:  yachts/{Folder}/{slug}-{n}.webp  (images start at 1)
-//                           yachts/{Folder}/{slug}-cover.webp  (thumbnail)
-// Videos follow the same slug pattern with a .mp4 extension.
+// Folder names keep apostrophes (e.g. "100'-Azimut-Jumbo") but the actual
+// filenames inside drop them (e.g. "100-azimut-jumbo-1.webp"), so we use
+// folderToSlug() for the file prefix, not folder.toLowerCase().
 const r2Yacht = (
   folder: string,
   imageCount: number,
   videoCount: number = 0
 ): MediaItem[] => {
-  const s = folder.toLowerCase();
+  const s = folderToSlug(folder);
   const base = `${R2}/yachts/${folder}/${s}`;
   const items: MediaItem[] = [];
 
@@ -90,7 +98,7 @@ const yachtsRaw: {
 
 export const yachts: InventoryItem[] = yachtsRaw.map((y) => {
   const gallery = r2Yacht(y.folder, y.images, y.videos);
-  const cover = `${R2}/yachts/${y.folder}/${y.folder.toLowerCase()}-cover.webp`;
+  const cover = `${R2}/yachts/${y.folder}/${folderToSlug(y.folder)}-cover.webp`;
   return {
     id: slug(y.name),
     name: y.name,
