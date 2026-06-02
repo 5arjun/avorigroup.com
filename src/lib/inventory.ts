@@ -1,13 +1,5 @@
 const R2 = "https://pub-ffee12d8734e4754ab62e41195b2330b.r2.dev";
 
-const r2Car = (folder: string, count: number): MediaItem[] => {
-  const slug = folder.toLowerCase();
-  const imgs: MediaItem[] = [{ type: "image", src: `${R2}/cars/${folder}/${slug}-cover.webp` }];
-  for (let i = 1; i < count; i++)
-    imgs.push({ type: "image", src: `${R2}/cars/${folder}/${slug}-${i}.webp` });
-  return imgs;
-};
-
 // ─── Media types ─────────────────────────────────────────────────────────────
 export type MediaItem =
   | { type: "image"; src: string }
@@ -25,46 +17,92 @@ export type InventoryItem = {
 const slug = (s: string) =>
   s
     .toLowerCase()
-    .replace(/[''"`]/g, "")
+    .replace(/[''""`]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
+// ─── CAR helper ──────────────────────────────────────────────────────────────
+const r2Car = (folder: string, count: number): MediaItem[] => {
+  const s = folder.toLowerCase();
+  const imgs: MediaItem[] = [{ type: "image", src: `${R2}/cars/${folder}/${s}-cover.webp` }];
+  for (let i = 1; i < count; i++)
+    imgs.push({ type: "image", src: `${R2}/cars/${folder}/${s}-${i}.webp` });
+  return imgs;
+};
+
+// ─── YACHT helper ─────────────────────────────────────────────────────────────
+// Naming convention in R2:  yachts/{Folder}/{slug}-{n}.webp  (images start at 1)
+//                           yachts/{Folder}/{slug}-cover.webp  (thumbnail)
+// Videos follow the same slug pattern with a .mp4 extension.
+const r2Yacht = (
+  folder: string,
+  imageCount: number,
+  videoCount: number = 0
+): MediaItem[] => {
+  const s = folder.toLowerCase();
+  const base = `${R2}/yachts/${folder}/${s}`;
+  const items: MediaItem[] = [];
+
+  // videos first
+  for (let i = 1; i <= videoCount; i++)
+    items.push({
+      type: "video",
+      src: `${base}-${i}.mp4`,
+      poster: `${base}-cover.webp`,
+    });
+
+  // cover thumbnail + numbered images
+  items.push({ type: "image", src: `${base}-cover.webp` });
+  for (let i = 1; i <= imageCount; i++)
+    items.push({ type: "image", src: `${base}-${i}.webp` });
+
+  return items;
+};
+
 // ─── YACHTS ───────────────────────────────────────────────────────────────────
-import heroYacht from "@/assets/hero-yacht.jpg";
-
-const yachtGallery = (seed: number): MediaItem[] => [
-  { type: "image", src: heroYacht },
-  { type: "image", src: `https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=1400&q=80&sig=${seed}` },
-  { type: "image", src: `https://images.unsplash.com/photo-1540946485063-a40da27545f8?auto=format&fit=crop&w=1400&q=80&sig=${seed}` },
-  { type: "image", src: `https://images.unsplash.com/photo-1599582909646-2b1e02b4c8b9?auto=format&fit=crop&w=1400&q=80&sig=${seed}` },
-  { type: "image", src: `https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1400&q=80&sig=${seed}` },
-  { type: "image", src: `https://images.unsplash.com/photo-1605281317010-fe5ffe798166?auto=format&fit=crop&w=1400&q=80&sig=${seed}` },
+const yachtsRaw: {
+  name: string;
+  folder: string;
+  length: string;
+  experience: string;
+  images: number;
+  videos: number;
+}[] = [
+  { name: "100' Azimut Jumbo",       folder: "100'-Azimut-Jumbo",      length: "100 ft", experience: "Day & Overnight",  images: 99, videos: 0 },
+  { name: "128' Angeles III",         folder: "128'-Angeles-III",        length: "128 ft", experience: "Day & Overnight",  images: 42, videos: 0 },
+  { name: "130' Azimut",              folder: "130'-Azimut",             length: "130 ft", experience: "Overnight Charter", images: 86, videos: 1 },
+  { name: "48' Princess Gazzela",     folder: "48'-Princess-Gazzela",    length: "48 ft",  experience: "Day Charter",       images: 19, videos: 1 },
+  { name: "50' Flybridge",            folder: "50'-Flybridge",           length: "50 ft",  experience: "Day Charter",       images: 15, videos: 1 },
+  { name: "53' 2025 Galeon",          folder: "53'-2025-Galeon",         length: "53 ft",  experience: "Day Charter",       images: 33, videos: 0 },
+  { name: "70' Money Wave",           folder: "70'-Money-Wave",          length: "70 ft",  experience: "Day Charter",       images: 16, videos: 3 },
+  { name: "75' Aicon",                folder: "75'-Aicon",               length: "75 ft",  experience: "Day Charter",       images: 19, videos: 3 },
+  { name: "75' Ferretti",             folder: "75'-Ferreti",             length: "75 ft",  experience: "Day & Sunset",      images: 19, videos: 2 },
+  { name: "90' Pershing",             folder: "90'-Pershing",            length: "90 ft",  experience: "Day Charter",       images: 58, videos: 2 },
+  { name: "90' Sunseeker",            folder: "90'-Sunseeker",           length: "90 ft",  experience: "Day & Overnight",   images: 54, videos: 4 },
+  { name: "94' Pershing Jerico V",    folder: "94'-Pershing-Jerico-V",   length: "94 ft",  experience: "Day & Sunset",      images: 82, videos: 1 },
+  { name: "94' Churri",               folder: "94'-Churri",              length: "94 ft",  experience: "Day Charter",       images: 14, videos: 1 },
+  { name: "Acqua Alberti",            folder: "Acqua-Alberti",           length: "—",      experience: "Day & Overnight",   images: 73, videos: 2 },
+  { name: "Deep Blue",                folder: "Deep-Blue",               length: "—",      experience: "Day Charter",       images: 30, videos: 0 },
+  { name: "Del Mar",                  folder: "Del-Mar",                 length: "—",      experience: "Day Charter",       images: 69, videos: 0 },
+  { name: "Moonlight",                folder: "Moonlight",               length: "—",      experience: "Day Charter",       images: 14, videos: 1 },
+  { name: "Warrior Flybridge",        folder: "Warrior-Flybridge",       length: "—",      experience: "Day Charter",       images: 98, videos: 2 },
 ];
 
-const yachtsRaw: { name: string; tagline: string; length: string; guests: string; experience: string }[] = [
-  { name: "75 Ft Icon",             tagline: "Modern sport-yacht silhouette with sun-pad bow.",       length: "75 ft",  guests: "12", experience: "Day Charter"      },
-  { name: "50 Ft Flybridge",        tagline: "Nimble flybridge cruiser for intimate Miami days.",     length: "50 ft",  guests: "10", experience: "Day Charter"      },
-  { name: "75 Ft Ferretti w Hottub",tagline: "Italian craftsmanship with on-deck hot tub.",          length: "75 ft",  guests: "12", experience: "Day & Sunset"     },
-  { name: "90' Sunseeker",          tagline: "British sport-yacht, full crew, premium finishes.",    length: "90 ft",  guests: "13", experience: "Day & Overnight"  },
-  { name: "90' Pershing - RYM",     tagline: "Carbon-bodied performance cruiser at speed.",          length: "90 ft",  guests: "13", experience: "Day Charter"      },
-  { name: "94' Pershing Jericho",   tagline: "Signature Pershing lines, full entertainment deck.",   length: "94 ft",  guests: "13", experience: "Day & Sunset"     },
-  { name: "Angeles III 128'",       tagline: "Tri-deck superyacht with beach-club access.",          length: "128 ft", guests: "14", experience: "Day & Overnight"  },
-  { name: "Azimut 130'",            tagline: "Flagship Azimut, sky lounge and master on deck.",      length: "130 ft", guests: "14", experience: "Overnight Charter" },
-  { name: "100 Azimut Jumbo",       tagline: "Wide-body 100, full crew, jacuzzi forward.",           length: "100 ft", guests: "13", experience: "Day & Overnight"  },
-];
-
-export const yachts: InventoryItem[] = yachtsRaw.map((y, i) => ({
-  id: slug(y.name),
-  name: y.name,
-  tagline: y.tagline,
-  cover: heroYacht,
-  gallery: yachtGallery(i + 1),
-  facts: [
-    { label: "Length",     value: y.length     },
-    { label: "Guests",     value: y.guests     },
-    { label: "Experience", value: y.experience },
-  ],
-}));
+export const yachts: InventoryItem[] = yachtsRaw.map((y) => {
+  const gallery = r2Yacht(y.folder, y.images, y.videos);
+  const cover = `${R2}/yachts/${y.folder}/${y.folder.toLowerCase()}-cover.webp`;
+  return {
+    id: slug(y.name),
+    name: y.name,
+    tagline: "",
+    cover,
+    gallery,
+    facts: [
+      ...(y.length !== "—" ? [{ label: "Length", value: y.length }] : []),
+      { label: "Experience", value: y.experience },
+    ],
+  };
+});
 
 // ─── CARS ─────────────────────────────────────────────────────────────────────
 const carsRaw: { name: string; tagline: string; cat: string; folder: string; count: number }[] = [
