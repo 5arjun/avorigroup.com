@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import { PageShell } from "@/components/site/PageShell";
 import { InventoryAccordion } from "@/components/site/InventoryAccordion";
+import { InventoryFilters, type FilterGroup } from "@/components/site/InventoryFilters";
 import { cars } from "@/lib/inventory";
 import heroCar from "@/assets/hero-car.jpg";
 
@@ -36,6 +38,45 @@ export const Route = createFileRoute("/cars")({
 });
 
 function CarsPage() {
+  const [query, setQuery] = useState("");
+  const [values, setValues] = useState<Record<string, string>>({ category: "all", brand: "all" });
+
+  const getFact = (item: (typeof cars)[number], label: string) =>
+    item.facts.find((f) => f.label === label)?.value ?? "";
+  const brandOf = (item: (typeof cars)[number]) => item.name.split(" ")[0];
+
+  const categories = Array.from(new Set(cars.map((c) => getFact(c, "Category")))).sort();
+  const brands = Array.from(new Set(cars.map(brandOf))).sort();
+
+  const groups: FilterGroup[] = [
+    {
+      id: "category",
+      label: "Category",
+      options: [
+        { label: "All categories", value: "all" },
+        ...categories.map((c) => ({ label: c, value: c })),
+      ],
+    },
+    {
+      id: "brand",
+      label: "Brand",
+      options: [
+        { label: "All brands", value: "all" },
+        ...brands.map((b) => ({ label: b, value: b })),
+      ],
+    },
+  ];
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return cars.filter((c) => {
+      if (q && !`${c.name} ${c.tagline}`.toLowerCase().includes(q)) return false;
+      if (values.category !== "all" && getFact(c, "Category") !== values.category) return false;
+      if (values.brand !== "all" && brandOf(c) !== values.brand) return false;
+      return true;
+    });
+  }, [query, values]);
+
   return (
     <PageShell ctaLabel="Request Availability">
       <section className="container-luxe pt-16 md:pt-24">
@@ -53,7 +94,24 @@ function CarsPage() {
       <div className="hairline my-16 md:my-20" />
 
       <section className="container-luxe">
-        <InventoryAccordion items={cars} ctaLabel="Inquire about this car" />
+        <InventoryFilters
+          groups={groups}
+          values={values}
+          onChange={(id, v) => setValues((p) => ({ ...p, [id]: v }))}
+          query={query}
+          onQueryChange={setQuery}
+          resultCount={filtered.length}
+          totalCount={cars.length}
+        />
+        <div className="mt-8">
+          {filtered.length > 0 ? (
+            <InventoryAccordion items={filtered} ctaLabel="Inquire about this car" />
+          ) : (
+            <p className="rounded-2xl border border-border bg-card/40 p-10 text-center text-muted-foreground">
+              No cars match those filters. Try widening your search.
+            </p>
+          )}
+        </div>
       </section>
     </PageShell>
   );

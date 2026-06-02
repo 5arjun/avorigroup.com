@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import { PageShell } from "@/components/site/PageShell";
 import { InventoryAccordion } from "@/components/site/InventoryAccordion";
+import { InventoryFilters, type FilterGroup } from "@/components/site/InventoryFilters";
 import { yachts } from "@/lib/inventory";
 import heroYacht from "@/assets/hero-yacht.jpg";
 
@@ -36,6 +38,57 @@ export const Route = createFileRoute("/yachts")({
 });
 
 function YachtsPage() {
+  const [query, setQuery] = useState("");
+  const [values, setValues] = useState<Record<string, string>>({ length: "all", guests: "all" });
+
+  const getFact = (item: (typeof yachts)[number], label: string) =>
+    item.facts.find((f) => f.label === label)?.value ?? "";
+  const lengthFt = (item: (typeof yachts)[number]) =>
+    parseInt(getFact(item, "Length"), 10) || 0;
+  const guestsNum = (item: (typeof yachts)[number]) =>
+    parseInt(getFact(item, "Guests"), 10) || 0;
+
+  const groups: FilterGroup[] = [
+    {
+      id: "length",
+      label: "Length",
+      options: [
+        { label: "Any length", value: "all" },
+        { label: "Up to 70 ft", value: "0-70" },
+        { label: "70 – 90 ft", value: "70-90" },
+        { label: "90 – 110 ft", value: "90-110" },
+        { label: "110 ft and up", value: "110-999" },
+      ],
+    },
+    {
+      id: "guests",
+      label: "Guests",
+      options: [
+        { label: "Any size", value: "all" },
+        { label: "Up to 10", value: "0-10" },
+        { label: "11 – 12", value: "11-12" },
+        { label: "13+", value: "13-999" },
+      ],
+    },
+  ];
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const parseRange = (v: string | undefined): [number, number] | null => {
+      if (!v || v === "all") return null;
+      const [min, max] = v.split("-").map(Number);
+      return [min, max];
+    };
+    const lenRange = parseRange(values.length);
+    const gstRange = parseRange(values.guests);
+    return yachts.filter((y) => {
+      if (q && !`${y.name} ${y.tagline}`.toLowerCase().includes(q)) return false;
+      if (lenRange && (lengthFt(y) < lenRange[0] || lengthFt(y) > lenRange[1])) return false;
+      if (gstRange && (guestsNum(y) < gstRange[0] || guestsNum(y) > gstRange[1])) return false;
+      return true;
+    });
+  }, [query, values]);
+
   return (
     <PageShell ctaLabel="Request Availability">
       <section className="container-luxe pt-16 md:pt-24">
@@ -53,7 +106,24 @@ function YachtsPage() {
       <div className="hairline my-16 md:my-20" />
 
       <section className="container-luxe">
-        <InventoryAccordion items={yachts} ctaLabel="Inquire about this yacht" />
+        <InventoryFilters
+          groups={groups}
+          values={values}
+          onChange={(id, v) => setValues((p) => ({ ...p, [id]: v }))}
+          query={query}
+          onQueryChange={setQuery}
+          resultCount={filtered.length}
+          totalCount={yachts.length}
+        />
+        <div className="mt-8">
+          {filtered.length > 0 ? (
+            <InventoryAccordion items={filtered} ctaLabel="Inquire about this yacht" />
+          ) : (
+            <p className="rounded-2xl border border-border bg-card/40 p-10 text-center text-muted-foreground">
+              No yachts match those filters. Try widening your search.
+            </p>
+          )}
+        </div>
       </section>
     </PageShell>
   );
