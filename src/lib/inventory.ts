@@ -39,16 +39,18 @@ const r2Car = (folder: string, count: number): MediaItem[] => {
 };
 
 // ─── YACHT helper ─────────────────────────────────────────────────────────────
-// Folder names keep apostrophes (e.g. "100'-Azimut-Jumbo") but the actual
-// filenames inside drop them (e.g. "100-azimut-jumbo-1.webp"), so we use
-// folderToSlug() for the file prefix, not folder.toLowerCase().
+// NOTE: The R2 bucket folder is "yacths" (typo) — do not change this constant.
+// Folder names keep apostrophes (e.g. "100'-Azimut-Jumbo") but filenames
+// inside drop them (e.g. "100-azimut-jumbo-1.webp"), so we use folderToSlug().
+const R2_YACHTS = `${R2}/yacths`;
+
 const r2Yacht = (
   folder: string,
   imageCount: number,
   videoCount: number = 0
 ): MediaItem[] => {
   const s = folderToSlug(folder);
-  const base = `${R2}/yachts/${folder}/${s}`;
+  const base = `${R2_YACHTS}/${folder}/${s}`;
   const items: MediaItem[] = [];
 
   // videos first
@@ -98,7 +100,7 @@ const yachtsRaw: {
 
 export const yachts: InventoryItem[] = yachtsRaw.map((y) => {
   const gallery = r2Yacht(y.folder, y.images, y.videos);
-  const cover = `${R2}/yachts/${y.folder}/${folderToSlug(y.folder)}-cover.webp`;
+  const cover = `${R2_YACHTS}/${y.folder}/${folderToSlug(y.folder)}-cover.webp`;
   return {
     id: slug(y.name),
     name: y.name,
