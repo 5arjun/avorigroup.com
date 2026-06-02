@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useRef, useState } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
-import type { InventoryItem } from "@/lib/inventory";
+import { ChevronDown, ChevronLeft, ChevronRight, Volume2, VolumeX } from "lucide-react";
+import type { InventoryItem, MediaItem } from "@/lib/inventory";
 
 export function InventoryAccordion({
   items,
@@ -39,14 +39,17 @@ function Card({
   ctaLabel: string;
 }) {
   const panelId = `panel-${item.id}`;
-  const btnId = `btn-${item.id}`;
+  const btnId   = `btn-${item.id}`;
 
   return (
     <article
       className={`overflow-hidden rounded-2xl border bg-card transition-all duration-500 ${
-        isOpen ? "border-ink/30 shadow-[0_30px_60px_-30px_rgba(8,20,50,0.25)]" : "border-border hover:border-ink/20"
+        isOpen
+          ? "border-ink/30 shadow-[0_30px_60px_-30px_rgba(8,20,50,0.25)]"
+          : "border-border hover:border-ink/20"
       }`}
     >
+      {/* ── Card header / toggle ── */}
       <button
         id={btnId}
         type="button"
@@ -55,21 +58,21 @@ function Card({
         aria-controls={panelId}
         className="grid w-full grid-cols-1 items-stretch text-left md:grid-cols-[280px_1fr_auto]"
       >
+        {/* Thumbnail */}
         <div className="relative h-56 overflow-hidden md:h-44">
           <img
             src={item.cover}
             alt={item.name}
             loading="lazy"
             className={`h-full w-full object-cover transition-transform duration-[1.2s] ease-out ${
-              isOpen ? "scale-105" : "group-hover:scale-105"
+              isOpen ? "scale-105" : ""
             }`}
           />
         </div>
 
+        {/* Meta */}
         <div className="flex flex-col justify-center gap-3 px-6 py-5 md:px-8">
-          <div className="flex items-baseline gap-3">
-            <h3 className="text-2xl text-ink md:text-3xl">{item.name}</h3>
-          </div>
+          <h3 className="text-2xl text-ink md:text-3xl">{item.name}</h3>
           <p className="text-sm text-muted-foreground md:text-base">{item.tagline}</p>
           <dl className="mt-1 flex flex-wrap gap-x-6 gap-y-1">
             {item.facts.map((f) => (
@@ -81,6 +84,7 @@ function Card({
           </dl>
         </div>
 
+        {/* Chevron */}
         <div className="flex items-center justify-between gap-3 px-6 pb-5 md:flex-col md:items-end md:justify-center md:px-8 md:pb-0">
           <span className="eyebrow hidden md:block">{isOpen ? "Close" : "Gallery"}</span>
           <span
@@ -93,6 +97,7 @@ function Card({
         </div>
       </button>
 
+      {/* ── Expanded panel ── */}
       <div
         id={panelId}
         role="region"
@@ -104,7 +109,7 @@ function Card({
       >
         {isOpen && (
           <div className="overflow-hidden border-t border-border">
-            <Gallery images={item.gallery} alt={item.name} />
+            <Gallery media={item.gallery} alt={item.name} />
             <div className="flex flex-col items-start justify-between gap-4 px-6 pb-7 md:flex-row md:items-center md:px-8">
               <p className="max-w-md text-sm text-muted-foreground">
                 Full specs, pricing, and add-on services delivered within the hour by your concierge.
@@ -120,8 +125,10 @@ function Card({
   );
 }
 
-function Gallery({ images, alt }: { images: string[]; alt: string }) {
-  const scrollerRef = useRef<HTMLDivElement>(null);
+// ── Gallery ──────────────────────────────────────────────────────────────────
+function Gallery({ media, alt }: { media: MediaItem[]; alt: string }) {
+  const scrollerRef  = useRef<HTMLDivElement>(null);
+  const [muted, setMuted] = useState(true);
 
   const scrollBy = (dir: 1 | -1) => {
     const el = scrollerRef.current;
@@ -129,28 +136,65 @@ function Gallery({ images, alt }: { images: string[]; alt: string }) {
     el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: "smooth" });
   };
 
+  const hasVideo = media.some((m) => m.type === "video");
+
   return (
     <div className="relative px-6 py-6 md:px-8">
+      {/* Sound toggle — only shown when a video is present */}
+      {hasVideo && (
+        <button
+          type="button"
+          onClick={() => setMuted((v) => !v)}
+          aria-label={muted ? "Unmute video" : "Mute video"}
+          className="absolute right-8 top-8 z-10 flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-3 py-1.5 text-xs text-muted-foreground backdrop-blur-sm transition hover:border-ink/30 hover:text-ink"
+        >
+          {muted ? <VolumeX size={13} /> : <Volume2 size={13} />}
+          <span>{muted ? "Sound off" : "Sound on"}</span>
+        </button>
+      )}
+
+      {/* Scrollable rail */}
       <div
         ref={scrollerRef}
         className="scrollbar-none flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2"
         style={{ scrollbarWidth: "none" }}
       >
-        {images.map((src, i) => (
+        {media.map((item, i) => (
           <div
             key={i}
             className="relative aspect-[4/3] w-[78%] flex-shrink-0 snap-start overflow-hidden rounded-xl bg-muted sm:w-[55%] md:w-[42%] lg:w-[32%]"
           >
-            <img
-              src={src}
-              alt={`${alt} — image ${i + 1}`}
-              loading="lazy"
-              className="h-full w-full object-cover"
-            />
+            {item.type === "video" ? (
+              <>
+                <video
+                  src={item.src}
+                  poster={item.poster}
+                  autoPlay
+                  muted={muted}
+                  loop
+                  playsInline
+                  preload="metadata"
+                  className="h-full w-full object-cover"
+                />
+                {/* Video badge */}
+                <span className="absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-black/50 px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-white backdrop-blur-sm">
+                  <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+                  Video
+                </span>
+              </>
+            ) : (
+              <img
+                src={item.src}
+                alt={`${alt} — photo ${i + 1}`}
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+            )}
           </div>
         ))}
       </div>
 
+      {/* Desktop nav arrows */}
       <div className="mt-4 hidden justify-end gap-2 md:flex">
         <button
           type="button"
