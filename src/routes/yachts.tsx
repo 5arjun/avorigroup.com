@@ -74,18 +74,17 @@ function YachtsPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+    const parseRange = (v: string | undefined): [number, number] | null => {
+      if (!v || v === "all") return null;
+      const [min, max] = v.split("-").map(Number);
+      return [min, max];
+    };
+    const lenRange = parseRange(values.length);
+    const gstRange = parseRange(values.guests);
     return yachts.filter((y) => {
       if (q && !`${y.name} ${y.tagline}`.toLowerCase().includes(q)) return false;
-      const ranges: Record<string, [number, number]> = {} as never;
-      for (const g of groups) {
-        const v = values[g.id];
-        if (v && v !== "all") {
-          const [min, max] = v.split("-").map(Number);
-          ranges[g.id] = [min, max];
-        }
-      }
-      if (ranges.length && (lengthFt(y) < ranges.length[0] || lengthFt(y) > ranges.length[1])) return false;
-      if (ranges.guests && (guestsNum(y) < ranges.guests[0] || guestsNum(y) > ranges.guests[1])) return false;
+      if (lenRange && (lengthFt(y) < lenRange[0] || lengthFt(y) > lenRange[1])) return false;
+      if (gstRange && (guestsNum(y) < gstRange[0] || guestsNum(y) > gstRange[1])) return false;
       return true;
     });
   }, [query, values]);
