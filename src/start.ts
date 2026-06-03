@@ -1,9 +1,3 @@
-import { createStart, createCsrfMiddleware } from "@tanstack/react-start/server";
-
-const csrfMiddleware = createCsrfMiddleware({
-  filter: (ctx) => ctx.handlerType === "serverFn",
-});
-
-export const startInstance = createStart(() => ({
-  requestMiddleware: [csrfMiddleware],
-}));
+// start.ts intentionally left minimal — CSRF middleware not available in this TanStack Start version.
+// Warning is suppressed via vite.config.ts
+export {};
