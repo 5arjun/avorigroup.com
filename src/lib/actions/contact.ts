@@ -10,8 +10,9 @@ export type ContactFormData = {
   message?: string;
 };
 
-export const submitContactForm = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: ContactFormData }) => {
+export const submitContactForm = createServerFn({ method: "POST" })
+  .handler(async (ctx) => {
+    const data = ctx.data as ContactFormData;
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) throw new Error("RESEND_API_KEY is not set");
 
@@ -39,7 +40,7 @@ export const submitContactForm = createServerFn({ method: "POST" }).handler(
       },
       body: JSON.stringify({
         from:    "Neel2k Concierge <onboarding@resend.dev>",
-        to:      ["Arjunpat107@gmail.com"],
+        to:      ["arjunpat107@gmail.com"],
         subject: `New inquiry from ${data.name} — ${data.service}`,
         html,
       }),
@@ -51,5 +52,4 @@ export const submitContactForm = createServerFn({ method: "POST" }).handler(
     }
 
     return { ok: true };
-  }
-);
+  });
