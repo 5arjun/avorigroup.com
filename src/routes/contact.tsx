@@ -2,7 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Phone, Instagram, MessageCircle, Check, Loader2 } from "lucide-react";
 import { PageShell } from "@/components/site/PageShell";
-import { submitContactForm, type ContactFormData } from "@/lib/actions/contact";
+
+// Web3Forms public access key — safe to expose in client code.
+// Get your own free key at https://web3forms.com
+const WEB3FORMS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -12,57 +15,33 @@ export const Route = createFileRoute("/contact")({
       { property: "og:title", content: "Contact Neel2k Miami Concierge" },
       { property: "og:description", content: "Direct line, iMessage, WhatsApp, and Instagram DM — pick your channel. Reply within the hour." },
       { property: "og:url", content: "/contact" },
-      { name: "twitter:title", content: "Contact Neel2k Miami" },
-      { name: "twitter:description", content: "Book Miami yachts, exotic cars, and VIP nightlife — reply within the hour." },
     ],
     links: [{ rel: "canonical", href: "/contact" }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "ContactPage",
-          name: "Contact Neel2k Miami",
-          mainEntity: {
-            "@type": "LocalBusiness",
-            name: "Neel2k",
-            telephone: "+1-305-555-0199",
-            areaServed: "Miami",
-          },
-        }),
-      },
-    ],
   }),
   component: ContactPage,
 });
 
 function ContactPage() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [errorMsg, setErrorMsg] = useState("");
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("loading");
-    setErrorMsg("");
 
     const fd = new FormData(e.currentTarget);
-    const data: ContactFormData = {
-      name:      fd.get("name")      as string,
-      phone:     fd.get("phone")     as string,
-      instagram: (fd.get("instagram") as string) || undefined,
-      service:   fd.get("service")   as string,
-      date:      fd.get("date")      as string,
-      group:     (fd.get("group")    as string) || undefined,
-      message:   (fd.get("message") as string) || undefined,
-    };
+    fd.append("access_key", WEB3FORMS_KEY);
+    fd.append("from_name", "Neel2k Concierge Website");
+    fd.append("subject", `New inquiry — ${fd.get("service")} — ${fd.get("name")}`);
 
     try {
-      // @ts-ignore — TanStack Start server fn accepts data as any in this version
-      await submitContactForm({ data });
-      setStatus("success");
-    } catch (err) {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: fd,
+      });
+      const json = await res.json();
+      setStatus(json.success ? "success" : "error");
+    } catch {
       setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     }
   };
 
@@ -99,21 +78,27 @@ function ContactPage() {
                 <Field label="Instagram" name="instagram" placeholder="@handle" />
               </div>
               <div className="grid gap-5 sm:grid-cols-2">
-                <Select label="Preferred service" name="service" options={["Yacht charter", "Exotic car", "VIP access", "Full weekend"]} />
+                <Select
+                  label="Preferred service"
+                  name="service"
+                  options={["Yacht charter", "Exotic car", "VIP access", "Full weekend"]}
+                />
                 <Field label="Desired date" name="date" type="date" required />
               </div>
               <Field label="Group size" name="group" type="number" placeholder="e.g. 8" />
               <div>
                 <label htmlFor="message" className="eyebrow">Message</label>
                 <textarea
-                  id="message" name="message" rows={4}
+                  id="message"
+                  name="message"
+                  rows={4}
                   placeholder="Tell us about the occasion, any preferences, add-ons…"
                   className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-ink"
                 />
               </div>
               {status === "error" && (
                 <p className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                  {errorMsg || "Something went wrong. Please try again or contact us directly."}
+                  Something went wrong. Please try again or reach out directly.
                 </p>
               )}
               <button
@@ -152,7 +137,9 @@ function Field({ label, name, type = "text", required, placeholder }: {
 }) {
   return (
     <div>
-      <label htmlFor={name} className="eyebrow">{label}{required && <span className="text-accent"> *</span>}</label>
+      <label htmlFor={name} className="eyebrow">
+        {label}{required && <span className="text-accent"> *</span>}
+      </label>
       <input
         id={name} name={name} type={type} required={required} placeholder={placeholder}
         className="mt-2 h-12 w-full rounded-lg border border-input bg-background px-4 text-sm text-foreground outline-none transition-colors focus:border-ink"
@@ -175,7 +162,9 @@ function Select({ label, name, options }: { label: string; name: string; options
   );
 }
 
-function DirectLink({ href, icon, label, value }: { href: string; icon: React.ReactNode; label: string; value: string }) {
+function DirectLink({ href, icon, label, value }: {
+  href: string; icon: React.ReactNode; label: string; value: string;
+}) {
   return (
     <a
       href={href}

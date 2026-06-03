@@ -1,3 +1,3 @@
-// start.ts intentionally left minimal — CSRF middleware not available in this TanStack Start version.
-// Warning is suppressed via vite.config.ts
+// This file is intentionally empty.
+// TanStack Start entry is handled by src/server.ts
 export {};
