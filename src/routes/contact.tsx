@@ -2,19 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Phone, Instagram, MessageCircle, Check, Loader2 } from "lucide-react";
 import { PageShell } from "@/components/site/PageShell";
-
-// Web3Forms public access key — safe to expose in client code.
-// Get your own free key at https://web3forms.com
-const WEB3FORMS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+import { submitContactForm, type ContactFormData } from "@/lib/actions/contact";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact Neel2k Miami Concierge — Book Yachts, Cars & VIP" },
-      { name: "description", content: "Contact Neel2k to book a Miami yacht charter, exotic car rental, or VIP table. Call, iMessage, WhatsApp, Instagram DM, or send an inquiry — reply within the hour." },
-      { property: "og:title", content: "Contact Neel2k Miami Concierge" },
-      { property: "og:description", content: "Direct line, iMessage, WhatsApp, and Instagram DM — pick your channel. Reply within the hour." },
-      { property: "og:url", content: "/contact" },
+      { name: "description", content: "Contact Neel2k to book a Miami yacht charter, exotic car rental, or VIP table." },
     ],
     links: [{ rel: "canonical", href: "/contact" }],
   }),
@@ -23,25 +17,30 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("loading");
+    setErrorMsg("");
 
     const fd = new FormData(e.currentTarget);
-    fd.append("access_key", WEB3FORMS_KEY);
-    fd.append("from_name", "Neel2k Concierge Website");
-    fd.append("subject", `New inquiry — ${fd.get("service")} — ${fd.get("name")}`);
+    const data: ContactFormData = {
+      name:      fd.get("name")      as string,
+      phone:     fd.get("phone")     as string,
+      instagram: (fd.get("instagram") as string) || undefined,
+      service:   fd.get("service")   as string,
+      date:      fd.get("date")      as string,
+      group:     (fd.get("group")    as string) || undefined,
+      message:   (fd.get("message") as string) || undefined,
+    };
 
     try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: fd,
-      });
-      const json = await res.json();
-      setStatus(json.success ? "success" : "error");
-    } catch {
+      await submitContactForm(data);
+      setStatus("success");
+    } catch (err) {
       setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Something went wrong.");
     }
   };
 
@@ -89,16 +88,14 @@ function ContactPage() {
               <div>
                 <label htmlFor="message" className="eyebrow">Message</label>
                 <textarea
-                  id="message"
-                  name="message"
-                  rows={4}
+                  id="message" name="message" rows={4}
                   placeholder="Tell us about the occasion, any preferences, add-ons…"
                   className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-ink"
                 />
               </div>
               {status === "error" && (
                 <p className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                  Something went wrong. Please try again or reach out directly.
+                  {errorMsg || "Something went wrong. Please try again or reach out directly."}
                 </p>
               )}
               <button
@@ -120,7 +117,6 @@ function ContactPage() {
           <DirectLink href="sms:+13055550199" icon={<MessageCircle size={18} />} label="iMessage / Text" value="Reply within the hour" />
           <DirectLink href="https://wa.me/13055550199" icon={<MessageCircle size={18} />} label="WhatsApp" value="Reply within the hour" />
           <DirectLink href="https://instagram.com/neel2k" icon={<Instagram size={18} />} label="Instagram DM" value="@neel2k" />
-
           <div className="mt-4 rounded-2xl bg-ink p-7 text-primary-foreground">
             <p className="eyebrow !text-primary-foreground/60">Office</p>
             <p className="mt-3 text-lg">Miami · Brickell & Beach</p>
