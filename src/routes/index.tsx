@@ -98,7 +98,7 @@ function Home() {
             <img src={heroVip} alt="Miami nightlife" loading="lazy" className="h-full w-full object-cover" />
           </div>
           <div>
-            <p className="eyebrow !text-primary-foreground/60">Add-on · Optional</p>
+            <p className="eyebrow !text-primary-foreground/60">Add-on</p>
             <h2 className="mt-3 text-4xl md:text-5xl">After dinner, the city opens.</h2>
             <p className="mt-5 max-w-md text-base text-primary-foreground/75 md:text-lg">
               When the night requires it, we hold tables at LIV, E11EVEN, Vendôme, and the

@@ -112,7 +112,7 @@ function Card({
             <Gallery media={item.gallery} alt={item.name} />
             <div className="flex flex-col items-start justify-between gap-4 px-6 pb-7 md:flex-row md:items-center md:px-8">
               <p className="max-w-md text-sm text-muted-foreground">
-                Full specs, pricing, and add-on services delivered within the hour by your concierge.
+                Full specs, pricing, and add-on services delivered asap by your concierge.
               </p>
               <Link to="/contact" className="btn-primary">
                 {ctaLabel}

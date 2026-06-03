@@ -10,10 +10,10 @@ export const Route = createFileRoute("/contact")({
       { title: "Contact Neel2k Miami Concierge \u2014 Book Yachts, Cars & VIP" },
       { name: "description", content: "Contact Neel2k to book a Miami yacht charter, exotic car rental, or VIP table. Call, WhatsApp, Instagram DM, or send an inquiry \u2014 reply within the hour." },
       { property: "og:title", content: "Contact Neel2k Miami Concierge" },
-      { property: "og:description", content: "Direct line, WhatsApp, and Instagram DM \u2014 pick your channel. Reply within the hour." },
+      { property: "og:description", content: "Direct line, WhatsApp, and Instagram DM, pick your channel. Reply within the hour." },
       { property: "og:url", content: "/contact" },
       { name: "twitter:title", content: "Contact Neel2k Miami" },
-      { name: "twitter:description", content: "Book Miami yachts, exotic cars, and VIP nightlife \u2014 reply within the hour." },
+      { name: "twitter:description", content: "Book Miami yachts, exotic cars, and VIP nightlife,  reply within the hour." },
     ],
     links: [{ rel: "canonical", href: "/contact" }],
     scripts: [
@@ -87,7 +87,7 @@ function ContactPage() {
               </span>
               <h2 className="mt-6 text-3xl">Received.</h2>
               <p className="mt-3 max-w-sm text-muted-foreground">
-                Your concierge will reply within the hour. For anything time-sensitive, call or text directly.
+                Your concierge will reply as soon as possible. For anything time-sensitive, call or text directly.
               </p>
             </div>
           ) : (
@@ -110,7 +110,7 @@ function ContactPage() {
                 <label htmlFor="message" className="eyebrow">Message</label>
                 <textarea
                   id="message" name="message" rows={4}
-                  placeholder="Tell us about the occasion, any preferences, add-ons6"
+                  placeholder="Tell us about the occasion, any preferences, add-ons"
                   className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-ink"
                 />
               </div>
@@ -128,7 +128,7 @@ function ContactPage() {
                   <><Loader2 size={16} className="animate-spin" /> Sending\u2026</>
                 ) : "Send Inquiry"}
               </button>
-              <p className="text-xs text-muted-foreground">We respond within the hour, 9am\u201311pm ET.</p>
+              <p className="text-xs text-muted-foreground">We respond within the hour, 9am-11pm ET.</p>
             </div>
           )}
         </form>
