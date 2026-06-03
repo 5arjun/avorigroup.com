@@ -43,7 +43,7 @@ const r2Car = (folder: string, count: number): MediaItem[] => {
 // Some folder names use curly apostrophes ('), others use straight (').
 // Video pattern: always a -hero file first, then -video-1, -video-2, etc.
 // Extensions are mixed (.mp4 / .mov) — specified explicitly per yacht via the
-// `videos` array: first entry is the hero ext, rest are the numbered extras.
+// `videoExts` array: first entry is the hero ext, rest are the numbered extras.
 const R2_YACHTS = `${R2}/yacths`;
 
 const r2Yacht = (
@@ -78,28 +78,27 @@ const yachtsRaw: {
   name: string;
   folder: string;
   length: string;
-  experience: string;
   images: number;
   videoExts: string[];
 }[] = [
-  { name: "100' Azimut Jumbo",       folder: "100'-Azimut-Jumbo",      length: "100 ft", experience: "Day & Overnight",   images: 99, videoExts: [] },
-  { name: "128' Angeles III",         folder: "128'-Angeles-III",        length: "128 ft", experience: "Day & Overnight",   images: 42, videoExts: [] },
-  { name: "130' Azimut",              folder: "130'-Azimut",             length: "130 ft", experience: "Overnight Charter", images: 86, videoExts: ["mov"] },
-  { name: "48' Princess Gazzela",     folder: "48’-Princess-Gazzela",    length: "48 ft",  experience: "Day Charter",       images: 19, videoExts: ["mov"] },
-  { name: "50' Flybridge",            folder: "50'-Flybridge",           length: "50 ft",  experience: "Day Charter",       images: 15, videoExts: ["mov"] },
-  { name: "53' 2025 Galeon",          folder: "53'-2025-Galeon",         length: "53 ft",  experience: "Day Charter",       images: 33, videoExts: [] },
-  { name: "70' Money Wave",           folder: "70’-Money-Wave",          length: "70 ft",  experience: "Day Charter",       images: 16, videoExts: ["mov", "mp4", "mov"] },
-  { name: "75' Aicon",                folder: "75'-Aicon",               length: "75 ft",  experience: "Day Charter",       images: 19, videoExts: ["mp4", "mp4", "mp4"] },
-  { name: "75' Ferretti",             folder: "75'-Ferreti",             length: "75 ft",  experience: "Day & Sunset",      images: 19, videoExts: ["mp4", "mp4"] },
-  { name: "90' Pershing",             folder: "90'-Pershing",            length: "90 ft",  experience: "Day Charter",       images: 58, videoExts: ["mp4", "mp4"] },
-  { name: "90' Sunseeker",            folder: "90’-Sunseeker",           length: "90 ft",  experience: "Day & Overnight",   images: 54, videoExts: ["mp4", "mp4", "mp4", "mov"] },
-  { name: "94' Pershing Jerico V",    folder: "94'-Pershing-Jerico-V",   length: "94 ft",  experience: "Day & Sunset",      images: 82, videoExts: ["mp4"] },
-  { name: "94' Churri",               folder: "94’-Churri",              length: "94 ft",  experience: "Day Charter",       images: 14, videoExts: ["mp4"] },
-  { name: "Acqua Alberti",            folder: "Acqua-Alberti",           length: "—",      experience: "Day & Overnight",   images: 73, videoExts: ["mp4", "mp4"] },
-  { name: "Deep Blue",                folder: "Deep-Blue",               length: "—",      experience: "Day Charter",       images: 30, videoExts: [] },
-  { name: "Del Mar",                  folder: "Del-Mar",                 length: "—",      experience: "Day Charter",       images: 69, videoExts: [] },
-  { name: "Moonlight",                folder: "Moonlight",               length: "—",      experience: "Day Charter",       images: 14, videoExts: ["mp4"] },
-  { name: "Warrior Flybridge",        folder: "Warrior-Flybridge",       length: "—",      experience: "Day Charter",       images: 98, videoExts: ["mp4", "mov"] },
+  { name: "100' Azimut Jumbo",       folder: "100'-Azimut-Jumbo",      length: "100 ft", images: 99, videoExts: [] },
+  { name: "128' Angeles III",         folder: "128'-Angeles-III",        length: "128 ft", images: 42, videoExts: [] },
+  { name: "130' Azimut",              folder: "130'-Azimut",             length: "130 ft", images: 86, videoExts: ["mov"] },
+  { name: "48' Princess Gazzela",     folder: "48\u2019-Princess-Gazzela",    length: "48 ft",  images: 19, videoExts: ["mov"] },
+  { name: "50' Flybridge",            folder: "50'-Flybridge",           length: "50 ft",  images: 15, videoExts: ["mov"] },
+  { name: "53' 2025 Galeon",          folder: "53'-2025-Galeon",         length: "53 ft",  images: 33, videoExts: [] },
+  { name: "70' Money Wave",           folder: "70\u2019-Money-Wave",          length: "70 ft",  images: 16, videoExts: ["mov", "mp4", "mov"] },
+  { name: "75' Aicon",                folder: "75'-Aicon",               length: "75 ft",  images: 19, videoExts: ["mp4", "mp4", "mp4"] },
+  { name: "75' Ferretti",             folder: "75'-Ferreti",             length: "75 ft",  images: 19, videoExts: ["mp4", "mp4"] },
+  { name: "90' Pershing",             folder: "90'-Pershing",            length: "90 ft",  images: 58, videoExts: ["mp4", "mp4"] },
+  { name: "90' Sunseeker",            folder: "90\u2019-Sunseeker",           length: "90 ft",  images: 54, videoExts: ["mp4", "mp4", "mp4", "mov"] },
+  { name: "94' Pershing Jerico V",    folder: "94'-Pershing-Jerico-V",   length: "94 ft",  images: 82, videoExts: ["mp4"] },
+  { name: "94' Churri",               folder: "94\u2019-Churri",              length: "94 ft",  images: 14, videoExts: ["mp4"] },
+  { name: "Acqua Alberti",            folder: "Acqua-Alberti",           length: "—",      images: 73, videoExts: ["mp4", "mp4"] },
+  { name: "Deep Blue",                folder: "Deep-Blue",               length: "—",      images: 30, videoExts: [] },
+  { name: "Del Mar",                  folder: "Del-Mar",                 length: "—",      images: 69, videoExts: [] },
+  { name: "Moonlight",                folder: "Moonlight",               length: "—",      images: 14, videoExts: ["mp4"] },
+  { name: "Warrior Flybridge",        folder: "Warrior-Flybridge",       length: "—",      images: 98, videoExts: ["mp4", "mov"] },
 ];
 
 export const yachts: InventoryItem[] = yachtsRaw.map((y) => {
@@ -113,7 +112,7 @@ export const yachts: InventoryItem[] = yachtsRaw.map((y) => {
     gallery,
     facts: [
       ...(y.length !== "—" ? [{ label: "Length", value: y.length }] : []),
-      { label: "Experience", value: y.experience },
+      { label: "Experience", value: "Day & Night" },
     ],
   };
 });
