@@ -1,21 +1,17 @@
 import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
 
-const schema = z.object({
-  name:     z.string().min(1),
-  phone:    z.string().min(1),
-  instagram: z.string().optional(),
-  service:  z.string(),
-  date:     z.string(),
-  group:    z.string().optional(),
-  message:  z.string().optional(),
-});
+export type ContactFormData = {
+  name: string;
+  phone: string;
+  instagram?: string;
+  service: string;
+  date: string;
+  group?: string;
+  message?: string;
+};
 
-export type ContactFormData = z.infer<typeof schema>;
-
-export const submitContactForm = createServerFn({ method: "POST" })
-  .validator(schema)
-  .handler(async ({ data }) => {
+export const submitContactForm = createServerFn({ method: "POST" }).handler(
+  async ({ data }: { data: ContactFormData }) => {
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) throw new Error("RESEND_API_KEY is not set");
 
@@ -38,7 +34,7 @@ export const submitContactForm = createServerFn({ method: "POST" })
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -55,4 +51,5 @@ export const submitContactForm = createServerFn({ method: "POST" })
     }
 
     return { ok: true };
-  });
+  }
+);
