@@ -110,7 +110,7 @@ function ContactPage() {
                 <label htmlFor="message" className="eyebrow">Message</label>
                 <textarea
                   id="message" name="message" rows={4}
-                  placeholder="Tell us about the occasion, any preferences, add-ons\u2026"
+                  placeholder="Tell us about the occasion, any preferences, add-ons6"
                   className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-ink"
                 />
               </div>
@@ -137,7 +137,7 @@ function ContactPage() {
           <DirectLink href="tel:+13055550199" icon={<Phone size={18} />} label="Call Concierge" value="+1 (305) 555-0199" />
           <DirectLink href="sms:+13055550199" icon={<MessageCircle size={18} />} label="iMessage / SMS" value="Text us directly" />
           <DirectLink href="https://wa.me/13055550199" icon={<MessageCircle size={18} />} label="WhatsApp" value="Reply within minutes" />
-          <DirectLink href="https://instagram.com" icon={<Instagram size={18} />} label="Instagram DM" value="@neel2k" />
+          <DirectLink href="https://instagram.com/neel2k" icon={<Instagram size={18} />} label="Instagram DM" value="@neel2k" />
           <div className="mt-4 rounded-2xl bg-ink p-7 text-primary-foreground">
             <p className="eyebrow !text-primary-foreground/60">Office</p>
             <p className="mt-3 text-lg">Miami | Brickell & Beach</p>
