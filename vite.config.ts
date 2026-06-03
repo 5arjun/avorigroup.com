@@ -13,4 +13,7 @@ export default defineConfig({
       disableCsrfMiddlewareWarning: true,
     },
   },
+  nitro: {
+    preset: "vercel",
+  },
 });
