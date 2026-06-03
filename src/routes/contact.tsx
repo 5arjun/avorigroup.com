@@ -7,9 +7,9 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact Neel2k Miami Concierge — Book Yachts, Cars & VIP" },
-      { name: "description", content: "Contact Neel2k to book a Miami yacht charter, exotic car rental, or VIP table. Call, WhatsApp, Instagram DM, or send an inquiry — reply within the hour." },
+      { name: "description", content: "Contact Neel2k to book a Miami yacht charter, exotic car rental, or VIP table. Call, iMessage, Instagram DM, or send an inquiry — reply within the hour." },
       { property: "og:title", content: "Contact Neel2k Miami Concierge" },
-      { property: "og:description", content: "Direct line, WhatsApp, and Instagram DM — pick your channel. Reply within the hour." },
+      { property: "og:description", content: "Direct line, iMessage, and Instagram DM — pick your channel. Reply within the hour." },
       { property: "og:url", content: "/contact" },
       { name: "twitter:title", content: "Contact Neel2k Miami" },
       { name: "twitter:description", content: "Book Miami yachts, exotic cars, and VIP nightlife — reply within the hour." },
@@ -65,7 +65,7 @@ function ContactPage() {
               </span>
               <h2 className="mt-6 text-3xl">Received.</h2>
               <p className="mt-3 max-w-sm text-muted-foreground">
-                Your concierge will reply within the hour. For anything time-sensitive, call or WhatsApp directly.
+                Your concierge will reply within the hour. For anything time-sensitive, call or text directly.
               </p>
             </div>
           ) : (
@@ -96,7 +96,7 @@ function ContactPage() {
 
         <aside className="flex flex-col gap-4">
           <DirectLink href="tel:+13055550199" icon={<Phone size={18} />} label="Call Concierge" value="+1 (305) 555-0199" />
-          <DirectLink href="https://wa.me/13055550199" icon={<MessageCircle size={18} />} label="WhatsApp / Text" value="Reply within the hour" />
+          <DirectLink href="sms:+13055550199" icon={<MessageCircle size={18} />} label="iMessage / Text" value="Reply within the hour" />
           <DirectLink href="https://instagram.com/neel2k" icon={<Instagram size={18} />} label="Instagram DM" value="@neel2k" />
 
           <div className="mt-4 rounded-2xl bg-ink p-7 text-primary-foreground">
