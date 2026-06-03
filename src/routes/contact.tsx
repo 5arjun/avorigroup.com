@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Phone, Instagram, MessageCircle, Check } from "lucide-react";
+import { Phone, Instagram, MessageCircle, Check, Loader2 } from "lucide-react";
 import { PageShell } from "@/components/site/PageShell";
+import { submitContactForm } from "@/lib/actions/contact";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -36,11 +37,32 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSent(true);
+    setStatus("loading");
+    setErrorMsg("");
+
+    const fd = new FormData(e.currentTarget);
+    const data = {
+      name:      fd.get("name")      as string,
+      phone:     fd.get("phone")     as string,
+      instagram: fd.get("instagram") as string | undefined,
+      service:   fd.get("service")   as string,
+      date:      fd.get("date")      as string,
+      group:     fd.get("group")     as string | undefined,
+      message:   fd.get("message")   as string | undefined,
+    };
+
+    try {
+      await submitContactForm({ data });
+      setStatus("success");
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -58,7 +80,7 @@ function ContactPage() {
 
       <section className="container-luxe mt-14 grid gap-10 md:mt-20 md:grid-cols-[1.4fr_1fr] md:gap-16">
         <form onSubmit={onSubmit} className="rounded-2xl border border-border bg-card p-7 md:p-10">
-          {sent ? (
+          {status === "success" ? (
             <div className="flex min-h-[400px] flex-col items-center justify-center text-center">
               <span className="grid h-14 w-14 place-items-center rounded-full bg-ink text-primary-foreground">
                 <Check size={22} />
@@ -88,7 +110,20 @@ function ContactPage() {
                   className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-ink"
                 />
               </div>
-              <button type="submit" className="btn-primary mt-2">Send Inquiry</button>
+              {status === "error" && (
+                <p className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                  {errorMsg || "Something went wrong. Please try again or contact us directly."}
+                </p>
+              )}
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="btn-primary mt-2 flex items-center justify-center gap-2 disabled:opacity-60"
+              >
+                {status === "loading" ? (
+                  <><Loader2 size={16} className="animate-spin" /> Sending…</>
+                ) : "Send Inquiry"}
+              </button>
               <p className="text-xs text-muted-foreground">We respond within the hour, 10am–11pm ET.</p>
             </div>
           )}
