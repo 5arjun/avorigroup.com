@@ -87,7 +87,7 @@ function ContactPage() {
               </span>
               <h2 className="mt-6 text-3xl">Received.</h2>
               <p className="mt-3 max-w-sm text-muted-foreground">
-                Your concierge will reply within the hour. For anything time-sensitive, call or WhatsApp directly.
+                Your concierge will reply within the hour. For anything time-sensitive, call or text directly.
               </p>
             </div>
           ) : (
@@ -139,7 +139,7 @@ function ContactPage() {
           <DirectLink href="https://instagram.com" icon={<Instagram size={18} />} label="Instagram DM" value="@neel2k" />
           <div className="mt-4 rounded-2xl bg-ink p-7 text-primary-foreground">
             <p className="eyebrow !text-primary-foreground/60">Office</p>
-            <p className="mt-3 text-lg">Miami \u00b7 Brickell & Beach</p>
+            <p className="mt-3 text-lg">Miami | Brickell & Beach</p>
             <p className="mt-1 text-sm text-primary-foreground/70">By appointment only.</p>
           </div>
         </aside>
