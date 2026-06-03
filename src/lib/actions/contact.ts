@@ -11,8 +11,9 @@ export type ContactFormData = {
   message?: string;
 };
 
-export const submitContactForm = createServerFn({ method: 'POST' }).handler(
-  async ({ data }: { data: ContactFormData }) => {
+export const submitContactForm = createServerFn({ method: 'POST' })
+  .inputValidator((data: ContactFormData) => data)
+  .handler(async ({ data }) => {
     const { name, phone, instagram, service, date, group, message } = data;
 
     const { error } = await resend.emails.send({
@@ -39,5 +40,4 @@ export const submitContactForm = createServerFn({ method: 'POST' }).handler(
     if (error) throw new Error(error.message);
 
     return { ok: true };
-  },
-);
+  });
