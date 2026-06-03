@@ -42,7 +42,7 @@
 :root {
   --radius: 0.5rem;
   /* Light, editorial luxury */
-  --background: oklch(0.985 0.005 230);
+  --background: oklch(96.937% 0.01354 226.889);
   --foreground: oklch(0.18 0.04 250);
   --ink: oklch(0.14 0.05 255);
   --sand: oklch(0.95 0.012 80);

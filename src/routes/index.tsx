@@ -92,7 +92,7 @@ function Home() {
       </section>
 
       {/* VIP add-on */}
-      <section className="bg-ink text-primary-foreground">
+      <section className="bg-slate-900 text-primary-foreground">
         <div className="container-luxe grid items-center gap-12 py-24 md:grid-cols-2 md:py-32">
           <div className="relative aspect-[5/6] overflow-hidden rounded-2xl">
             <img src={heroVip} alt="Miami nightlife" loading="lazy" className="h-full w-full object-cover" />
@@ -101,8 +101,7 @@ function Home() {
             <p className="eyebrow !text-primary-foreground/60">Add-on</p>
             <h2 className="mt-3 text-4xl md:text-5xl">After dinner, the city opens.</h2>
             <p className="mt-5 max-w-md text-base text-primary-foreground/75 md:text-lg">
-              When the night requires it, we hold tables at LIV, E11EVEN, Vendôme, and the
-              quieter rooms you won't find on a guestlist. Bundle it with your day.
+              When the night requires it, we hold tables at LIV, E11EVEN, Vendôme, and other clubs you won't find on a guestlist. Bundle it with your day.
             </p>
             <div className="mt-8 flex gap-3">
               <Link to="/vip-access" className="btn-primary bg-primary-foreground !text-ink hover:!bg-accent hover:!text-primary-foreground">

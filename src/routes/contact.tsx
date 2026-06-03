@@ -69,7 +69,7 @@ function ContactPage() {
     <PageShell ctaLabel="Call Concierge">
       <section className="container-luxe pt-16 md:pt-24">
         <div className="max-w-3xl">
-          <p className="eyebrow">Concierge \u00b7 Reply within the hour</p>
+          <p className="eyebrow">Concierge will reply as soon as possible</p>
           <h1 className="mt-4 text-5xl md:text-7xl">Let's plan it.</h1>
           <p className="mt-6 max-w-xl text-base text-muted-foreground md:text-lg">
             Share the date, group size, and what you'd like to do. We'll come back with
