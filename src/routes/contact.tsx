@@ -65,7 +65,7 @@ function ContactPage() {
               </span>
               <h2 className="mt-6 text-3xl">Received.</h2>
               <p className="mt-3 max-w-sm text-muted-foreground">
-                Your concierge will reply within the hour. For anything time-sensitive, call or WhatsApp directly.
+                Your concierge will reply within the hour. For anything time-sensitive, call or text directly.
               </p>
             </div>
           ) : (
