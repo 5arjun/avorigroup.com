@@ -6,14 +6,14 @@ import heroVip from "@/assets/hero-vip.jpg";
 export const Route = createFileRoute("/vip-access")({
   head: () => ({
     meta: [
-      { title: "Miami VIP Nightlife Access — Tables at LIV, E11EVEN & More · Neel2k" },
-      { name: "description", content: "VIP tables and entry at Miami's top clubs and lounges — LIV, E11EVEN, Vendôme, Mr. Jones, Coco, Kiki on the River. A polished add-on to your concierge weekend." },
-      { property: "og:title", content: "Miami VIP Access — Tables & Entry · Neel2k" },
-      { property: "og:description", content: "Hold the right rooms for the right hours — Miami nightlife, handled." },
+      { title: "Miami VIP Nightlife Access - Tables at LIV, E11EVEN & More · Neel2k" },
+      { name: "description", content: "VIP tables and entry at Miami's top clubs and lounges - LIV, E11EVEN, Vendôme, Mr. Jones, Coco, Kiki on the River. A polished add-on to your concierge weekend." },
+      { property: "og:title", content: "Miami VIP Access - Tables & Entry · Neel2k" },
+      { property: "og:description", content: "Hold the right rooms for the right hours - Miami nightlife, handled." },
       { property: "og:url", content: "/vip-access" },
       { property: "og:image", content: heroVip },
-      { name: "twitter:title", content: "Miami VIP Nightlife Access — Neel2k" },
-      { name: "twitter:description", content: "VIP tables at LIV, E11EVEN, Vendôme and more — bundled with your Miami concierge day." },
+      { name: "twitter:title", content: "Miami VIP Nightlife Access - Neel2k" },
+      { name: "twitter:description", content: "VIP tables at LIV, E11EVEN, Vendôme and more - bundled with your Miami concierge day." },
       { name: "twitter:image", content: heroVip },
     ],
     links: [{ rel: "canonical", href: "/vip-access" }],
@@ -64,7 +64,7 @@ function VipPage() {
               <h2 className="mt-3 text-3xl md:text-4xl">VIP is the encore, not the show.</h2>
               <p className="mt-5 max-w-xl text-primary-foreground/75">
                 Bundle a table with a yacht day or weekend exotic and we'll align the
-                logistics — driver to the door, photographer if you want one, and a quiet
+                logistics - driver to the door, photographer if you want one, and a quiet
                 exit when it's time.
               </p>
             </div>

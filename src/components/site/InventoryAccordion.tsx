@@ -140,7 +140,7 @@ function Gallery({ media, alt }: { media: MediaItem[]; alt: string }) {
 
   return (
     <div className="relative px-6 py-6 md:px-8">
-      {/* Sound toggle — only shown when a video is present */}
+      {/* Sound toggle - only shown when a video is present */}
       {hasVideo && (
         <button
           type="button"
@@ -185,7 +185,7 @@ function Gallery({ media, alt }: { media: MediaItem[]; alt: string }) {
             ) : (
               <img
                 src={item.src}
-                alt={`${alt} — photo ${i + 1}`}
+                alt={`${alt} - photo ${i + 1}`}
                 loading="lazy"
                 className="h-full w-full object-cover"
               />

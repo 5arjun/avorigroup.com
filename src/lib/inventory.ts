@@ -21,7 +21,7 @@ const slug = (s: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
-// Converts a folder name into the file slug — strips both straight and curly apostrophes
+// Converts a folder name into the file slug - strips both straight and curly apostrophes
 const folderToSlug = (folder: string) =>
   folder
     .toLowerCase()
@@ -39,17 +39,17 @@ const r2Car = (folder: string, count: number): MediaItem[] => {
 };
 
 // ─── YACHT helper ─────────────────────────────────────────────────────────────
-// NOTE: The R2 bucket folder is "yacths" (typo) — do not change this constant.
+// NOTE: The R2 bucket folder is "yacths" (typo) - do not change this constant.
 // Some folder names use curly apostrophes ('), others use straight (').
 // Video pattern: always a -hero file first, then -video-1, -video-2, etc.
-// Extensions are mixed (.mp4 / .mov) — specified explicitly per yacht via the
+// Extensions are mixed (.mp4 / .mov) - specified explicitly per yacht via the
 // `videoExts` array: first entry is the hero ext, rest are the numbered extras.
 const R2_YACHTS = `${R2}/yacths`;
 
 const r2Yacht = (
   folder: string,
   imageCount: number,
-  videoExts: string[] = []   // e.g. ["mp4"] or ["mov", "mp4", "mov"] — hero first, then video-1, video-2...
+  videoExts: string[] = []   // e.g. ["mp4"] or ["mov", "mp4", "mov"] - hero first, then video-1, video-2...
 ): MediaItem[] => {
   const s = folderToSlug(folder);
   const base = `${R2_YACHTS}/${folder}/${s}`;
@@ -72,7 +72,7 @@ const r2Yacht = (
 
 // ─── YACHTS ───────────────────────────────────────────────────────────────────
 // NOTE: folder names must exactly match the R2 bucket folder names.
-// Curly apostrophe (') = %E2%80%99, straight (') = %27 — they are different!
+// Curly apostrophe (') = %E2%80%99, straight (') = %27 - they are different!
 // videoExts: first = hero ext, subsequent = video-1, video-2... exts
 const yachtsRaw: {
   name: string;
@@ -94,11 +94,11 @@ const yachtsRaw: {
   { name: "90' Sunseeker",            folder: "90\u2019-Sunseeker",           length: "90 ft",  images: 54, videoExts: ["mp4", "mp4", "mp4", "mov"] },
   { name: "94' Pershing Jerico V",    folder: "94'-Pershing-Jerico-V",   length: "94 ft",  images: 82, videoExts: ["mp4"] },
   { name: "94' Churri",               folder: "94\u2019-Churri",              length: "94 ft",  images: 14, videoExts: ["mp4"] },
-  { name: "Acqua Alberti",            folder: "Acqua-Alberti",           length: "—",      images: 73, videoExts: ["mp4", "mp4"] },
-  { name: "Deep Blue",                folder: "Deep-Blue",               length: "—",      images: 30, videoExts: [] },
-  { name: "Del Mar",                  folder: "Del-Mar",                 length: "—",      images: 69, videoExts: [] },
-  { name: "Moonlight",                folder: "Moonlight",               length: "—",      images: 14, videoExts: ["mp4"] },
-  { name: "Warrior Flybridge",        folder: "Warrior-Flybridge",       length: "—",      images: 98, videoExts: ["mp4", "mov"] },
+  { name: "Acqua Alberti",            folder: "Acqua-Alberti",           length: "-",      images: 73, videoExts: ["mp4", "mp4"] },
+  { name: "Deep Blue",                folder: "Deep-Blue",               length: "-",      images: 30, videoExts: [] },
+  { name: "Del Mar",                  folder: "Del-Mar",                 length: "-",      images: 69, videoExts: [] },
+  { name: "Moonlight",                folder: "Moonlight",               length: "-",      images: 14, videoExts: ["mp4"] },
+  { name: "Warrior Flybridge",        folder: "Warrior-Flybridge",       length: "-",      images: 98, videoExts: ["mp4", "mov"] },
 ];
 
 export const yachts: InventoryItem[] = yachtsRaw.map((y) => {
@@ -111,7 +111,7 @@ export const yachts: InventoryItem[] = yachtsRaw.map((y) => {
     cover,
     gallery,
     facts: [
-      ...(y.length !== "—" ? [{ label: "Length", value: y.length }] : []),
+      ...(y.length !== "-" ? [{ label: "Length", value: y.length }] : []),
       { label: "Experience", value: "Day & Night" },
     ],
   };
@@ -119,13 +119,13 @@ export const yachts: InventoryItem[] = yachtsRaw.map((y) => {
 
 // ─── CARS ─────────────────────────────────────────────────────────────────────
 const carsRaw: { name: string; tagline: string; cat: string; folder: string; count: number }[] = [
-  { name: "Audi S5 White",                      tagline: "Crisp white S5 coupe — daily-driver luxury.",          cat: "Coupe",       folder: "Audi-S5-White",                      count: 11 },
+  { name: "Audi S5 White",                      tagline: "Crisp white S5 coupe - daily-driver luxury.",          cat: "Coupe",       folder: "Audi-S5-White",                      count: 11 },
   { name: "BMW M3 Competition Blue",             tagline: "M3 Competition in signature blue.",                   cat: "Sedan",       folder: "BMW-M3-Competition-Blue",             count: 14 },
   { name: "BMW M3 Competition Frozen White",     tagline: "Matte frozen white finish, blacked-out trim.",        cat: "Sedan",       folder: "BMW-M3-Competition-Frozen-White",     count: 12 },
   { name: "BMW M3 Competition Yellow",           tagline: "Bold yellow M3 Competition, head-turner spec.",       cat: "Sedan",       folder: "BMW-M3-Competition-Yellow",           count: 18 },
   { name: "BMW M4 Convertible Grey",             tagline: "Top-down M4 with carbon accents.",                   cat: "Convertible", folder: "BMW-M4-Convertible-Grey",             count: 14 },
   { name: "BMW M5 Blue",                         tagline: "Twin-turbo V8 super-sedan in deep blue.",             cat: "Sedan",       folder: "BMW-M5-Blue",                         count: 14 },
-  { name: "Cadillac Escalade ESV Black",         tagline: "Long-wheelbase ESV — group transfers in comfort.",    cat: "SUV",         folder: "Cadillac-Escalade-ESV-Black",         count: 14 },
+  { name: "Cadillac Escalade ESV Black",         tagline: "Long-wheelbase ESV - group transfers in comfort.",    cat: "SUV",         folder: "Cadillac-Escalade-ESV-Black",         count: 14 },
   { name: "Corvette C8 2026 Black",              tagline: "Mid-engine C8 in stealth black.",                    cat: "Coupe",       folder: "Corvette-C8-2026-Black",              count: 10 },
   { name: "Ferrari 296 GTS Red",                 tagline: "Hybrid V6 Spider in Rosso Corsa, top down.",         cat: "Convertible", folder: "Ferrari-296-GTS-Red",                 count: 16 },
   { name: "Ferrari F8 Black",                    tagline: "Twin-turbo V8 F8 Tributo in nero.",                  cat: "Supercar",    folder: "Ferrari-F8-Black",                    count: 12 },

@@ -19,10 +19,10 @@ export const submitContactForm = createServerFn({ method: 'POST' })
     const { error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
       to: ['arjunpat107@gmail.com'],
-      subject: `New inquiry — ${service} — ${name}`,
+      subject: `New inquiry - ${service} - ${name}`,
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
-          <h2 style="border-bottom:2px solid #000;padding-bottom:12px;">New Inquiry — Neel2k Concierge</h2>
+          <h2 style="border-bottom:2px solid #000;padding-bottom:12px;">New Inquiry - Neel2k Concierge</h2>
           <table style="width:100%;border-collapse:collapse;margin-top:16px;">
             <tr><td style="padding:8px 0;color:#666;width:140px;">Name</td><td style="padding:8px 0;font-weight:600;">${name}</td></tr>
             <tr><td style="padding:8px 0;color:#666;">Phone</td><td style="padding:8px 0;">${phone}</td></tr>

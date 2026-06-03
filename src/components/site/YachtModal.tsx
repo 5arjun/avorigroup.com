@@ -158,7 +158,7 @@ export function YachtModal({ yacht, onClose }: Props) {
             <img
               key={active.src}
               src={active.src}
-              alt={`${yacht.name} — photo ${activeIdx + 1}`}
+              alt={`${yacht.name} - photo ${activeIdx + 1}`}
               loading="eager"
               className="max-h-full max-w-full rounded-xl object-contain"
               style={{ maxHeight: "calc(100vh - 220px)" }}

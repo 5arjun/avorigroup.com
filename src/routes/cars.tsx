@@ -9,14 +9,14 @@ import heroCar from "@/assets/hero-car.jpg";
 export const Route = createFileRoute("/cars")({
   head: () => ({
     meta: [
-      { title: "Exotic & Luxury Car Rentals Miami — Ferrari, Lamborghini, Rolls-Royce · Neel2k" },
-      { name: "description", content: "Rent a Ferrari, Lamborghini, McLaren, Rolls-Royce, Porsche or AMG in Miami. Self-drive or chauffeured — delivered to your hotel, residence, or marina." },
-      { property: "og:title", content: "Exotic & Luxury Car Rentals in Miami — Neel2k" },
-      { property: "og:description", content: "Curated Miami exotic fleet — Ferrari, Lamborghini, McLaren, Porsche, Rolls-Royce, AMG. Delivered to you." },
+      { title: "Exotic & Luxury Car Rentals Miami - Ferrari, Lamborghini, Rolls-Royce · Neel2k" },
+      { name: "description", content: "Rent a Ferrari, Lamborghini, McLaren, Rolls-Royce, Porsche or AMG in Miami. Self-drive or chauffeured - delivered to your hotel, residence, or marina." },
+      { property: "og:title", content: "Exotic & Luxury Car Rentals in Miami - Neel2k" },
+      { property: "og:description", content: "Curated Miami exotic fleet - Ferrari, Lamborghini, McLaren, Porsche, Rolls-Royce, AMG. Delivered to you." },
       { property: "og:url", content: "/cars" },
       { property: "og:image", content: heroCar },
-      { name: "twitter:title", content: "Miami Exotic Car Rentals — Neel2k" },
-      { name: "twitter:description", content: "Ferrari, Lamborghini, McLaren, Rolls-Royce — delivered anywhere in Miami." },
+      { name: "twitter:title", content: "Miami Exotic Car Rentals - Neel2k" },
+      { name: "twitter:description", content: "Ferrari, Lamborghini, McLaren, Rolls-Royce - delivered anywhere in Miami." },
       { name: "twitter:image", content: heroCar },
     ],
     links: [{ rel: "canonical", href: "/cars" }],
