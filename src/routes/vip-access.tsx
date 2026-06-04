@@ -54,7 +54,7 @@ function VipPage() {
   const hasFilters = activeGenres.length > 0 || activeTypes.length > 0;
 
   return (
-    <PageShell ctaLabel="Inquire Now">
+    <PageShell ctaLabel="Inquire Now" service="VIP access">
       <section className="relative -mt-16 h-[60vh] min-h-[440px] overflow-hidden md:-mt-20">
         <img src={heroVip} alt="Miami nightlife" className="absolute inset-0 h-full w-full object-cover" />
         {/* Bottom-to-top fade for hero text legibility */}
@@ -149,7 +149,7 @@ function VipPage() {
                   </div>
                 </div>
                 <div className="mt-8 flex items-center justify-between gap-4">
-                  <Link to="/contact" className="btn-ghost text-ink">Inquire</Link>
+                  <Link to="/contact" search={{ service: "VIP access" }} className="btn-ghost text-ink">Inquire</Link>
                   <span className="text-xs uppercase tracking-[0.22em] text-muted-foreground">By guestlist</span>
                 </div>
               </article>
@@ -168,7 +168,7 @@ function VipPage() {
                 exit when it's time.
               </p>
             </div>
-            <Link to="/contact" className="btn-primary bg-primary-foreground !text-ink hover:!bg-accent hover:!text-primary-foreground">Plan the night</Link>
+            <Link to="/contact" search={{ service: "VIP access" }} className="btn-primary bg-primary-foreground !text-ink hover:!bg-accent hover:!text-primary-foreground">Plan the night</Link>
           </div>
         </div>
       </section>

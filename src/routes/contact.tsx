@@ -4,7 +4,21 @@ import { Phone, Instagram, MessageCircle, Check, Loader2 } from "lucide-react";
 import { PageShell } from "@/components/site/PageShell";
 import { submitContactForm, type ContactFormData } from "@/lib/actions/contact";
 
+const SERVICE_OPTIONS = ["Yacht charter", "Exotic car", "VIP access", "Full weekend"] as const;
+type ServiceOption = (typeof SERVICE_OPTIONS)[number];
+
+function normaliseService(raw: string | undefined): ServiceOption {
+  if (!raw) return "Yacht charter";
+  const match = SERVICE_OPTIONS.find(
+    (o) => o.toLowerCase() === raw.toLowerCase()
+  );
+  return match ?? "Yacht charter";
+}
+
 export const Route = createFileRoute("/contact")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    service: typeof search.service === "string" ? search.service : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Contact Neel2k Miami Concierge \u2014 Book Yachts, Cars & VIP" },
@@ -37,6 +51,9 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
+  const { service: rawService } = Route.useSearch();
+  const defaultService = normaliseService(rawService);
+
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -101,7 +118,8 @@ function ContactPage() {
                 <Select
                   label="Preferred service"
                   name="service"
-                  options={["Yacht charter", "Exotic car", "VIP access", "Full weekend"]}
+                  options={SERVICE_OPTIONS as unknown as string[]}
+                  defaultValue={defaultService}
                 />
                 <Field label="Desired date" name="date" type="date" required />
               </div>
@@ -165,15 +183,22 @@ function Field({ label, name, type = "text", required, placeholder }: {
   );
 }
 
-function Select({ label, name, options }: { label: string; name: string; options: string[] }) {
+function Select({ label, name, options, defaultValue }: {
+  label: string;
+  name: string;
+  options: string[];
+  defaultValue?: string;
+}) {
   return (
     <div>
       <label htmlFor={name} className="eyebrow">{label}</label>
       <select
-        id={name} name={name}
+        id={name}
+        name={name}
+        defaultValue={defaultValue}
         className="mt-2 h-12 w-full rounded-lg border border-input bg-background px-3 text-sm text-foreground outline-none transition-colors focus:border-ink"
       >
-        {options.map((o) => <option key={o}>{o}</option>)}
+        {options.map((o) => <option key={o} value={o}>{o}</option>)}
       </select>
     </div>
   );

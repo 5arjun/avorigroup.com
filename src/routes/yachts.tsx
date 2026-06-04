@@ -55,8 +55,8 @@ function YachtsPage() {
       options: [
         { label: "Any length",   value: "all"     },
         { label: "Up to 70 ft",  value: "0-70"    },
-        { label: "70 – 90 ft",   value: "70-90"   },
-        { label: "90 – 110 ft",  value: "90-110"  },
+        { label: "70 \u2013 90 ft",   value: "70-90"   },
+        { label: "90 \u2013 110 ft",  value: "90-110"  },
         { label: "110 ft and up",value: "110-999" },
       ],
     },
@@ -66,7 +66,7 @@ function YachtsPage() {
       options: [
         { label: "Any size", value: "all"    },
         { label: "Up to 10", value: "0-10"  },
-        { label: "11 – 12",  value: "11-12" },
+        { label: "11 \u2013 12",  value: "11-12" },
         { label: "13+",      value: "13-999"},
       ],
     },
@@ -90,11 +90,11 @@ function YachtsPage() {
   }, [query, values]);
 
   return (
-    <PageShell ctaLabel="Request Availability">
+    <PageShell ctaLabel="Request Availability" service="Yacht charter">
       {/* Lightbox modal */}
       <YachtModal yacht={selected} onClose={() => setSelected(null)} />
 
-      {/* ── Hero header ── */}
+      {/* \u2500\u2500 Hero header \u2500\u2500 */}
       <section className="container-luxe pt-16 md:pt-24">
         <div className="max-w-3xl">
           <p className="eyebrow">Fleet · {yachts.length} vessels</p>
@@ -103,13 +103,13 @@ function YachtsPage() {
             Sport yachts, sun-deck cruisers, and full-crew superyachts - each with provisioning,
             water toys, and slip-side service handled. Tap any card to open the gallery.
           </p>
-          <Link to="/contact" className="btn-primary mt-8">Request Availability</Link>
+          <Link to="/contact" search={{ service: "Yacht charter" }} className="btn-primary mt-8">Request Availability</Link>
         </div>
       </section>
 
       <div className="hairline my-16 md:my-20" />
 
-      {/* ── Filters + grid ── */}
+      {/* \u2500\u2500 Filters + grid \u2500\u2500 */}
       <section className="container-luxe pb-24">
         <InventoryFilters
           groups={groups}
@@ -135,7 +135,7 @@ function YachtsPage() {
   );
 }
 
-// ── Yacht card grid ────────────────────────────────────────────────────────
+// \u2500\u2500 Yacht card grid \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function YachtGrid({
   items,
   onSelect,
