@@ -11,7 +11,7 @@ const links = [
 ] as const;
 
 // Routes that have a full-bleed dark hero — header text should be white when unscrolled
-const DARK_HERO_ROUTES = ["/vip-access", "/cars"];
+const DARK_HERO_ROUTES = ["/vip-access"];
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
