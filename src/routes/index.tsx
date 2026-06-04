@@ -48,7 +48,7 @@ function Home() {
               concierge. VIP rooms after dark, when the occasion calls for it.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <Link to="/contact" className="btn-primary bg-primary-foreground !text-ink hover:!bg-accent hover:!text-primary-foreground">
+              <Link to="/contact" search={{ service: "Full weekend" }} className="btn-primary bg-primary-foreground !text-ink hover:!bg-accent hover:!text-primary-foreground">
                 Request Availability <ArrowUpRight size={16} />
               </Link>
               <Link to="/yachts" className="btn-ghost text-primary-foreground">
@@ -107,7 +107,7 @@ function Home() {
               <Link to="/vip-access" className="btn-primary bg-primary-foreground !text-ink hover:!bg-accent hover:!text-primary-foreground">
                 See the rooms
               </Link>
-              <Link to="/contact" className="btn-ghost text-primary-foreground">Inquire</Link>
+              <Link to="/contact" search={{ service: "VIP access" }} className="btn-ghost text-primary-foreground">Inquire</Link>
             </div>
           </div>
         </div>
@@ -184,7 +184,7 @@ function Home() {
           Tell us the weekend. <span className="italic">We'll build the rest.</span>
         </h2>
         <div className="mt-10">
-          <Link to="/contact" className="btn-primary">Request Availability</Link>
+          <Link to="/contact" search={{ service: "Full weekend" }} className="btn-primary">Request Availability</Link>
         </div>
       </section>
     </PageShell>
