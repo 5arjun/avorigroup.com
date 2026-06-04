@@ -1,13 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-
-// TODO: replace with project URL once a custom domain is set.
-const BASE_URL = "";
+import { BASE_URL } from "../lib/seo";
 
 interface SitemapEntry {
   path: string;
   changefreq?: "weekly" | "monthly" | "yearly";
   priority?: string;
+  lastmod?: string;
 }
 
 export const Route = createFileRoute("/sitemap.xml")({
@@ -15,11 +14,11 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         const entries: SitemapEntry[] = [
-          { path: "/", changefreq: "weekly", priority: "1.0" },
-          { path: "/yachts", changefreq: "weekly", priority: "0.9" },
-          { path: "/cars", changefreq: "weekly", priority: "0.9" },
-          { path: "/vip-access", changefreq: "monthly", priority: "0.7" },
-          { path: "/contact", changefreq: "yearly", priority: "0.6" },
+          { path: "/",           changefreq: "weekly",  priority: "1.0", lastmod: "2026-06-01" },
+          { path: "/yachts",     changefreq: "weekly",  priority: "0.9", lastmod: "2026-06-01" },
+          { path: "/cars",       changefreq: "weekly",  priority: "0.9", lastmod: "2026-06-01" },
+          { path: "/vip-access", changefreq: "monthly", priority: "0.7", lastmod: "2026-06-01" },
+          { path: "/contact",    changefreq: "yearly",  priority: "0.6", lastmod: "2026-06-01" },
         ];
 
         const urls = entries
@@ -27,8 +26,9 @@ export const Route = createFileRoute("/sitemap.xml")({
             [
               `  <url>`,
               `    <loc>${BASE_URL}${e.path}</loc>`,
+              e.lastmod    ? `    <lastmod>${e.lastmod}</lastmod>`           : null,
               e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
-              e.priority ? `    <priority>${e.priority}</priority>` : null,
+              e.priority   ? `    <priority>${e.priority}</priority>`       : null,
               `  </url>`,
             ]
               .filter(Boolean)

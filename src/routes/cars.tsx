@@ -4,6 +4,7 @@ import { PageShell } from "@/components/site/PageShell";
 import { InventoryAccordion } from "@/components/site/InventoryAccordion";
 import { InventoryFilters, type FilterGroup } from "@/components/site/InventoryFilters";
 import { cars } from "@/lib/inventory";
+import { abs, OG_IMAGES, BASE_URL } from "@/lib/seo";
 import heroCar from "@/assets/hero-car.jpg";
 
 export const Route = createFileRoute("/cars")({
@@ -13,13 +14,13 @@ export const Route = createFileRoute("/cars")({
       { name: "description", content: "Rent a Ferrari, Lamborghini, McLaren, Rolls-Royce, Porsche or AMG in Miami. Self-drive or chauffeured - delivered to your hotel, residence, or marina." },
       { property: "og:title", content: "Exotic & Luxury Car Rentals in Miami - Neel2k" },
       { property: "og:description", content: "Curated Miami exotic fleet - Ferrari, Lamborghini, McLaren, Porsche, Rolls-Royce, AMG. Delivered to you." },
-      { property: "og:url", content: "/cars" },
-      { property: "og:image", content: heroCar },
+      { property: "og:url", content: abs("/cars") },
+      { property: "og:image", content: OG_IMAGES.cars },
       { name: "twitter:title", content: "Miami Exotic Car Rentals - Neel2k" },
       { name: "twitter:description", content: "Ferrari, Lamborghini, McLaren, Rolls-Royce - delivered anywhere in Miami." },
-      { name: "twitter:image", content: heroCar },
+      { name: "twitter:image", content: OG_IMAGES.cars },
     ],
-    links: [{ rel: "canonical", href: "/cars" }],
+    links: [{ rel: "canonical", href: abs("/cars") }],
     scripts: [
       {
         type: "application/ld+json",
@@ -28,8 +29,21 @@ export const Route = createFileRoute("/cars")({
           "@type": "Service",
           serviceType: "Exotic & Luxury Car Rental",
           areaServed: { "@type": "City", name: "Miami" },
-          provider: { "@type": "LocalBusiness", name: "Neel2k" },
+          provider: { "@type": "LocalBusiness", name: "Neel2k", url: BASE_URL },
           name: "Miami Exotic & Luxury Car Rentals",
+          url: abs("/cars"),
+        }),
+      },
+      {
+        // BreadcrumbList — shows path in SERP: Neel2k > Cars
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+            { "@type": "ListItem", position: 2, name: "Cars", item: abs("/cars") },
+          ],
         }),
       },
     ],

@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { PageShell } from "@/components/site/PageShell";
 import { clubs, ALL_GENRES, ALL_VENUE_TYPES } from "@/lib/inventory";
 import type { Genre, VenueType } from "@/lib/inventory";
+import { abs, OG_IMAGES, BASE_URL } from "@/lib/seo";
 import heroVip from "@/assets/hero-vip.jpg";
 
 export const Route = createFileRoute("/vip-access")({
@@ -12,13 +13,27 @@ export const Route = createFileRoute("/vip-access")({
       { name: "description", content: "VIP tables and entry at Miami's top clubs and lounges - LIV, E11EVEN, Vendôme, Mr. Jones, Coco, Kiki on the River. A polished add-on to your concierge weekend." },
       { property: "og:title", content: "Miami VIP Access - Tables & Entry · Neel2k" },
       { property: "og:description", content: "Hold the right rooms for the right hours - Miami nightlife, handled." },
-      { property: "og:url", content: "/vip-access" },
-      { property: "og:image", content: heroVip },
+      { property: "og:url", content: abs("/vip-access") },
+      { property: "og:image", content: OG_IMAGES.vip },
       { name: "twitter:title", content: "Miami VIP Nightlife Access - Neel2k" },
       { name: "twitter:description", content: "VIP tables at LIV, E11EVEN, Vendôme and more - bundled with your Miami concierge day." },
-      { name: "twitter:image", content: heroVip },
+      { name: "twitter:image", content: OG_IMAGES.vip },
     ],
-    links: [{ rel: "canonical", href: "/vip-access" }],
+    links: [{ rel: "canonical", href: abs("/vip-access") }],
+    scripts: [
+      {
+        // BreadcrumbList — shows path in SERP: Neel2k > VIP Access
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home",       item: BASE_URL },
+            { "@type": "ListItem", position: 2, name: "VIP Access", item: abs("/vip-access") },
+          ],
+        }),
+      },
+    ],
   }),
   component: VipPage,
 });
@@ -56,7 +71,15 @@ function VipPage() {
   return (
     <PageShell ctaLabel="Inquire Now" service="VIP access">
       <section className="relative -mt-16 h-[60vh] min-h-[440px] overflow-hidden md:-mt-20">
-        <img src={heroVip} alt="Miami nightlife" className="absolute inset-0 h-full w-full object-cover" />
+        <img
+          src={heroVip}
+          alt="Miami VIP nightlife - exclusive club access and table reservations"
+          fetchPriority="high"
+          loading="eager"
+          width={1920}
+          height={1080}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
         {/* Bottom-to-top fade for hero text legibility */}
         <div className="absolute inset-0 bg-gradient-to-b from-ink/30 to-ink/85" />
         {/* Top overlay specifically to keep header links readable */}
