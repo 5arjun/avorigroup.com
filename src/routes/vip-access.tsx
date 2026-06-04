@@ -57,7 +57,10 @@ function VipPage() {
     <PageShell ctaLabel="Inquire Now">
       <section className="relative -mt-16 h-[60vh] min-h-[440px] overflow-hidden md:-mt-20">
         <img src={heroVip} alt="Miami nightlife" className="absolute inset-0 h-full w-full object-cover" />
+        {/* Bottom-to-top fade for hero text legibility */}
         <div className="absolute inset-0 bg-gradient-to-b from-ink/30 to-ink/85" />
+        {/* Top overlay specifically to keep header links readable */}
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-ink/60 to-transparent" />
         <div className="container-luxe relative flex h-full flex-col justify-end pb-14 text-primary-foreground md:pb-20">
           <p className="eyebrow !text-primary-foreground/70">Add-on · Optional</p>
           <h1 className="mt-3 text-5xl md:text-7xl">VIP Access</h1>
