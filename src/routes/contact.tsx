@@ -27,7 +27,7 @@ export const Route = createFileRoute("/contact")({
       { property: "og:description", content: "Direct line, WhatsApp, and Instagram DM, pick your channel. Reply within the hour." },
       { property: "og:url", content: "/contact" },
       { name: "twitter:title", content: "Contact Neel2k Miami" },
-      { name: "twitter:description", content: "Book Miami yachts, exotic cars, and VIP nightlife,  reply within the hour." },
+      { name: "twitter:description", content: "Book Miami yachts, exotic cars, and VIP nightlife, reply within the hour." },
     ],
     links: [{ rel: "canonical", href: "/contact" }],
     scripts: [
@@ -56,6 +56,9 @@ function validateForm(fd: FormData): string | null {
   if (name.length < 2) return "Name must be at least 2 characters.";
 
   const phone = (fd.get("phone") as string ?? "").trim();
+  // Reject anything that isn't digits, spaces, +, -, (, )
+  if (/[^\d\s+\-().]/.test(phone))
+    return "Phone number may only contain digits, spaces, and + - ( ) characters.";
   const digits = phone.replace(/\D/g, "");
   if (digits.length < 7 || digits.length > 15)
     return "Phone number must be between 7 and 15 digits.";
@@ -71,7 +74,7 @@ function validateForm(fd: FormData): string | null {
   const group = (fd.get("group") as string ?? "").trim();
   if (group) {
     const n = parseInt(group, 10);
-    if (isNaN(n) || n < 1 || n > 500)
+    if (isNaN(n) || String(n) !== group || n < 1 || n > 500)
       return "Group size must be a whole number between 1 and 500.";
   }
 
@@ -90,7 +93,6 @@ function ContactPage() {
 
     const fd = new FormData(e.currentTarget);
 
-    // Client-side validation first
     const clientError = validateForm(fd);
     if (clientError) {
       setStatus("error");
@@ -161,7 +163,6 @@ function ContactPage() {
                   name="phone"
                   type="tel"
                   required
-                  pattern="[\d\s+\-().]{7,20}"
                   maxLength={20}
                   autoComplete="tel"
                   placeholder="+1 305 000 0000"
