@@ -81,6 +81,7 @@ const yachtsRaw: {
   images: number;
   videoExts: string[];
 }[] = [
+  { name: "60' Rodman",               folder: "60'-Rodman",              length: "60 ft",  images: 39, videoExts: [] },
   { name: "100' Azimut Jumbo",       folder: "100'-Azimut-Jumbo",      length: "100 ft", images: 99, videoExts: [] },
   { name: "128' Angeles III",         folder: "128'-Angeles-III",        length: "128 ft", images: 42, videoExts: [] },
   { name: "130' Azimut",              folder: "130'-Azimut",             length: "130 ft", images: 86, videoExts: ["mov"] },
