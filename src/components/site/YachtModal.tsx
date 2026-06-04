@@ -205,7 +205,7 @@ export function YachtModal({ yacht, onClose }: Props) {
                     src={m.src}
                     muted
                     playsInline
-                    preload="metadata"
+                    preload="none"
                     className="h-full w-full object-cover"
                   />
                   {/* Play icon overlay */}
