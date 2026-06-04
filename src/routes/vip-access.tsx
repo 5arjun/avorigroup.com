@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState, useMemo } from "react";
 import { PageShell } from "@/components/site/PageShell";
-import { clubs } from "@/lib/inventory";
+import { clubs, ALL_GENRES, ALL_VENUE_TYPES } from "@/lib/inventory";
+import type { Genre, VenueType } from "@/lib/inventory";
 import heroVip from "@/assets/hero-vip.jpg";
 
 export const Route = createFileRoute("/vip-access")({
@@ -22,6 +24,35 @@ export const Route = createFileRoute("/vip-access")({
 });
 
 function VipPage() {
+  const [activeGenres, setActiveGenres] = useState<Genre[]>([]);
+  const [activeTypes, setActiveTypes] = useState<VenueType[]>([]);
+
+  function toggleGenre(g: Genre) {
+    setActiveGenres((prev) =>
+      prev.includes(g) ? prev.filter((x) => x !== g) : [...prev, g]
+    );
+  }
+
+  function toggleType(t: VenueType) {
+    setActiveTypes((prev) =>
+      prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
+    );
+  }
+
+  const filtered = useMemo(() => {
+    return clubs.filter((club) => {
+      const genreOk =
+        activeGenres.length === 0 ||
+        activeGenres.some((g) => club.genres.includes(g));
+      const typeOk =
+        activeTypes.length === 0 ||
+        activeTypes.some((t) => club.types.includes(t));
+      return genreOk && typeOk;
+    });
+  }, [activeGenres, activeTypes]);
+
+  const hasFilters = activeGenres.length > 0 || activeTypes.length > 0;
+
   return (
     <PageShell ctaLabel="Inquire Now">
       <section className="relative -mt-16 h-[60vh] min-h-[440px] overflow-hidden md:-mt-20">
@@ -38,24 +69,90 @@ function VipPage() {
       </section>
 
       <section className="container-luxe py-20 md:py-28">
-        <div className="grid gap-5 md:grid-cols-2">
-          {clubs.map((club) => (
-            <article key={club.name} className="group flex flex-col justify-between rounded-2xl border border-border bg-card p-7 transition-all hover:border-ink/30 md:p-9">
-              <div>
-                <div className="flex items-baseline justify-between gap-4">
-                  <h3 className="text-3xl text-ink md:text-4xl">{club.name}</h3>
-                  <span className="eyebrow">Room</span>
-                </div>
-                <p className="mt-4 text-base text-muted-foreground">{club.vibe}</p>
-                <p className="mt-2 text-sm text-ink/70">{club.note}</p>
-              </div>
-              <div className="mt-8 flex items-center justify-between gap-4">
-                <Link to="/contact" className="btn-ghost text-ink">Inquire</Link>
-                <span className="text-xs uppercase tracking-[0.22em] text-muted-foreground">By guestlist</span>
-              </div>
-            </article>
-          ))}
+        {/* ── Filters ── */}
+        <div className="mb-10 space-y-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="eyebrow mr-2 text-muted-foreground">Vibe</span>
+            {ALL_GENRES.map((g) => (
+              <FilterChip
+                key={g}
+                label={g}
+                active={activeGenres.includes(g)}
+                onClick={() => toggleGenre(g)}
+              />
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="eyebrow mr-2 text-muted-foreground">Type</span>
+            {ALL_VENUE_TYPES.map((t) => (
+              <FilterChip
+                key={t}
+                label={t}
+                active={activeTypes.includes(t)}
+                onClick={() => toggleType(t)}
+              />
+            ))}
+          </div>
+          {hasFilters && (
+            <button
+              className="text-xs uppercase tracking-[0.18em] text-muted-foreground underline-offset-2 hover:text-ink hover:underline transition-colors"
+              onClick={() => { setActiveGenres([]); setActiveTypes([]); }}
+            >
+              Clear filters
+            </button>
+          )}
         </div>
+
+        {/* ── Cards ── */}
+        {filtered.length === 0 ? (
+          <p className="py-20 text-center text-muted-foreground">No venues match the selected filters.</p>
+        ) : (
+          <div className="grid gap-5 md:grid-cols-2">
+            {filtered.map((club) => (
+              <article
+                key={club.name}
+                className="group flex flex-col justify-between rounded-2xl border border-border bg-card p-7 transition-all hover:border-ink/30 md:p-9"
+              >
+                <div>
+                  <div className="flex items-start justify-between gap-4">
+                    <h3 className="text-3xl text-ink md:text-4xl">{club.name}</h3>
+                    {/* Type badges */}
+                    <div className="flex flex-wrap justify-end gap-1 pt-1">
+                      {club.types.map((t) => (
+                        <span
+                          key={t}
+                          className="rounded-full border border-border bg-secondary px-2.5 py-0.5 text-[0.65rem] uppercase tracking-[0.14em] text-muted-foreground"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <p className="mt-4 text-base text-muted-foreground">{club.vibe}</p>
+                  {club.schedule && (
+                    <p className="mt-2 text-sm font-medium text-ink/70">{club.schedule}</p>
+                  )}
+                  <p className="mt-1 text-sm text-ink/50">{club.note}</p>
+                  {/* Genre tags */}
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {club.genres.map((g) => (
+                      <span
+                        key={g}
+                        className="rounded-full bg-ink/5 px-3 py-1 text-[0.7rem] uppercase tracking-[0.14em] text-ink/60"
+                      >
+                        {g}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-8 flex items-center justify-between gap-4">
+                  <Link to="/contact" className="btn-ghost text-ink">Inquire</Link>
+                  <span className="text-xs uppercase tracking-[0.22em] text-muted-foreground">By guestlist</span>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
 
         <div className="mt-20 rounded-2xl bg-ink p-10 text-primary-foreground md:p-16">
           <div className="grid items-center gap-8 md:grid-cols-[1fr_auto]">
@@ -73,5 +170,29 @@ function VipPage() {
         </div>
       </section>
     </PageShell>
+  );
+}
+
+function FilterChip({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={[
+        "rounded-full border px-4 py-1.5 text-xs uppercase tracking-[0.14em] transition-all",
+        active
+          ? "border-ink bg-ink text-primary-foreground"
+          : "border-border bg-card text-muted-foreground hover:border-ink/40 hover:text-ink",
+      ].join(" ")}
+    >
+      {label}
+    </button>
   );
 }

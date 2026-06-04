@@ -157,12 +157,106 @@ export const cars: InventoryItem[] = carsRaw.map((c) => {
 });
 
 // ─── CLUBS ────────────────────────────────────────────────────────────────────
-export type Club = { name: string; vibe: string; note: string };
+export type VenueType = "Club" | "Lounge" | "Dinner Party" | "Day Club";
+export type Genre = "Hip-Hop" | "EDM" | "Open Format";
+
+export type Club = {
+  name: string;
+  vibe: string;
+  note: string;
+  types: VenueType[];
+  genres: Genre[];
+  /** Short schedule line shown on the card, e.g. "Fri Hip-Hop · Sat EDM · Sun Hip-Hop" */
+  schedule?: string;
+};
+
 export const clubs: Club[] = [
-  { name: "LIV",               vibe: "Stadium-energy main room",    note: "Fontainebleau · Saturdays peak."  },
-  { name: "E11EVEN",           vibe: "24/7 ultraclub theatre",      note: "Downtown · late-night signature." },
-  { name: "Vendôme",           vibe: "Old-world supper club",       note: "Brickell · dinner into dancing."  },
-  { name: "Mr. Jones",         vibe: "Cinematic Wynwood lounge",    note: "Wynwood · curated guestlist."     },
-  { name: "Coco",              vibe: "Asian-inspired night garden", note: "Wynwood · weekday revival."       },
-  { name: "Kiki on the River", vibe: "Greek riverside daytime",     note: "River District · brunch to dusk." },
+  {
+    name: "LIV",
+    vibe: "Stadium-energy main room at Fontainebleau",
+    note: "Subject to change on holidays & big events.",
+    schedule: "Fri Hip-Hop · Sat EDM · Sun Hip-Hop",
+    types: ["Club"],
+    genres: ["Hip-Hop", "EDM"],
+  },
+  {
+    name: "E11EVEN",
+    vibe: "24/7 ultraclub theatre with headline DJs & artists",
+    note: "Downtown · late-night signature.",
+    types: ["Club"],
+    genres: ["Hip-Hop", "EDM", "Open Format"],
+  },
+  {
+    name: "Mr. Jones",
+    vibe: "Best Hip-Hop club in Miami Beach — high-level artists & performances",
+    note: "Miami Beach · curated guestlist.",
+    types: ["Club"],
+    genres: ["Hip-Hop"],
+  },
+  {
+    name: "Casa Neos",
+    vibe: "Beach day club by day, upscale lounge after dark",
+    note: "Miami Beach · dual-format venue.",
+    types: ["Day Club", "Lounge"],
+    genres: ["Open Format"],
+  },
+  {
+    name: "Kiki",
+    vibe: "Greek-style dinner party on the river",
+    note: "River District · brunch through late night.",
+    types: ["Dinner Party", "Lounge"],
+    genres: ["Open Format"],
+  },
+  {
+    name: "Habibi",
+    vibe: "Arab-style immersive dinner party",
+    note: "Miami · curated evenings.",
+    types: ["Dinner Party", "Lounge"],
+    genres: ["Open Format"],
+  },
+  {
+    name: "Coco",
+    vibe: "Fashion District Hip-Hop club & lounge",
+    note: "Fashion District · weekday revival.",
+    types: ["Club", "Lounge"],
+    genres: ["Hip-Hop"],
+  },
+  {
+    name: "Vendôme",
+    vibe: "Old-world supper club — dinner into dancing",
+    note: "Brickell · dinner into dancing.",
+    types: ["Club", "Dinner Party"],
+    genres: ["Hip-Hop"],
+  },
+  {
+    name: "Gekko",
+    vibe: "Restaurant & lounge from David Grutman & Bad Bunny",
+    note: "Brickell · late-night dining.",
+    types: ["Lounge"],
+    genres: ["Open Format"],
+  },
+  {
+    name: "Bacara",
+    vibe: "Open-format club — crowd-driven programming",
+    note: "Miami · rotating formats.",
+    types: ["Club"],
+    genres: ["Open Format"],
+  },
+  {
+    name: "Boobytrap",
+    vibe: "Gentleman's club with premium service",
+    note: "Miami · late night.",
+    types: ["Club"],
+    genres: ["Hip-Hop", "Open Format"],
+  },
+  {
+    name: "Mona",
+    vibe: "Hip-Hop lounge with an intimate, upscale feel",
+    note: "Miami · reservation recommended.",
+    types: ["Lounge"],
+    genres: ["Hip-Hop"],
+  },
 ];
+
+export const ALL_GENRES: Genre[] = ["Hip-Hop", "EDM", "Open Format"];
+export const ALL_VENUE_TYPES: VenueType[] = ["Club", "Lounge", "Dinner Party", "Day Club"];
