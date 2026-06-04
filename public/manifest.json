@@ -1,13 +1,13 @@
 {
   "name": "Neel2k Miami Concierge",
   "short_name": "Neel2k",
-  "description": "Private yacht charters, exotic car rentals, and VIP nightlife in Miami.",
+  "description": "Private yacht charters, exotic car rentals, and VIP nightlife access in Miami.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0b1a2b",
   "theme_color": "#0b1a2b",
   "icons": [
-    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
-    { "src": "/favicon-32x32.png",    "sizes": "32x32",   "type": "image/png" }
+    { "src": "/favicon-32x32.png", "sizes": "32x32",   "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
   ]
 }
