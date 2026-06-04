@@ -6,9 +6,11 @@ import type { InventoryItem, MediaItem } from "@/lib/inventory";
 export function InventoryAccordion({
   items,
   ctaLabel = "Inquire",
+  service,
 }: {
   items: InventoryItem[];
   ctaLabel?: string;
+  service?: string;
 }) {
   const [openId, setOpenId] = useState<string | null>(null);
 
@@ -21,6 +23,7 @@ export function InventoryAccordion({
           isOpen={openId === item.id}
           onToggle={() => setOpenId((prev) => (prev === item.id ? null : item.id))}
           ctaLabel={ctaLabel}
+          service={service}
         />
       ))}
     </div>
@@ -32,11 +35,13 @@ function Card({
   isOpen,
   onToggle,
   ctaLabel,
+  service,
 }: {
   item: InventoryItem;
   isOpen: boolean;
   onToggle: () => void;
   ctaLabel: string;
+  service?: string;
 }) {
   const panelId = `panel-${item.id}`;
   const btnId   = `btn-${item.id}`;
@@ -114,7 +119,11 @@ function Card({
               <p className="max-w-md text-sm text-muted-foreground">
                 Full specs, pricing, and add-on services delivered asap by your concierge.
               </p>
-              <Link to="/contact" className="btn-primary">
+              <Link
+                to="/contact"
+                search={service ? { service } : undefined}
+                className="btn-primary"
+              >
                 {ctaLabel}
               </Link>
             </div>

@@ -78,7 +78,7 @@ function CarsPage() {
   }, [query, values]);
 
   return (
-    <PageShell ctaLabel="Request Availability">
+    <PageShell ctaLabel="Request Availability" service="Exotic car">
       <section className="container-luxe pt-16 md:pt-24">
         <div className="max-w-3xl">
           <p className="eyebrow">Garage · 12 vehicles</p>
@@ -87,7 +87,7 @@ function CarsPage() {
             Marquee exotics and luxury daily-drivers, delivered to your hotel, residence,
             or marina. Insurance, fuel, and chauffeur options arranged on request.
           </p>
-          <Link to="/contact" className="btn-primary mt-8">Request Availability</Link>
+          <Link to="/contact" search={{ service: "Exotic car" }} className="btn-primary mt-8">Request Availability</Link>
         </div>
       </section>
 
@@ -105,7 +105,7 @@ function CarsPage() {
         />
         <div className="mt-8">
           {filtered.length > 0 ? (
-            <InventoryAccordion items={filtered} ctaLabel="Inquire about this car" />
+            <InventoryAccordion items={filtered} ctaLabel="Inquire about this car" service="Exotic car" />
           ) : (
             <p className="rounded-2xl border border-border bg-card/40 p-10 text-center text-muted-foreground">
               No cars match those filters. Try widening your search.
