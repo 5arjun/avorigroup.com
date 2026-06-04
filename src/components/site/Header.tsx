@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -10,9 +10,15 @@ const links = [
   { to: "/contact", label: "Contact" },
 ] as const;
 
+// Routes that have a full-bleed dark hero — header text should be white when unscrolled
+const DARK_HERO_ROUTES = ["/vip-access", "/cars"];
+
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  const isDarkHero = !scrolled && !open && DARK_HERO_ROUTES.includes(pathname);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -31,9 +37,15 @@ export function Header() {
     >
       <div className="container-luxe flex h-16 items-center justify-between md:h-20">
         <Link to="/" className="group flex items-baseline gap-1.5" onClick={() => setOpen(false)}>
-          <span className="font-display text-2xl tracking-tight text-ink">Neel</span>
-          <span className="font-display text-2xl tracking-tight text-accent">2k</span>
-          <span className="eyebrow ml-2 hidden text-[0.6rem] sm:inline">Miami</span>
+          <span className={`font-display text-2xl tracking-tight transition-colors ${
+            isDarkHero ? "text-white" : "text-ink"
+          }`}>Neel</span>
+          <span className={`font-display text-2xl tracking-tight transition-colors ${
+            isDarkHero ? "text-white/80" : "text-accent"
+          }`}>2k</span>
+          <span className={`eyebrow ml-2 hidden text-[0.6rem] sm:inline transition-colors ${
+            isDarkHero ? "text-white/60" : ""
+          }`}>Miami</span>
         </Link>
 
         <nav className="hidden items-center gap-9 md:flex">
@@ -41,8 +53,12 @@ export function Header() {
             <Link
               key={l.to}
               to={l.to}
-              className="text-[0.78rem] uppercase tracking-[0.22em] text-foreground/75 transition-colors hover:text-ink"
-              activeProps={{ className: "text-ink" }}
+              className={`text-[0.78rem] uppercase tracking-[0.22em] transition-colors hover:text-ink ${
+                isDarkHero
+                  ? "text-white/80 hover:!text-white"
+                  : "text-foreground/75"
+              }`}
+              activeProps={{ className: isDarkHero ? "!text-white" : "text-ink" }}
               activeOptions={{ exact: l.to === "/" }}
             >
               {l.label}
@@ -59,7 +75,11 @@ export function Header() {
             aria-label="Toggle menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="grid h-11 w-11 place-items-center rounded-full border border-border text-ink md:hidden"
+            className={`grid h-11 w-11 place-items-center rounded-full border transition-colors md:hidden ${
+              isDarkHero
+                ? "border-white/30 text-white"
+                : "border-border text-ink"
+            }`}
           >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
