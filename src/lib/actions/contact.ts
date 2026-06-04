@@ -11,10 +11,86 @@ export type ContactFormData = {
   message?: string;
 };
 
+const VALID_SERVICES = ["Yacht charter", "Exotic car", "VIP access", "Full weekend"] as const;
+
+/** Strip every HTML tag and trim whitespace. */
+function stripHtml(value: string): string {
+  return value.replace(/<[^>]*>/g, "").trim();
+}
+
+/** Escape characters that are special in HTML to prevent XSS in the email template. */
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;");
+}
+
+function sanitize(value: string, maxLen = 500): string {
+  return escapeHtml(stripHtml(value)).slice(0, maxLen);
+}
+
+function validateAndSanitize(raw: ContactFormData): ContactFormData {
+  // ── name ──────────────────────────────────────────────────────────────────
+  const name = sanitize(raw.name, 100);
+  if (!name || name.length < 2) throw new Error("Name must be at least 2 characters.");
+
+  // ── phone ─────────────────────────────────────────────────────────────────
+  // Allow digits, spaces, +, -, (, ) — strip everything else, then validate length
+  const phoneClean = stripHtml(raw.phone).replace(/[^\d\s+\-().]/g, "").trim();
+  const digitsOnly = phoneClean.replace(/\D/g, "");
+  if (digitsOnly.length < 7 || digitsOnly.length > 15)
+    throw new Error("Phone number must be between 7 and 15 digits.");
+  const phone = escapeHtml(phoneClean);
+
+  // ── instagram (optional) ──────────────────────────────────────────────────
+  let instagram: string | undefined;
+  if (raw.instagram) {
+    const igRaw = sanitize(raw.instagram, 40);
+    // Allow only alphanumeric, underscores, dots, and a leading @
+    const igClean = igRaw.replace(/[^a-zA-Z0-9_.@]/g, "");
+    instagram = igClean || undefined;
+  }
+
+  // ── service ───────────────────────────────────────────────────────────────
+  const service = VALID_SERVICES.find(
+    (s) => s.toLowerCase() === (raw.service ?? "").toLowerCase()
+  );
+  if (!service) throw new Error("Invalid service selection.");
+
+  // ── date ──────────────────────────────────────────────────────────────────
+  const dateStr = stripHtml(raw.date).trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) throw new Error("Invalid date format.");
+  const parsedDate = new Date(dateStr);
+  if (isNaN(parsedDate.getTime())) throw new Error("Invalid date.");
+  // Must not be in the past (allow today)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (parsedDate < today) throw new Error("Date cannot be in the past.");
+  const date = dateStr;
+
+  // ── group size (optional) ─────────────────────────────────────────────────
+  let group: string | undefined;
+  if (raw.group) {
+    const groupNum = parseInt(stripHtml(raw.group), 10);
+    if (isNaN(groupNum) || groupNum < 1 || groupNum > 500)
+      throw new Error("Group size must be a number between 1 and 500.");
+    group = String(groupNum);
+  }
+
+  // ── message (optional) ────────────────────────────────────────────────────
+  const message = raw.message ? sanitize(raw.message, 2000) : undefined;
+
+  return { name, phone, instagram, service, date, group, message };
+}
+
 export const submitContactForm = createServerFn({ method: 'POST' })
   .inputValidator((data: ContactFormData) => data)
   .handler(async ({ data }) => {
-    const { name, phone, instagram, service, date, group, message } = data;
+    const { name, phone, instagram, service, date, group, message } =
+      validateAndSanitize(data);
 
     const { error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
@@ -22,7 +98,7 @@ export const submitContactForm = createServerFn({ method: 'POST' })
       subject: `New inquiry - ${service} - ${name}`,
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
-          <h2 style="border-bottom:2px solid #000;padding-bottom:12px;">New Inquiry - Neel2k Concierge</h2>
+          <h2 style="border-bottom:2px solid #000;padding-bottom:12px;">New Inquiry &mdash; Neel2k Concierge</h2>
           <table style="width:100%;border-collapse:collapse;margin-top:16px;">
             <tr><td style="padding:8px 0;color:#666;width:140px;">Name</td><td style="padding:8px 0;font-weight:600;">${name}</td></tr>
             <tr><td style="padding:8px 0;color:#666;">Phone</td><td style="padding:8px 0;">${phone}</td></tr>

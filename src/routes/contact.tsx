@@ -50,6 +50,34 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
+// Client-side field-level validation — mirrors server rules
+function validateForm(fd: FormData): string | null {
+  const name = (fd.get("name") as string ?? "").trim();
+  if (name.length < 2) return "Name must be at least 2 characters.";
+
+  const phone = (fd.get("phone") as string ?? "").trim();
+  const digits = phone.replace(/\D/g, "");
+  if (digits.length < 7 || digits.length > 15)
+    return "Phone number must be between 7 and 15 digits.";
+
+  const date = (fd.get("date") as string ?? "").trim();
+  if (!date) return "Please select a desired date.";
+  const parsed = new Date(date);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (isNaN(parsed.getTime()) || parsed < today)
+    return "Please choose a date that is today or in the future.";
+
+  const group = (fd.get("group") as string ?? "").trim();
+  if (group) {
+    const n = parseInt(group, 10);
+    if (isNaN(n) || n < 1 || n > 500)
+      return "Group size must be a whole number between 1 and 500.";
+  }
+
+  return null;
+}
+
 function ContactPage() {
   const { service: rawService } = Route.useSearch();
   const defaultService = normaliseService(rawService);
@@ -59,18 +87,28 @@ function ContactPage() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const fd = new FormData(e.currentTarget);
+
+    // Client-side validation first
+    const clientError = validateForm(fd);
+    if (clientError) {
+      setStatus("error");
+      setErrorMsg(clientError);
+      return;
+    }
+
     setStatus("loading");
     setErrorMsg("");
 
-    const fd = new FormData(e.currentTarget);
     const data: ContactFormData = {
-      name:      fd.get("name")      as string,
-      phone:     fd.get("phone")     as string,
-      instagram: (fd.get("instagram") as string) || undefined,
+      name:      (fd.get("name")      as string).trim(),
+      phone:     (fd.get("phone")     as string).trim(),
+      instagram: (fd.get("instagram") as string).trim() || undefined,
       service:   fd.get("service")   as string,
       date:      fd.get("date")      as string,
-      group:     (fd.get("group")    as string) || undefined,
-      message:   (fd.get("message") as string) || undefined,
+      group:     (fd.get("group")    as string).trim() || undefined,
+      message:   (fd.get("message")  as string).trim() || undefined,
     };
 
     try {
@@ -96,7 +134,7 @@ function ContactPage() {
       </section>
 
       <section className="container-luxe mt-14 grid gap-10 md:mt-20 md:grid-cols-[1.4fr_1fr] md:gap-16">
-        <form onSubmit={onSubmit} className="rounded-2xl border border-border bg-card p-7 md:p-10">
+        <form onSubmit={onSubmit} noValidate className="rounded-2xl border border-border bg-card p-7 md:p-10">
           {status === "success" ? (
             <div className="flex min-h-[400px] flex-col items-center justify-center text-center">
               <span className="grid h-14 w-14 place-items-center rounded-full bg-ink text-primary-foreground">
@@ -109,31 +147,69 @@ function ContactPage() {
             </div>
           ) : (
             <div className="grid gap-5">
-              <Field label="Name" name="name" required />
+              <Field
+                label="Name"
+                name="name"
+                required
+                minLength={2}
+                maxLength={100}
+                autoComplete="name"
+              />
               <div className="grid gap-5 sm:grid-cols-2">
-                <Field label="Phone" name="phone" type="tel" required />
-                <Field label="Instagram" name="instagram" placeholder="@handle" />
+                <Field
+                  label="Phone"
+                  name="phone"
+                  type="tel"
+                  required
+                  pattern="[\d\s+\-().]{7,20}"
+                  maxLength={20}
+                  autoComplete="tel"
+                  placeholder="+1 305 000 0000"
+                />
+                <Field
+                  label="Instagram"
+                  name="instagram"
+                  placeholder="@handle"
+                  pattern="@?[a-zA-Z0-9_.]{1,30}"
+                  maxLength={40}
+                />
               </div>
               <div className="grid gap-5 sm:grid-cols-2">
-                <Select
+                <SelectField
                   label="Preferred service"
                   name="service"
                   options={SERVICE_OPTIONS as unknown as string[]}
                   defaultValue={defaultService}
                 />
-                <Field label="Desired date" name="date" type="date" required />
+                <Field
+                  label="Desired date"
+                  name="date"
+                  type="date"
+                  required
+                  min={new Date().toISOString().split("T")[0]}
+                />
               </div>
-              <Field label="Group size" name="group" type="number" placeholder="e.g. 8" />
+              <Field
+                label="Group size"
+                name="group"
+                type="number"
+                placeholder="e.g. 8"
+                min="1"
+                max="500"
+              />
               <div>
                 <label htmlFor="message" className="eyebrow">Message</label>
                 <textarea
-                  id="message" name="message" rows={4}
+                  id="message"
+                  name="message"
+                  rows={4}
+                  maxLength={2000}
                   placeholder="Tell us about the occasion, any preferences, add-ons"
                   className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-ink"
                 />
               </div>
               {status === "error" && (
-                <p className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                <p role="alert" className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
                   {errorMsg || "Something went wrong. Please try again or reach out directly."}
                 </p>
               )}
@@ -143,10 +219,10 @@ function ContactPage() {
                 className="btn-primary mt-2 flex items-center justify-center gap-2 disabled:opacity-60"
               >
                 {status === "loading" ? (
-                  <><Loader2 size={16} className="animate-spin" /> Sending\u2026</>
+                  <><Loader2 size={16} className="animate-spin" /> Sending&hellip;</>
                 ) : "Send Inquiry"}
               </button>
-              <p className="text-xs text-muted-foreground">We respond within the hour, 9am-11pm ET.</p>
+              <p className="text-xs text-muted-foreground">We respond within the hour, 9am&ndash;11pm ET.</p>
             </div>
           )}
         </form>
@@ -167,8 +243,30 @@ function ContactPage() {
   );
 }
 
-function Field({ label, name, type = "text", required, placeholder }: {
-  label: string; name: string; type?: string; required?: boolean; placeholder?: string;
+function Field({
+  label,
+  name,
+  type = "text",
+  required,
+  placeholder,
+  pattern,
+  minLength,
+  maxLength,
+  min,
+  max,
+  autoComplete,
+}: {
+  label: string;
+  name: string;
+  type?: string;
+  required?: boolean;
+  placeholder?: string;
+  pattern?: string;
+  minLength?: number;
+  maxLength?: number;
+  min?: string;
+  max?: string;
+  autoComplete?: string;
 }) {
   return (
     <div>
@@ -176,14 +274,29 @@ function Field({ label, name, type = "text", required, placeholder }: {
         {label}{required && <span className="text-accent"> *</span>}
       </label>
       <input
-        id={name} name={name} type={type} required={required} placeholder={placeholder}
+        id={name}
+        name={name}
+        type={type}
+        required={required}
+        placeholder={placeholder}
+        pattern={pattern}
+        minLength={minLength}
+        maxLength={maxLength}
+        min={min}
+        max={max}
+        autoComplete={autoComplete}
         className="mt-2 h-12 w-full rounded-lg border border-input bg-background px-4 text-sm text-foreground outline-none transition-colors focus:border-ink"
       />
     </div>
   );
 }
 
-function Select({ label, name, options, defaultValue }: {
+function SelectField({
+  label,
+  name,
+  options,
+  defaultValue,
+}: {
   label: string;
   name: string;
   options: string[];
@@ -204,8 +317,16 @@ function Select({ label, name, options, defaultValue }: {
   );
 }
 
-function DirectLink({ href, icon, label, value }: {
-  href: string; icon: React.ReactNode; label: string; value: string;
+function DirectLink({
+  href,
+  icon,
+  label,
+  value,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+  value: string;
 }) {
   return (
     <a
