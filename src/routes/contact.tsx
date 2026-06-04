@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Phone, Instagram, MessageCircle, Check, Loader2 } from "lucide-react";
 import { PageShell } from "@/components/site/PageShell";
 import { submitContactForm, type ContactFormData } from "@/lib/actions/contact";
+import { abs, BASE_URL } from "@/lib/seo";
 
 const SERVICE_OPTIONS = ["Yacht charter", "Exotic car", "VIP access", "Full weekend"] as const;
 type ServiceOption = (typeof SERVICE_OPTIONS)[number];
@@ -25,11 +26,11 @@ export const Route = createFileRoute("/contact")({
       { name: "description", content: "Contact Neel2k to book a Miami yacht charter, exotic car rental, or VIP table. Call, WhatsApp, Instagram DM, or send an inquiry \u2014 reply within the hour." },
       { property: "og:title", content: "Contact Neel2k Miami Concierge" },
       { property: "og:description", content: "Direct line, WhatsApp, and Instagram DM, pick your channel. Reply within the hour." },
-      { property: "og:url", content: "/contact" },
+      { property: "og:url", content: abs("/contact") },
       { name: "twitter:title", content: "Contact Neel2k Miami" },
       { name: "twitter:description", content: "Book Miami yachts, exotic cars, and VIP nightlife, reply within the hour." },
     ],
-    links: [{ rel: "canonical", href: "/contact" }],
+    links: [{ rel: "canonical", href: abs("/contact") }],
     scripts: [
       {
         type: "application/ld+json",
@@ -37,12 +38,26 @@ export const Route = createFileRoute("/contact")({
           "@context": "https://schema.org",
           "@type": "ContactPage",
           name: "Contact Neel2k Miami",
+          url: abs("/contact"),
           mainEntity: {
             "@type": "LocalBusiness",
             name: "Neel2k",
+            url: BASE_URL,
             telephone: "+1-305-555-0199",
             areaServed: "Miami",
           },
+        }),
+      },
+      {
+        // BreadcrumbList — shows path in SERP: Neel2k > Contact
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home",    item: BASE_URL },
+            { "@type": "ListItem", position: 2, name: "Contact", item: abs("/contact") },
+          ],
         }),
       },
     ],

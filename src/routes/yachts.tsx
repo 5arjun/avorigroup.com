@@ -5,6 +5,7 @@ import { InventoryFilters, type FilterGroup } from "@/components/site/InventoryF
 import { YachtModal } from "@/components/site/YachtModal";
 import { yachts } from "@/lib/inventory";
 import type { InventoryItem } from "@/lib/inventory";
+import { abs, OG_IMAGES, BASE_URL } from "@/lib/seo";
 import heroYacht from "@/assets/hero-yacht.jpg";
 
 export const Route = createFileRoute("/yachts")({
@@ -14,13 +15,13 @@ export const Route = createFileRoute("/yachts")({
       { name: "description", content: "Charter a private yacht in Miami - Sunseeker, Pershing, Ferretti, Azimut and more. Half-day, sunset, and overnight charters with full crew." },
       { property: "og:title", content: "Private Yacht Charters in Miami - Neel2k" },
       { property: "og:description", content: "Hand-picked Miami yachts from 50ft sport cruisers to 130ft superyachts. Full crew, full discretion." },
-      { property: "og:url", content: "/yachts" },
-      { property: "og:image", content: heroYacht },
+      { property: "og:url", content: abs("/yachts") },
+      { property: "og:image", content: OG_IMAGES.yachts },
       { name: "twitter:title", content: "Miami Yacht Charters - Neel2k" },
       { name: "twitter:description", content: "Private yacht charters across Miami - full crew, fully curated." },
-      { name: "twitter:image", content: heroYacht },
+      { name: "twitter:image", content: OG_IMAGES.yachts },
     ],
-    links: [{ rel: "canonical", href: "/yachts" }],
+    links: [{ rel: "canonical", href: abs("/yachts") }],
     scripts: [
       {
         type: "application/ld+json",
@@ -29,8 +30,21 @@ export const Route = createFileRoute("/yachts")({
           "@type": "Service",
           serviceType: "Private Yacht Charter",
           areaServed: { "@type": "City", name: "Miami" },
-          provider: { "@type": "LocalBusiness", name: "Neel2k" },
+          provider: { "@type": "LocalBusiness", name: "Neel2k", url: BASE_URL },
           name: "Miami Private Yacht Charters",
+          url: abs("/yachts"),
+        }),
+      },
+      {
+        // BreadcrumbList — shows path in SERP: Neel2k > Yachts
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home",   item: BASE_URL },
+            { "@type": "ListItem", position: 2, name: "Yachts", item: abs("/yachts") },
+          ],
         }),
       },
     ],
@@ -135,7 +149,6 @@ function YachtsPage() {
   );
 }
 
-// \u2500\u2500 Yacht card grid \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function YachtGrid({
   items,
   onSelect,
@@ -172,7 +185,7 @@ function YachtCard({
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
           src={yacht.cover}
-          alt={yacht.name}
+          alt={`${yacht.name} - Private Yacht Charter Miami`}
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
         />

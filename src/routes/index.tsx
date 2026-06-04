@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight, Sparkles, Anchor, Car, Wine, ShieldCheck, Clock, Users, Compass } from "lucide-react";
 import { PageShell } from "@/components/site/PageShell";
 import { yachts, cars } from "@/lib/inventory";
+import { abs, OG_IMAGES, BASE_URL } from "@/lib/seo";
 import heroHome from "@/assets/hero-home.jpg";
 import heroCar from "@/assets/hero-car.jpg";
 import heroYachtImg from "@/assets/hero-yacht.jpg";
@@ -14,13 +15,57 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Private yacht charters, exotic car rentals, and VIP nightlife access in Miami - curated end-to-end by a single trusted concierge. Reply within the hour." },
       { property: "og:title", content: "Neel2k - Miami Yacht Charters, Exotic Cars & VIP Access" },
       { property: "og:description", content: "One Miami concierge for private yachts, exotic cars, and the city's most coveted rooms." },
-      { property: "og:url", content: "/" },
-      { property: "og:image", content: heroHome },
+      { property: "og:url", content: abs("/") },
+      { property: "og:image", content: OG_IMAGES.home },
       { name: "twitter:title", content: "Neel2k - Miami Luxury Concierge" },
       { name: "twitter:description", content: "Yacht charters, exotic car rentals, and VIP nightlife - Miami, end-to-end." },
-      { name: "twitter:image", content: heroHome },
+      { name: "twitter:image", content: OG_IMAGES.home },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: abs("/") }],
+    scripts: [
+      {
+        // FAQPage schema — can show Q&A accordion directly in Google SERP
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "How far in advance should I book a yacht charter in Miami?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "We recommend inquiring at least 48–72 hours in advance for standard charters. For superyachts or busy holiday weekends, 1–2 weeks is ideal. Last-minute requests are always welcome — we respond within the hour.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Do you deliver exotic cars to hotels in Miami?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes. We deliver to any Miami hotel, private residence, marina, or airport. Chauffeur options are also available on request.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Can I bundle a yacht charter with a car rental and VIP nightlife?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Absolutely — that's exactly what Neel2k specializes in. We coordinate all three through a single concierge so nothing falls between providers. Tell us your weekend and we'll build the full itinerary.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "What areas of Miami do you serve?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "We serve all of Greater Miami including South Beach, Brickell, Wynwood, Coconut Grove, Miami Beach, and the surrounding waters for yacht charters.",
+              },
+            },
+          ],
+        }),
+      },
+    ],
   }),
   component: Home,
 });
@@ -32,7 +77,11 @@ function Home() {
       <section className="relative -mt-16 h-[100svh] min-h-[640px] w-full overflow-hidden md:-mt-20">
         <img
           src={heroHome}
-          alt="Luxury yacht in Miami at golden hour"
+          alt="Luxury yacht cruising Miami waters at golden hour"
+          fetchPriority="high"
+          loading="eager"
+          width={1920}
+          height={1080}
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/20 to-ink/85" />
@@ -78,6 +127,7 @@ function Home() {
             title="Private Charters"
             copy="Sport-yachts, sun-deck cruisers, and full-crew superyachts. Half-day to overnight."
             image={heroYachtImg}
+            imageAlt="Private yacht charter Miami - sport cruisers and superyachts"
             icon={<Anchor size={18} />}
           />
           <ServiceCard
@@ -86,6 +136,7 @@ function Home() {
             title="Exotic & Luxury Fleet"
             copy="Cullinan, Urus, 296 GTB, G-Wagons, soft-tops. Delivered to your door."
             image={heroCar}
+            imageAlt="Exotic and luxury car rental Miami - Ferrari, Lamborghini, Rolls-Royce"
             icon={<Car size={18} />}
           />
         </div>
@@ -95,7 +146,14 @@ function Home() {
       <section className="bg-slate-900 text-primary-foreground">
         <div className="container-luxe grid items-center gap-12 py-24 md:grid-cols-2 md:py-32">
           <div className="relative aspect-[5/6] overflow-hidden rounded-2xl">
-            <img src={heroVip} alt="Miami nightlife" loading="lazy" className="h-full w-full object-cover" />
+            <img
+              src={heroVip}
+              alt="Miami VIP nightlife - exclusive tables at LIV and E11EVEN"
+              loading="lazy"
+              width={800}
+              height={960}
+              className="h-full w-full object-cover"
+            />
           </div>
           <div>
             <p className="eyebrow !text-primary-foreground/60">Add-on</p>
@@ -156,7 +214,7 @@ function Home() {
           </div>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {yachts.slice(0, 3).map((y) => (
-              <PreviewCard key={y.id} title={y.name} tagline={y.tagline} image={y.cover} to="/yachts" />
+              <PreviewCard key={y.id} title={y.name} tagline={y.tagline} image={y.cover} to="/yachts" type="yacht" />
             ))}
           </div>
 
@@ -171,7 +229,7 @@ function Home() {
           </div>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {cars.slice(0, 3).map((c) => (
-              <PreviewCard key={c.id} title={c.name} tagline={c.tagline} image={c.cover} to="/cars" />
+              <PreviewCard key={c.id} title={c.name} tagline={c.tagline} image={c.cover} to="/cars" type="car" />
             ))}
           </div>
         </div>
@@ -191,12 +249,12 @@ function Home() {
   );
 }
 
-function ServiceCard({ to, tag, title, copy, image, icon }: {
-  to: "/yachts" | "/cars"; tag: string; title: string; copy: string; image: string; icon: React.ReactNode;
+function ServiceCard({ to, tag, title, copy, image, imageAlt, icon }: {
+  to: "/yachts" | "/cars"; tag: string; title: string; copy: string; image: string; imageAlt: string; icon: React.ReactNode;
 }) {
   return (
     <Link to={to} className="group relative block aspect-[4/5] overflow-hidden rounded-2xl bg-ink">
-      <img src={image} alt={title} loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-[1.4s] ease-out group-hover:scale-105" />
+      <img src={image} alt={imageAlt} loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-[1.4s] ease-out group-hover:scale-105" />
       <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" />
       <div className="relative flex h-full flex-col justify-between p-7 text-primary-foreground md:p-10">
         <div className="flex items-center justify-between">
@@ -225,11 +283,14 @@ function Why({ icon, title, children }: { icon: React.ReactNode; title: string; 
   );
 }
 
-function PreviewCard({ title, tagline, image, to }: { title: string; tagline: string; image: string; to: "/yachts" | "/cars"; }) {
+function PreviewCard({ title, tagline, image, to, type }: { title: string; tagline: string; image: string; to: "/yachts" | "/cars"; type: "yacht" | "car"; }) {
+  const altText = type === "yacht"
+    ? `${title} - Private Yacht Charter Miami`
+    : `${title} - Exotic Car Rental Miami`;
   return (
     <Link to={to} className="group block overflow-hidden rounded-xl bg-card">
       <div className="relative aspect-[4/3] overflow-hidden">
-        <img src={image} alt={title} loading="lazy" className="h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105" />
+        <img src={image} alt={altText} loading="lazy" className="h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105" />
       </div>
       <div className="p-5">
         <h3 className="text-xl text-ink">{title}</h3>
