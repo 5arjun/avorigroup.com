@@ -202,6 +202,13 @@ export const clubs: Club[] = [
     genres: ["Open Format"],
   },
   {
+    name: "Strawberry Moon",
+    vibe: "Rooftop day club at the Goodtime Hotel — pool party energy with a South Beach edge",
+    note: "South Beach · poolside reservations.",
+    types: ["Day Club", "Lounge"],
+    genres: ["Open Format"],
+  },
+  {
     name: "Kiki",
     vibe: "Greek-style dinner party on the river",
     note: "River District · brunch through late night.",
