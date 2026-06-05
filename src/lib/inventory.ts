@@ -131,7 +131,7 @@ const carsRaw: { name: string; tagline: string; cat: string; folder: string; cou
   { name: "Ferrari 296 GTS Red",                 tagline: "Hybrid V6 Spider in Rosso Corsa, top down.",         cat: "Convertible", folder: "Ferrari-296-GTS-Red",                 count: 16 },
   { name: "Ferrari F8 Black",                    tagline: "Twin-turbo V8 F8 Tributo in nero.",                  cat: "Supercar",    folder: "Ferrari-F8-Black",                    count: 12 },
   { name: "Ferrari SF90 Satin Black",            tagline: "Plug-in hybrid flagship, satin black wrap.",         cat: "Hypercar",    folder: "Ferrari-SF90-Satin-Black",            count: 10 },
-  { name: "Lamborghini Evo Spider Grey",         tagline: "Huracán EVO Spider in grigio, sound on demand.",     cat: "Convertible", folder: "Lamborghini-Evo-Spider-Grey",         count: 14 },
+  { name: "Lamborghini Evo Spider Grey",         tagline: "Hurac\u00e1n EVO Spider in grigio, sound on demand.",     cat: "Convertible", folder: "Lamborghini-Evo-Spider-Grey",         count: 14 },
   { name: "Lamborghini Urus Black",              tagline: "Performance SUV in stealth black.",                  cat: "SUV",         folder: "Lamborghini-Urus-Black",              count: 17 },
   { name: "Lamborghini Urus Performante Purple", tagline: "Track-tuned Urus Performante in viola.",             cat: "SUV",         folder: "Lamborghini-Urus-Performante-Purple", count: 10 },
   { name: "McLaren 750S Spider Orange",          tagline: "Papaya orange Spider with dihedral doors.",          cat: "Supercar",    folder: "Mclaren-750S-Spider-Orange",          count: 8  },
@@ -202,13 +202,6 @@ export const clubs: Club[] = [
     genres: ["Open Format"],
   },
   {
-    name: "Strawberry Moon",
-    vibe: "Rooftop day club at the Goodtime Hotel — pool party energy with a South Beach edge",
-    note: "South Beach · poolside reservations.",
-    types: ["Day Club", "Lounge"],
-    genres: ["Open Format"],
-  },
-  {
     name: "Kiki",
     vibe: "Greek-style dinner party on the river",
     note: "River District · brunch through late night.",
@@ -263,6 +256,13 @@ export const clubs: Club[] = [
     note: "Miami · reservation recommended.",
     types: ["Lounge"],
     genres: ["Hip-Hop"],
+  },
+  {
+    name: "Strawberry Moon",
+    vibe: "Mediterranean day club — pool party energy with a South Beach edge",
+    note: "South Beach · poolside reservations.",
+    types: ["Day Club", "Lounge"],
+    genres: ["Open Format"],
   },
 ];
 
