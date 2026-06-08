@@ -189,7 +189,7 @@ export const clubs: Club[] = [
   },
   {
     name: "Club Space",
-    vibe: "Legendary underground EDM club — world-class DJs & marathon sets",
+    vibe: "Legendary EDM club — world-class DJs & marathon sets",
     note: "Downtown · open from Friday night through Sunday.",
     schedule: "Fri–Sun EDM",
     types: ["Club"],
