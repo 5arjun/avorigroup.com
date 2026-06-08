@@ -188,6 +188,14 @@ export const clubs: Club[] = [
     genres: ["Hip-Hop", "EDM", "Open Format"],
   },
   {
+    name: "Club Space",
+    vibe: "Legendary EDM club — world-class DJs & marathon sets",
+    note: "Downtown · open from Friday night through Sunday.",
+    schedule: "Fri–Sun EDM",
+    types: ["Club"],
+    genres: ["EDM"],
+  },
+  {
     name: "Mr. Jones",
     vibe: "Best Hip-Hop club in Miami Beach — high-level artists & performances",
     note: "Miami Beach · curated guestlist.",
