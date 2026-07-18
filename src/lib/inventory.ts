@@ -198,14 +198,14 @@ export const clubs: Club[] = [
   {
     name: "Mr. Jones",
     vibe: "Best Hip-Hop club in Miami Beach — high-level artists & performances",
-    note: "Miami Beach · curated guestlist.",
+    note: "South Beach · curated guestlist.",
     types: ["Club"],
     genres: ["Hip-Hop"],
   },
   {
     name: "Casa Neos",
     vibe: "Beach day club by day, upscale lounge after dark",
-    note: "Miami Beach · dual-format venue.",
+    note: "River District · dual-format venue.",
     types: ["Day Club", "Lounge"],
     genres: ["Open Format"],
   },
@@ -219,7 +219,7 @@ export const clubs: Club[] = [
   {
     name: "Habibi",
     vibe: "Arab-style immersive dinner party",
-    note: "Miami · curated evenings.",
+    note: "River District · curated evenings.",
     types: ["Dinner Party", "Lounge"],
     genres: ["Open Format"],
   },
@@ -233,7 +233,7 @@ export const clubs: Club[] = [
   {
     name: "Vendôme",
     vibe: "Old-world supper club — dinner into dancing",
-    note: "Brickell · dinner into dancing.",
+    note: "South Beach · dinner into dancing.",
     types: ["Club", "Dinner Party"],
     genres: ["Hip-Hop"],
   },
@@ -247,7 +247,7 @@ export const clubs: Club[] = [
   {
     name: "Bacara",
     vibe: "Open-format club — crowd-driven programming",
-    note: "Miami · rotating formats.",
+    note: "South Beach · rotating formats.",
     types: ["Club"],
     genres: ["Open Format"],
   },
