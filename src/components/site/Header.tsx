@@ -48,12 +48,12 @@ export function Header() {
           }`}>Miami</span>
         </Link>
 
-        <nav className="hidden items-center gap-9 md:flex">
+        <nav className="hidden items-center gap-9 lg:flex">
           {links.map((l) => (
             <Link
               key={l.to}
               to={l.to}
-              className={`text-[0.78rem] uppercase tracking-[0.22em] transition-colors hover:text-ink ${
+              className={`whitespace-nowrap text-[0.78rem] uppercase tracking-[0.22em] transition-colors hover:text-ink ${
                 isDarkHero
                   ? "text-white/80 hover:!text-white"
                   : "text-foreground/75"
@@ -67,7 +67,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link to="/contact" className="btn-primary hidden h-11 md:inline-flex">
+          <Link to="/contact" className="btn-primary hidden h-11 lg:inline-flex">
             Book Now
           </Link>
           <button
@@ -75,7 +75,7 @@ export function Header() {
             aria-label="Toggle menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className={`grid h-11 w-11 place-items-center rounded-full border transition-colors md:hidden ${
+            className={`grid h-11 w-11 place-items-center rounded-full border transition-colors lg:hidden ${
               isDarkHero
                 ? "border-white/30 text-white"
                 : "border-border text-ink"

@@ -180,7 +180,7 @@ function Home() {
 
         <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
           <Why icon={<Sparkles size={18} />} title="One contact, end to end">
-            Yachts, vehicles, dinner, nightlife - coordinated through a single line so nothing falls between providers.
+            Yachts, vehicles, dinner, nightlife — coordinated through a single line so nothing falls between providers.
           </Why>
           <Why icon={<Clock size={18} />} title="Hour-fast responses">
             Availability, pricing, and confirmations within sixty minutes of your inquiry. Often faster.
@@ -189,13 +189,13 @@ function Home() {
             Every captain, vendor, and room on our roster is one we use ourselves. No third-party booking sites.
           </Why>
           <Why icon={<Users size={18} />} title="Group-ready logistics">
-            Bachelor & bachelorette weekends, birthdays, corporate retreats - vehicles, slip transfers, and tables handled in one brief.
+            Bachelor & bachelorette weekends, birthdays, corporate retreats — vehicles, slip transfers, and tables handled in one brief.
           </Why>
           <Why icon={<ShieldCheck size={18} />} title="Discreet by default">
             Private channels, NDAs on request, and a staff trained in confidentiality. No social tagging unless you ask.
           </Why>
           <Why icon={<Wine size={18} />} title="On-board, on-call">
-            Provisioning, photographers, chefs, water toys - whatever the day requires, queued before you board.
+            Provisioning, photographers, chefs, water toys — whatever the day requires, queued before you board.
           </Why>
         </div>
       </section>

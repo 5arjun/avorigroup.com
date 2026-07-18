@@ -68,36 +68,38 @@ export const Route = createFileRoute("/contact")({
 // HTML5/WHATWG email regex — mirrors server-side validation in src/lib/actions/contact.ts
 const EMAIL_RE = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 
+type FieldError = { field: string; message: string };
+
 // Client-side field-level validation — mirrors server rules
-function validateForm(fd: FormData): string | null {
+function validateForm(fd: FormData): FieldError | null {
   const name = (fd.get("name") as string ?? "").trim();
-  if (name.length < 2) return "Name must be at least 2 characters.";
+  if (name.length < 2) return { field: "name", message: "Name must be at least 2 characters." };
 
   const email = (fd.get("email") as string ?? "").trim();
   if (!email || email.length > 254 || !EMAIL_RE.test(email))
-    return "Please enter a valid email address.";
+    return { field: "email", message: "Please enter a valid email address." };
 
   const phone = (fd.get("phone") as string ?? "").trim();
   // Reject anything that isn't digits, spaces, +, -, (, )
   if (/[^\d\s+\-().]/.test(phone))
-    return "Phone number may only contain digits, spaces, and + - ( ) characters.";
+    return { field: "phone", message: "Phone number may only contain digits, spaces, and + - ( ) characters." };
   const digits = phone.replace(/\D/g, "");
   if (digits.length < 7 || digits.length > 15)
-    return "Phone number must be between 7 and 15 digits.";
+    return { field: "phone", message: "Phone number must be between 7 and 15 digits." };
 
   const date = (fd.get("date") as string ?? "").trim();
-  if (!date) return "Please select a desired date.";
+  if (!date) return { field: "date", message: "Please select a desired date." };
   const parsed = new Date(date);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   if (isNaN(parsed.getTime()) || parsed < today)
-    return "Please choose a date that is today or in the future.";
+    return { field: "date", message: "Please choose a date that is today or in the future." };
 
   const group = (fd.get("group") as string ?? "").trim();
   if (group) {
     const n = parseInt(group, 10);
     if (isNaN(n) || String(n) !== group || n < 1 || n > 500)
-      return "Group size must be a whole number between 1 and 500.";
+      return { field: "group", message: "Group size must be a whole number between 1 and 500." };
   }
 
   return null;
@@ -109,6 +111,16 @@ function ContactPage() {
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [errorField, setErrorField] = useState<string | null>(null);
+
+  // Clear a stale error the moment the visitor edits any field again.
+  const onFormInput = () => {
+    if (status === "error") {
+      setStatus("idle");
+      setErrorMsg("");
+      setErrorField(null);
+    }
+  };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -118,12 +130,15 @@ function ContactPage() {
     const clientError = validateForm(fd);
     if (clientError) {
       setStatus("error");
-      setErrorMsg(clientError);
+      setErrorMsg(clientError.message);
+      setErrorField(clientError.field);
+      document.getElementById(clientError.field)?.focus();
       return;
     }
 
     setStatus("loading");
     setErrorMsg("");
+    setErrorField(null);
 
     const data: ContactFormData = {
       name:      (fd.get("name")      as string).trim(),
@@ -146,7 +161,7 @@ function ContactPage() {
   };
 
   return (
-    <PageShell ctaLabel="Call Concierge">
+    <PageShell ctaLabel="Call Concierge" ctaHref="tel:+13055550199">
       <section className="container-luxe pt-16 md:pt-24">
         <div className="max-w-3xl">
           <p className="eyebrow">Concierge will reply as soon as possible</p>
@@ -159,11 +174,11 @@ function ContactPage() {
       </section>
 
       <section className="container-luxe mt-14 grid gap-10 md:mt-20 md:grid-cols-[1.4fr_1fr] md:gap-16">
-        <form onSubmit={onSubmit} noValidate className="rounded-2xl border border-border bg-card p-7 md:p-10">
+        <form onSubmit={onSubmit} onInput={onFormInput} noValidate className="rounded-2xl border border-border bg-card p-7 md:p-10">
           {status === "success" ? (
             <div className="flex min-h-[400px] flex-col items-center justify-center text-center">
               <span className="grid h-14 w-14 place-items-center rounded-full bg-ink text-primary-foreground">
-                <Check size={22} />
+                <Check size={22} aria-hidden="true" />
               </span>
               <h2 className="mt-6 text-3xl">Received.</h2>
               <p className="mt-3 max-w-sm text-muted-foreground">
@@ -179,6 +194,7 @@ function ContactPage() {
                 minLength={2}
                 maxLength={100}
                 autoComplete="name"
+                invalid={errorField === "name"}
               />
               <div className="grid gap-5 sm:grid-cols-2">
                 <Field
@@ -189,6 +205,7 @@ function ContactPage() {
                   maxLength={254}
                   autoComplete="email"
                   placeholder="you@example.com"
+                  invalid={errorField === "email"}
                 />
                 <Field
                   label="Phone"
@@ -198,6 +215,7 @@ function ContactPage() {
                   maxLength={20}
                   autoComplete="tel"
                   placeholder="+1 305 000 0000"
+                  invalid={errorField === "phone"}
                 />
               </div>
               <Field
@@ -220,6 +238,7 @@ function ContactPage() {
                   type="date"
                   required
                   min={new Date().toISOString().split("T")[0]}
+                  invalid={errorField === "date"}
                 />
               </div>
               <Field
@@ -229,6 +248,7 @@ function ContactPage() {
                 placeholder="e.g. 8"
                 min="1"
                 max="500"
+                invalid={errorField === "group"}
               />
               <div>
                 <label htmlFor="message" className="eyebrow">Message</label>
@@ -238,11 +258,11 @@ function ContactPage() {
                   rows={4}
                   maxLength={2000}
                   placeholder="Tell us about the occasion, any preferences, add-ons"
-                  className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-ink"
+                  className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm text-foreground outline-none placeholder:text-muted-foreground transition-colors focus:border-ink"
                 />
               </div>
               {status === "error" && (
-                <p role="alert" className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                <p id="form-error" role="alert" className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
                   {errorMsg || "Something went wrong. Please try again or reach out directly."}
                 </p>
               )}
@@ -252,7 +272,7 @@ function ContactPage() {
                 className="btn-primary mt-2 flex items-center justify-center gap-2 disabled:opacity-60"
               >
                 {status === "loading" ? (
-                  <><Loader2 size={16} className="animate-spin" /> Sending&hellip;</>
+                  <><Loader2 size={16} className="animate-spin" aria-hidden="true" /> Sending&hellip;</>
                 ) : "Send Inquiry"}
               </button>
               <p className="text-xs text-muted-foreground">We respond within the hour, 9am&ndash;11pm ET.</p>
@@ -261,10 +281,10 @@ function ContactPage() {
         </form>
 
         <aside className="flex flex-col gap-4">
-          <DirectLink href="tel:+13055550199" icon={<Phone size={18} />} label="Call Concierge" value="+1 (305) 555-0199" />
-          <DirectLink href="sms:+13055550199" icon={<MessageCircle size={18} />} label="iMessage / SMS" value="Text us directly" />
-          <DirectLink href="https://wa.me/13055550199" icon={<MessageCircle size={18} />} label="WhatsApp" value="Message on Whatsapp" />
-          <DirectLink href="https://instagram.com/avori.group" icon={<Instagram size={18} />} label="Instagram DM" value="@avori.group" />
+          <DirectLink href="tel:+13055550199" icon={<Phone size={18} aria-hidden="true" />} label="Call Concierge" value="+1 (305) 555-0199" />
+          <DirectLink href="sms:+13055550199" icon={<MessageCircle size={18} aria-hidden="true" />} label="iMessage / SMS" value="Text us directly" />
+          <DirectLink href="https://wa.me/13055550199" icon={<MessageCircle size={18} aria-hidden="true" />} label="WhatsApp" value="Message on Whatsapp" />
+          <DirectLink href="https://instagram.com/avori.group" icon={<Instagram size={18} aria-hidden="true" />} label="Instagram DM" value="@avori.group" />
           <div className="mt-4 rounded-2xl bg-ink p-7 text-primary-foreground">
             <p className="eyebrow !text-primary-foreground/60">Office</p>
             <p className="mt-3 text-lg">Miami | Brickell & Beach</p>
@@ -288,6 +308,7 @@ function Field({
   min,
   max,
   autoComplete,
+  invalid,
 }: {
   label: string;
   name: string;
@@ -300,6 +321,7 @@ function Field({
   min?: string;
   max?: string;
   autoComplete?: string;
+  invalid?: boolean;
 }) {
   return (
     <div>
@@ -318,7 +340,11 @@ function Field({
         min={min}
         max={max}
         autoComplete={autoComplete}
-        className="mt-2 h-12 w-full rounded-lg border border-input bg-background px-4 text-sm text-foreground outline-none transition-colors focus:border-ink"
+        aria-invalid={invalid || undefined}
+        aria-describedby={invalid ? "form-error" : undefined}
+        className={`mt-2 h-12 w-full rounded-lg border bg-background px-4 text-sm text-foreground outline-none placeholder:text-muted-foreground transition-colors focus:border-ink ${
+          invalid ? "border-destructive focus:border-destructive" : "border-input"
+        }`}
       />
     </div>
   );
