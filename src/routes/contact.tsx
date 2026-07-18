@@ -22,12 +22,12 @@ export const Route = createFileRoute("/contact")({
   }),
   head: () => ({
     meta: [
-      { title: "Contact Neel2k Miami Concierge \u2014 Book Yachts, Cars & VIP" },
-      { name: "description", content: "Contact Neel2k to book a Miami yacht charter, exotic car rental, or VIP table. Call, WhatsApp, Instagram DM, or send an inquiry \u2014 reply within the hour." },
-      { property: "og:title", content: "Contact Neel2k Miami Concierge" },
+      { title: "Contact Avori Group Concierge \u2014 Book Yachts, Cars & VIP" },
+      { name: "description", content: "Contact Avori Group to book a Miami yacht charter, exotic car rental, or VIP table. Call, WhatsApp, Instagram DM, or send an inquiry \u2014 reply within the hour." },
+      { property: "og:title", content: "Contact Avori Group Concierge" },
       { property: "og:description", content: "Direct line, WhatsApp, and Instagram DM, pick your channel. Reply within the hour." },
       { property: "og:url", content: abs("/contact") },
-      { name: "twitter:title", content: "Contact Neel2k Miami" },
+      { name: "twitter:title", content: "Contact Avori Group" },
       { name: "twitter:description", content: "Book Miami yachts, exotic cars, and VIP nightlife, reply within the hour." },
     ],
     links: [{ rel: "canonical", href: abs("/contact") }],
@@ -37,11 +37,11 @@ export const Route = createFileRoute("/contact")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "ContactPage",
-          name: "Contact Neel2k Miami",
+          name: "Contact Avori Group ",
           url: abs("/contact"),
           mainEntity: {
             "@type": "LocalBusiness",
-            name: "Neel2k",
+            name: "Avori Group",
             url: BASE_URL,
             telephone: "+1-305-555-0199",
             areaServed: "Miami",
@@ -49,7 +49,7 @@ export const Route = createFileRoute("/contact")({
         }),
       },
       {
-        // BreadcrumbList — shows path in SERP: Neel2k > Contact
+        // BreadcrumbList — shows path in SERP: Avori Group > Contact
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
@@ -65,10 +65,17 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
+// HTML5/WHATWG email regex — mirrors server-side validation in src/lib/actions/contact.ts
+const EMAIL_RE = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+
 // Client-side field-level validation — mirrors server rules
 function validateForm(fd: FormData): string | null {
   const name = (fd.get("name") as string ?? "").trim();
   if (name.length < 2) return "Name must be at least 2 characters.";
+
+  const email = (fd.get("email") as string ?? "").trim();
+  if (!email || email.length > 254 || !EMAIL_RE.test(email))
+    return "Please enter a valid email address.";
 
   const phone = (fd.get("phone") as string ?? "").trim();
   // Reject anything that isn't digits, spaces, +, -, (, )
@@ -120,6 +127,7 @@ function ContactPage() {
 
     const data: ContactFormData = {
       name:      (fd.get("name")      as string).trim(),
+      email:     (fd.get("email")     as string).trim(),
       phone:     (fd.get("phone")     as string).trim(),
       instagram: (fd.get("instagram") as string).trim() || undefined,
       service:   fd.get("service")   as string,
@@ -174,6 +182,15 @@ function ContactPage() {
               />
               <div className="grid gap-5 sm:grid-cols-2">
                 <Field
+                  label="Email"
+                  name="email"
+                  type="email"
+                  required
+                  maxLength={254}
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                />
+                <Field
                   label="Phone"
                   name="phone"
                   type="tel"
@@ -182,14 +199,14 @@ function ContactPage() {
                   autoComplete="tel"
                   placeholder="+1 305 000 0000"
                 />
-                <Field
-                  label="Instagram"
-                  name="instagram"
-                  placeholder="@handle"
-                  pattern="@?[a-zA-Z0-9_.]{1,30}"
-                  maxLength={40}
-                />
               </div>
+              <Field
+                label="Instagram"
+                name="instagram"
+                placeholder="@handle"
+                pattern="@?[a-zA-Z0-9_.]{1,30}"
+                maxLength={40}
+              />
               <div className="grid gap-5 sm:grid-cols-2">
                 <SelectField
                   label="Preferred service"
@@ -247,7 +264,7 @@ function ContactPage() {
           <DirectLink href="tel:+13055550199" icon={<Phone size={18} />} label="Call Concierge" value="+1 (305) 555-0199" />
           <DirectLink href="sms:+13055550199" icon={<MessageCircle size={18} />} label="iMessage / SMS" value="Text us directly" />
           <DirectLink href="https://wa.me/13055550199" icon={<MessageCircle size={18} />} label="WhatsApp" value="Message on Whatsapp" />
-          <DirectLink href="https://instagram.com/neel2k" icon={<Instagram size={18} />} label="Instagram DM" value="@neel2k" />
+          <DirectLink href="https://instagram.com/avori.group" icon={<Instagram size={18} />} label="Instagram DM" value="@avori.group" />
           <div className="mt-4 rounded-2xl bg-ink p-7 text-primary-foreground">
             <p className="eyebrow !text-primary-foreground/60">Office</p>
             <p className="mt-3 text-lg">Miami | Brickell & Beach</p>

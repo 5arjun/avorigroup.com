@@ -86,11 +86,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       // Extended robots directive: allow large image previews & full snippets in SERPs
       { name: "robots", content: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" },
-      { property: "og:site_name", content: "Neel2k" },
+      { property: "og:site_name", content: "Avori Group" },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "en_US" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@neel2k" },
+      { name: "twitter:site", content: "@avori.group" },
       { name: "theme-color", content: "#0b1a2b" },
       // Geo meta tags for local search signals
       { name: "geo.region", content: "US-FL" },
@@ -122,7 +122,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "LocalBusiness",
-          name: "Neel2k",
+          name: "Avori Group",
           url: BASE_URL,
           image: abs("/og/home.jpg"),
           description:
@@ -135,7 +135,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           currenciesAccepted: "USD",
           paymentAccepted: "Cash, Credit Card",
           hasMap: "https://maps.google.com/?q=Miami,FL",
-          sameAs: ["https://instagram.com/neel2k"],
+          sameAs: ["https://instagram.com/avori.group"],
           makesOffer: [
             { "@type": "Offer", name: "Private Yacht Charters Miami" },
             { "@type": "Offer", name: "Exotic & Luxury Car Rentals Miami" },
@@ -149,10 +149,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
-          name: "Neel2k",
+          name: "Avori Group",
           url: BASE_URL,
           logo: abs("/og/logo.png"),
-          sameAs: ["https://instagram.com/neel2k"],
+          sameAs: ["https://instagram.com/avori.group"],
         }),
       },
       // WebSite schema — enables Sitelinks search box in SERPs
@@ -161,7 +161,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebSite",
-          name: "Neel2k",
+          name: "Avori Group",
           url: BASE_URL,
         }),
       },

@@ -3,6 +3,7 @@ import { resend } from '@/lib/resend';
 
 export type ContactFormData = {
   name: string;
+  email: string;
   phone: string;
   instagram?: string;
   service: string;
@@ -12,6 +13,9 @@ export type ContactFormData = {
 };
 
 const VALID_SERVICES = ["Yacht charter", "Exotic car", "VIP access", "Full weekend"] as const;
+
+// HTML5/WHATWG email regex — practical validation, not full RFC 5322.
+const EMAIL_RE = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 
 /** Strip every HTML tag and trim whitespace. */
 function stripHtml(value: string): string {
@@ -36,6 +40,12 @@ function validateAndSanitize(raw: ContactFormData): ContactFormData {
   // ── name ──────────────────────────────────────────────────────────────────
   const name = sanitize(raw.name, 100);
   if (!name || name.length < 2) throw new Error("Name must be at least 2 characters.");
+
+  // ── email ─────────────────────────────────────────────────────────────────
+  const emailClean = stripHtml(raw.email).trim().toLowerCase();
+  if (!emailClean || emailClean.length > 254 || !EMAIL_RE.test(emailClean))
+    throw new Error("Please enter a valid email address.");
+  const email = escapeHtml(emailClean);
 
   // ── phone ─────────────────────────────────────────────────────────────────
   // Allow digits, spaces, +, -, (, ) — strip everything else, then validate length
@@ -83,24 +93,26 @@ function validateAndSanitize(raw: ContactFormData): ContactFormData {
   // ── message (optional) ────────────────────────────────────────────────────
   const message = raw.message ? sanitize(raw.message, 2000) : undefined;
 
-  return { name, phone, instagram, service, date, group, message };
+  return { name, email, phone, instagram, service, date, group, message };
 }
 
 export const submitContactForm = createServerFn({ method: 'POST' })
   .inputValidator((data: ContactFormData) => data)
   .handler(async ({ data }) => {
-    const { name, phone, instagram, service, date, group, message } =
+    const { name, email, phone, instagram, service, date, group, message } =
       validateAndSanitize(data);
 
     const { error } = await resend.emails.send({
       from: 'concierge@send.avorigroup.com',
       to: ['hello@avorigroup.com'],
+      replyTo: email,
       subject: `New inquiry - ${service} - ${name}`,
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
           <h2 style="border-bottom:2px solid #3e7a80;padding-bottom:12px;">New Inquiry &mdash; Avori Group</h2>
           <table style="width:100%;border-collapse:collapse;margin-top:16px;">
             <tr><td style="padding:8px 0;color:#666;width:140px;">Name</td><td style="padding:8px 0;font-weight:600;">${name}</td></tr>
+            <tr><td style="padding:8px 0;color:#666;">Email</td><td style="padding:8px 0;">${email}</td></tr>
             <tr><td style="padding:8px 0;color:#666;">Phone</td><td style="padding:8px 0;">${phone}</td></tr>
             ${instagram ? `<tr><td style="padding:8px 0;color:#666;">Instagram</td><td style="padding:8px 0;">${instagram}</td></tr>` : ''}
             <tr><td style="padding:8px 0;color:#666;">Service</td><td style="padding:8px 0;">${service}</td></tr>

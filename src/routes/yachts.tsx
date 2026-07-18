@@ -11,13 +11,13 @@ import heroYacht from "@/assets/hero-yacht.jpg";
 export const Route = createFileRoute("/yachts")({
   head: () => ({
     meta: [
-      { title: "Miami Yacht Charters - Private Fleet from 50ft to 130ft · Neel2k" },
+      { title: "Miami Yacht Charters - Private Fleet from 50ft to 130ft · Avori Group" },
       { name: "description", content: "Charter a private yacht in Miami - Sunseeker, Pershing, Ferretti, Azimut and more. Half-day, sunset, and overnight charters with full crew." },
-      { property: "og:title", content: "Private Yacht Charters in Miami - Neel2k" },
+      { property: "og:title", content: "Private Yacht Charters in Miami - Avori Group" },
       { property: "og:description", content: "Hand-picked Miami yachts from 50ft sport cruisers to 130ft superyachts. Full crew, full discretion." },
       { property: "og:url", content: abs("/yachts") },
       { property: "og:image", content: OG_IMAGES.yachts },
-      { name: "twitter:title", content: "Miami Yacht Charters - Neel2k" },
+      { name: "twitter:title", content: "Miami Yacht Charters - Avori Group" },
       { name: "twitter:description", content: "Private yacht charters across Miami - full crew, fully curated." },
       { name: "twitter:image", content: OG_IMAGES.yachts },
     ],
@@ -30,13 +30,13 @@ export const Route = createFileRoute("/yachts")({
           "@type": "Service",
           serviceType: "Private Yacht Charter",
           areaServed: { "@type": "City", name: "Miami" },
-          provider: { "@type": "LocalBusiness", name: "Neel2k", url: BASE_URL },
+          provider: { "@type": "LocalBusiness", name: "Avori Group", url: BASE_URL },
           name: "Miami Private Yacht Charters",
           url: abs("/yachts"),
         }),
       },
       {
-        // BreadcrumbList — shows path in SERP: Neel2k > Yachts
+        // BreadcrumbList — shows path in SERP: Avori Group > Yachts
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",

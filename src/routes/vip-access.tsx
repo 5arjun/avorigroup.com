@@ -9,20 +9,20 @@ import heroVip from "@/assets/hero-vip.jpg";
 export const Route = createFileRoute("/vip-access")({
   head: () => ({
     meta: [
-      { title: "Miami VIP Nightlife Access - Tables at LIV, E11EVEN & More · Neel2k" },
+      { title: "Miami VIP Nightlife Access - Tables at LIV, E11EVEN & More · Avori Group" },
       { name: "description", content: "VIP tables and entry at Miami's top clubs and lounges - LIV, E11EVEN, Vendôme, Mr. Jones, Coco, Kiki on the River. A polished add-on to your concierge weekend." },
-      { property: "og:title", content: "Miami VIP Access - Tables & Entry · Neel2k" },
+      { property: "og:title", content: "Miami VIP Access - Tables & Entry · Avori Group" },
       { property: "og:description", content: "Hold the right rooms for the right hours - Miami nightlife, handled." },
       { property: "og:url", content: abs("/vip-access") },
       { property: "og:image", content: OG_IMAGES.vip },
-      { name: "twitter:title", content: "Miami VIP Nightlife Access - Neel2k" },
+      { name: "twitter:title", content: "Miami VIP Nightlife Access - Avori Group" },
       { name: "twitter:description", content: "VIP tables at LIV, E11EVEN, Vendôme and more - bundled with your Miami concierge day." },
       { name: "twitter:image", content: OG_IMAGES.vip },
     ],
     links: [{ rel: "canonical", href: abs("/vip-access") }],
     scripts: [
       {
-        // BreadcrumbList — shows path in SERP: Neel2k > VIP Access
+        // BreadcrumbList — shows path in SERP: Avori Group > VIP Access
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",

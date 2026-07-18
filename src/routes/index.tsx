@@ -11,13 +11,13 @@ import heroVip from "@/assets/hero-vip.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Neel2k Miami Concierge - Yacht Charters, Exotic Car Rentals & VIP" },
+      { title: "Avori Group - Yacht Charters, Exotic Car Rentals & VIP" },
       { name: "description", content: "Private yacht charters, exotic car rentals, and VIP nightlife access in Miami - curated end-to-end by a single trusted concierge. Reply within the hour." },
-      { property: "og:title", content: "Neel2k - Miami Yacht Charters, Exotic Cars & VIP Access" },
+      { property: "og:title", content: "Avori Group - Miami Yacht Charters, Exotic Cars & VIP Access" },
       { property: "og:description", content: "One Miami concierge for private yachts, exotic cars, and the city's most coveted rooms." },
       { property: "og:url", content: abs("/") },
       { property: "og:image", content: OG_IMAGES.home },
-      { name: "twitter:title", content: "Neel2k - Miami Luxury Concierge" },
+      { name: "twitter:title", content: "Avori Group - Miami Luxury Concierge" },
       { name: "twitter:description", content: "Yacht charters, exotic car rentals, and VIP nightlife - Miami, end-to-end." },
       { name: "twitter:image", content: OG_IMAGES.home },
     ],
@@ -51,7 +51,7 @@ export const Route = createFileRoute("/")({
               name: "Can I bundle a yacht charter with a car rental and VIP nightlife?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "Absolutely — that's exactly what Neel2k specializes in. We coordinate all three through a single concierge so nothing falls between providers. Tell us your weekend and we'll build the full itinerary.",
+                text: "Absolutely — that's exactly what we specialize in. We coordinate all three through a single concierge so nothing falls between providers. Tell us your weekend and we'll build the full itinerary.",
               },
             },
             {
@@ -174,8 +174,8 @@ function Home() {
       {/* WHY */}
       <section className="container-luxe py-24 md:py-36">
         <div className="mb-16 max-w-2xl">
-          <p className="eyebrow">Why Neel2k</p>
-          <h2 className="mt-3 text-4xl md:text-5xl">One concierge. The full city.</h2>
+          <p className="eyebrow">Why Avori Group</p>
+          <h2 className="mt-3 text-4xl md:text-5xl">One concierge. The full city. Your lifestyle elevated.</h2>
         </div>
 
         <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">

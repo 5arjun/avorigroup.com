@@ -39,10 +39,10 @@ export function Header() {
         <Link to="/" className="group flex items-baseline gap-1.5" onClick={() => setOpen(false)}>
           <span className={`font-display text-2xl tracking-tight transition-colors ${
             isDarkHero ? "text-white" : "text-ink"
-          }`}>Neel</span>
+          }`}>Avori</span>
           <span className={`font-display text-2xl tracking-tight transition-colors ${
             isDarkHero ? "text-white/80" : "text-accent"
-          }`}>2k</span>
+          }`}>Group</span>
           <span className={`eyebrow ml-2 hidden text-[0.6rem] sm:inline transition-colors ${
             isDarkHero ? "text-white/60" : ""
           }`}>Miami</span>

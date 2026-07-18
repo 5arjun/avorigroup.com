@@ -10,13 +10,13 @@ import heroCar from "@/assets/hero-car.jpg";
 export const Route = createFileRoute("/cars")({
   head: () => ({
     meta: [
-      { title: "Exotic & Luxury Car Rentals Miami - Ferrari, Lamborghini, Rolls-Royce · Neel2k" },
+      { title: "Exotic & Luxury Car Rentals Miami - Ferrari, Lamborghini, Rolls-Royce · Avori Group" },
       { name: "description", content: "Rent a Ferrari, Lamborghini, McLaren, Rolls-Royce, Porsche or AMG in Miami. Self-drive or chauffeured - delivered to your hotel, residence, or marina." },
-      { property: "og:title", content: "Exotic & Luxury Car Rentals in Miami - Neel2k" },
+      { property: "og:title", content: "Exotic & Luxury Car Rentals in Miami - Avori Group" },
       { property: "og:description", content: "Curated Miami exotic fleet - Ferrari, Lamborghini, McLaren, Porsche, Rolls-Royce, AMG. Delivered to you." },
       { property: "og:url", content: abs("/cars") },
       { property: "og:image", content: OG_IMAGES.cars },
-      { name: "twitter:title", content: "Miami Exotic Car Rentals - Neel2k" },
+      { name: "twitter:title", content: "Miami Exotic Car Rentals - Avori Group" },
       { name: "twitter:description", content: "Ferrari, Lamborghini, McLaren, Rolls-Royce - delivered anywhere in Miami." },
       { name: "twitter:image", content: OG_IMAGES.cars },
     ],
@@ -29,13 +29,13 @@ export const Route = createFileRoute("/cars")({
           "@type": "Service",
           serviceType: "Exotic & Luxury Car Rental",
           areaServed: { "@type": "City", name: "Miami" },
-          provider: { "@type": "LocalBusiness", name: "Neel2k", url: BASE_URL },
+          provider: { "@type": "LocalBusiness", name: "Avori Group", url: BASE_URL },
           name: "Miami Exotic & Luxury Car Rentals",
           url: abs("/cars"),
         }),
       },
       {
-        // BreadcrumbList — shows path in SERP: Neel2k > Cars
+        // BreadcrumbList — shows path in SERP: Avori Group > Cars
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
