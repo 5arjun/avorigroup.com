@@ -87,7 +87,7 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-background md:hidden">
+        <div className="border-t border-border bg-background lg:hidden">
           <nav className="container-luxe flex flex-col gap-1 py-6">
             {links.map((l) => (
               <Link

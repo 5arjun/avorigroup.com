@@ -5,7 +5,7 @@ import { InventoryAccordion } from "@/components/site/InventoryAccordion";
 import { InventoryFilters, type FilterGroup } from "@/components/site/InventoryFilters";
 import { cars } from "@/lib/inventory";
 import { abs, OG_IMAGES, BASE_URL } from "@/lib/seo";
-import heroCar from "@/assets/hero-car.jpg";
+import heroCarLineup from "@/assets/miami-cars-lineup.jpg";
 
 export const Route = createFileRoute("/cars")({
   head: () => ({
@@ -93,19 +93,43 @@ function CarsPage() {
 
   return (
     <PageShell ctaLabel="Request Availability" service="Exotic car">
-      <section className="container-luxe pt-16 md:pt-24">
-        <div className="max-w-3xl">
-          <p className="eyebrow">Garage · 12 vehicles</p>
-          <h1 className="mt-4 text-5xl md:text-7xl">Cars</h1>
-          <p className="mt-6 max-w-xl text-base text-muted-foreground md:text-lg">
-            Marquee exotics and luxury daily-drivers, delivered to your hotel, residence,
-            or marina. Insurance, fuel, and chauffeur options arranged on request.
-          </p>
-          <Link to="/contact" search={{ service: "Exotic car" }} className="btn-primary mt-8">Request Availability</Link>
+      <section className="relative isolate overflow-hidden">
+        {/* Mobile: full-width band above the text, fading down into the page background */}
+        <div className="relative h-48 w-full sm:h-56 md:hidden">
+          <img
+            src={heroCarLineup}
+            alt="Lineup of exotic Lamborghinis delivered for a Miami rental"
+            loading="eager"
+            fetchPriority="high"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/55 to-background" />
+        </div>
+        {/* Desktop: backdrop fills the right side, behind the text */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[58%] md:block">
+          <img
+            src={heroCarLineup}
+            alt="Lineup of exotic Lamborghinis delivered for a Miami rental"
+            loading="eager"
+            fetchPriority="high"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent" />
+        </div>
+        <div className="container-luxe relative pt-6 pb-6 md:pt-24 md:pb-8">
+          <div className="max-w-3xl">
+            <p className="eyebrow">Garage · 12 vehicles</p>
+            <h1 className="mt-4 text-5xl md:text-7xl">Cars</h1>
+            <p className="mt-6 max-w-xl text-base text-muted-foreground md:text-lg">
+              Marquee exotics and luxury daily-drivers, delivered to your hotel, residence,
+              or marina. Insurance, fuel, and chauffeur options arranged on request.
+            </p>
+            <Link to="/contact" search={{ service: "Exotic car" }} className="btn-primary mt-8">Request Availability</Link>
+          </div>
         </div>
       </section>
 
-      <div className="hairline my-16 md:my-20" />
+      <div className="hairline my-6 md:my-8" />
 
       <section className="container-luxe">
         <InventoryFilters
@@ -117,7 +141,7 @@ function CarsPage() {
           resultCount={filtered.length}
           totalCount={cars.length}
         />
-        <div className="mt-8">
+        <div className="mt-5">
           {filtered.length > 0 ? (
             <InventoryAccordion items={filtered} ctaLabel="Inquire about this car" service="Exotic car" />
           ) : (

@@ -6,7 +6,7 @@ import { YachtModal } from "@/components/site/YachtModal";
 import { yachts } from "@/lib/inventory";
 import type { InventoryItem } from "@/lib/inventory";
 import { abs, OG_IMAGES, BASE_URL } from "@/lib/seo";
-import heroYacht from "@/assets/hero-yacht.jpg";
+import heroYachtSunset from "@/assets/yacht-sunset-deck.jpg";
 
 export const Route = createFileRoute("/yachts")({
   head: () => ({
@@ -109,19 +109,43 @@ function YachtsPage() {
       <YachtModal yacht={selected} onClose={() => setSelected(null)} />
 
       {/* \u2500\u2500 Hero header \u2500\u2500 */}
-      <section className="container-luxe pt-16 md:pt-24">
-        <div className="max-w-3xl">
-          <p className="eyebrow">Fleet · {yachts.length} vessels</p>
-          <h1 className="mt-4 text-5xl md:text-7xl">Yachts</h1>
-          <p className="mt-6 max-w-xl text-base text-muted-foreground md:text-lg">
-            Sport yachts, sun-deck cruisers, and full-crew superyachts - each with provisioning,
-            water toys, and slip-side service handled. Tap any card to open the gallery.
-          </p>
-          <Link to="/contact" search={{ service: "Yacht charter" }} className="btn-primary mt-8">Request Availability</Link>
+      <section className="relative isolate overflow-hidden">
+        {/* Mobile: full-width band above the text, fading down into the page background */}
+        <div className="relative h-48 w-full sm:h-56 md:hidden">
+          <img
+            src={heroYachtSunset}
+            alt="Sunset from a private yacht's aft deck off Miami"
+            loading="eager"
+            fetchPriority="high"
+            className="h-full w-full object-cover object-[30%_50%]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/55 to-background" />
+        </div>
+        {/* Desktop: backdrop fills the right side, behind the text */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[58%] md:block">
+          <img
+            src={heroYachtSunset}
+            alt="Sunset from a private yacht's aft deck off Miami"
+            loading="eager"
+            fetchPriority="high"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent" />
+        </div>
+        <div className="container-luxe relative pt-6 pb-6 md:pt-24 md:pb-8">
+          <div className="max-w-3xl">
+            <p className="eyebrow">Fleet · {yachts.length} vessels</p>
+            <h1 className="mt-4 text-5xl md:text-7xl">Yachts</h1>
+            <p className="mt-6 max-w-xl text-base text-muted-foreground md:text-lg">
+              Sport yachts, sun-deck cruisers, and full-crew superyachts - each with provisioning,
+              water toys, and slip-side service handled. Tap any card to open the gallery.
+            </p>
+            <Link to="/contact" search={{ service: "Yacht charter" }} className="btn-primary mt-8">Request Availability</Link>
+          </div>
         </div>
       </section>
 
-      <div className="hairline my-16 md:my-20" />
+      <div className="hairline my-6 md:my-8" />
 
       {/* \u2500\u2500 Filters + grid \u2500\u2500 */}
       <section className="container-luxe pb-24">
@@ -135,7 +159,7 @@ function YachtsPage() {
           totalCount={yachts.length}
         />
 
-        <div className="mt-8">
+        <div className="mt-5">
           {filtered.length > 0 ? (
             <YachtGrid items={filtered} onSelect={setSelected} />
           ) : (
