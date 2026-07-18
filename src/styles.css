@@ -79,6 +79,22 @@
     font-feature-settings: "ss01", "cv11";
   }
   h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.01em; }
+  /* iOS Safari renders an empty input[type=date] fully blank (WebKit bug 198959 —
+     internal field layout collapses when the value is unset). Disabling the native
+     appearance and normalizing the internal date sub-fields avoids the collapse. */
+  input[type="date"] {
+    -webkit-appearance: none;
+    appearance: none;
+    min-height: 3rem;
+  }
+  input[type="date"]::-webkit-datetime-edit,
+  input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+  input[type="date"]::-webkit-datetime-edit-text,
+  input[type="date"]::-webkit-datetime-edit-month-field,
+  input[type="date"]::-webkit-datetime-edit-day-field,
+  input[type="date"]::-webkit-datetime-edit-year-field {
+    padding: 0;
+  }
   .font-display { font-family: var(--font-display); }
   .eyebrow {
     font-family: var(--font-sans);

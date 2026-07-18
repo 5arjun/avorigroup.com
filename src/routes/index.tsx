@@ -85,8 +85,8 @@ function Home() {
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/20 to-ink/85" />
-        <div className="container-luxe relative flex h-full flex-col justify-end pb-16 pt-32 text-primary-foreground md:pb-24">
-          <div className="reveal max-w-3xl">
+        <div className="container-luxe relative flex h-full flex-col justify-end pb-32 pt-32 text-primary-foreground md:pb-24">
+          <div className="reveal max-w-3xl [text-shadow:0_2px_10px_rgba(0,0,0,0.45)]">
             <p className="eyebrow !text-primary-foreground/80">Miami · By Appointment</p>
             <h1 className="mt-5 text-5xl leading-[1.02] sm:text-6xl md:text-7xl lg:text-[5.5rem]">
               The Miami you<br />
