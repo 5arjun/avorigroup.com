@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-18T00:00:00.000Z",
+  "title": "Design System: Avori Group",
+  "extensions": {
+    "colorMeta": {
+      "ink": { "role": "primary", "displayName": "Ink", "canonical": "oklch(0.14 0.05 255)", "tonalRamp": ["#000B1F", "#172A41", "#354962", "#566B86", "#7B91AE", "#A2BAD8", "#C2DAF9", "#D9F1FF"] },
+      "navy-primary": { "role": "primary-alt", "displayName": "Navy Primary", "canonical": "oklch(0.28 0.09 255)", "tonalRamp": ["#00062F", "#012854", "#234877", "#446B9C", "#6992C5", "#90BAF1", "#B0DBFF", "#C6F2FF"] },
+      "accent-blue": { "role": "secondary", "displayName": "Accent Blue", "canonical": "oklch(0.55 0.14 240)", "tonalRamp": ["#00013F", "#002A65", "#004D8A", "#0070B0", "#2098DB", "#55C2FF", "#78E3FF", "#90FBFF"] },
+      "gold-reserved": { "role": "tertiary", "displayName": "Gold (reserved)", "canonical": "oklch(0.78 0.09 80)", "tonalRamp": ["#1D0200", "#3F2100", "#614100", "#846324", "#AC894C", "#D6B174", "#F7D293", "#FFE9A9"] },
+      "sand-reserved": { "role": "tertiary-alt", "displayName": "Sand (reserved)", "canonical": "oklch(0.95 0.012 80)", "tonalRamp": ["#0E0B06", "#2C2822", "#4B4741", "#6D6861", "#938E87", "#BBB7AF", "#DCD7CF", "#F3EEE6"] },
+      "paper-bg": { "role": "neutral", "displayName": "Paper Background", "canonical": "oklch(0.96937 0.01354 226.889)", "tonalRamp": ["#060C10", "#222A2E", "#40494D", "#616B6F", "#879196", "#AFB9BE", "#CFD9DE", "#E6F1F6"] },
+      "card": { "role": "neutral", "displayName": "Card White", "canonical": "oklch(1 0 0)", "tonalRamp": ["#000000", "#242424", "#404040", "#616161", "#878787", "#AFAFAF", "#CFCFCF", "#FFFFFF"] },
+      "muted": { "role": "neutral", "displayName": "Muted Surface", "canonical": "oklch(0.95 0.01 240)", "tonalRamp": ["#080C0F", "#252A2D", "#43494D", "#646A6E", "#8A9095", "#B2B8BD", "#D2D8DD", "#E9F0F5"] },
+      "muted-foreground": { "role": "neutral", "displayName": "Muted Text", "canonical": "oklch(0.5 0.03 250)", "tonalRamp": ["#04070C", "#1E252E", "#3B4552", "#5C6878", "#82909F", "#ABB8C6", "#CCDAE8", "#E4F1FE"] },
+      "border": { "role": "neutral", "displayName": "Border / Input", "canonical": "oklch(0.9 0.015 240)", "tonalRamp": ["#060C11", "#222A30", "#41494F", "#616A71", "#879198", "#AFB9C0", "#CFD9E1", "#E6F0F8"] },
+      "destructive": { "role": "destructive", "displayName": "Destructive Red", "canonical": "oklch(0.55 0.22 25)", "tonalRamp": ["#3C0000", "#650300", "#8F0F00", "#B92B0F", "#DE4C2C", "#FF7752", "#FFA37E", "#FFCBB0"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display (Cormorant Garamond)", "purpose": "Hero headlines and every section h2/h3. Never used for body copy or UI chrome." },
+      "body": { "displayName": "Body (Inter)", "purpose": "Paragraph copy, card descriptions, helper text, and all UI chrome." },
+      "label": { "displayName": "Eyebrow / Label", "purpose": "Section kickers and form field labels: 0.7rem, 0.28em tracking, uppercase. Already at saturation across the site — don't add to new sections by default." }
+    },
+    "shadows": [
+      { "name": "opened-state-glow", "value": "0 30px 60px -30px rgba(8,20,50,0.25)", "purpose": "Signals an expanded/active inventory card. Not used as ambient depth anywhere else." }
+    ],
+    "motion": [
+      { "name": "reveal-rise", "value": "cubic-bezier(0.2, 0.7, 0.2, 1), 0.8s", "purpose": "Hero and section entrance: translateY(14px) to 0, opacity 0 to 1." },
+      { "name": "image-hover-scale", "value": "1.2s-1.4s ease-out", "purpose": "Slow scale-to-105% on card/thumbnail images on hover or open state." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid pill CTA — the only primary action style on the site.",
+      "html": "<a href=\"#\" class=\"ds-btn-primary\">Request Availability</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 3rem; padding: 0 1.75rem; background: #00081D; color: #F7FBFD; font-family: Inter, system-ui, sans-serif; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; border-radius: 999px; border: none; transition: background 0.25s ease, transform 0.25s ease; cursor: pointer; } .ds-btn-primary:hover { background: #0079BA; transform: translateY(-1px); }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Outlined pill CTA for secondary/lower-commitment actions.",
+      "html": "<a href=\"#\" class=\"ds-btn-ghost\">Explore Fleet</a>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 3rem; padding: 0 1.5rem; border: 1px solid currentColor; border-radius: 999px; color: #00081D; font-family: Inter, system-ui, sans-serif; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; background: transparent; transition: all 0.25s ease; cursor: pointer; } .ds-btn-ghost:hover { background: currentColor; } .ds-btn-ghost:hover span { color: #ECF7FC; }"
+    },
+    {
+      "name": "Inventory Card",
+      "kind": "card",
+      "refersTo": "card-inventory",
+      "description": "Yacht/car listing row — border-only at rest, elevated shadow when expanded.",
+      "html": "<article class=\"ds-inv-card\"><div class=\"ds-inv-thumb\"></div><div class=\"ds-inv-meta\"><h3>Azimut 68</h3><p>Full-crew sport yacht, half-day to overnight.</p></div></article>",
+      "css": ".ds-inv-card { overflow: hidden; border-radius: 16px; border: 1px solid #D6E0E7; background: #FFFFFF; transition: all 0.5s ease; display: grid; grid-template-columns: 200px 1fr; } .ds-inv-card:hover { border-color: rgba(0,8,29,0.2); } .ds-inv-thumb { background: #00081D; height: 140px; } .ds-inv-meta { padding: 20px 24px; font-family: Inter, sans-serif; } .ds-inv-meta h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: #00081D; margin: 0 0 8px; } .ds-inv-meta p { font-size: 0.875rem; color: #576574; margin: 0; }"
+    },
+    {
+      "name": "Form Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Contact form text input — rounded-lg, ink border on focus.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-eyebrow\">Full Name *</span><input type=\"text\" placeholder=\"Jane Doe\" /></label>",
+      "css": ".ds-field { display: block; } .ds-eyebrow { font-family: Inter, sans-serif; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase; color: #576574; } .ds-field input { display: block; margin-top: 0.5rem; height: 3rem; width: 100%; border-radius: 8px; border: 1px solid #DEE6EC; background: #ECF7FC; padding: 0 1rem; font-size: 0.875rem; color: #031222; outline: none; transition: border-color 0.2s ease; } .ds-field input:focus { border-color: #00081D; }"
+    },
+    {
+      "name": "Filter Pill Field",
+      "kind": "input",
+      "refersTo": "input-field-pill",
+      "description": "Inventory search/filter input — pill-shaped, accent-blue focus ring.",
+      "html": "<input class=\"ds-filter-input\" type=\"text\" placeholder=\"Search the fleet\" />",
+      "css": ".ds-filter-input { width: 100%; border-radius: 999px; border: 1px solid #D6E0E7; background: #ECF7FC; padding: 0.75rem 1.25rem; font-size: 0.875rem; color: #00081D; outline: none; transition: border-color 0.2s ease, box-shadow 0.2s ease; } .ds-filter-input::placeholder { color: #576574; } .ds-filter-input:focus { border-color: #0079BA; box-shadow: 0 0 0 4px rgba(0,121,186,0.16); }"
+    },
+    {
+      "name": "Eyebrow Label",
+      "kind": "custom",
+      "refersTo": "label",
+      "description": "Section kicker / form label. Already saturated across the site — see Eyebrow-At-Capacity rule.",
+      "html": "<p class=\"ds-eyebrow-label\">Featured &middot; Yachts</p>",
+      "css": ".ds-eyebrow-label { font-family: Inter, sans-serif; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase; color: #576574; margin: 0; }"
+    },
+    {
+      "name": "Sticky Mobile CTA",
+      "kind": "custom",
+      "refersTo": "sticky-mobile-cta",
+      "description": "Fixed bottom bar on mobile carrying the single primary CTA, mounted by PageShell on every route.",
+      "html": "<div class=\"ds-sticky-cta\"><a href=\"#\" class=\"ds-btn-primary\" style=\"width:100%\">Request Availability</a></div>",
+      "css": ".ds-sticky-cta { position: fixed; left: 0; right: 0; bottom: 0; border-top: 1px solid #D6E0E7; background: rgba(236,247,252,0.95); backdrop-filter: blur(20px); padding: 0.75rem 1.25rem calc(0.75rem + env(safe-area-inset-bottom)); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Private Marina at Dusk",
+    "overview": "Avori Group's system reads as a members-only concierge ledger, not a booking marketplace: deep navy ink, a pale blue-white paper ground, and a single restrained sky-blue accent that appears only where a decision is being asked for. Cormorant Garamond display type gives every headline an editorial, slightly formal weight; Inter carries all working text so the system never feels precious about itself. The overall density is generous because the audience is deciding on a five-figure weekend, not scanning a feature list.\n\nThis system explicitly rejects gaudy or ostentatious luxury signaling: heavy gilt ornamentation, glitter, superlative-stacked copy, and gold-and-black luxury-template clichés. Confidence here is shown through specificity and restraint, not decoration. It also rejects marketplace patterns in favor of a curated, editorial presentation of a small, vetted roster.",
+    "keyCharacteristics": [
+      "Deep navy ink is the true primary color, despite the --primary variable pointing elsewhere",
+      "One sky-blue accent, used sparingly for a single decision point per screen",
+      "Gold and sand tokens exist but are unwired — reserved, not decorative filler",
+      "Pill-shaped buttons only — no square or soft-radius buttons anywhere",
+      "Restrained motion: one rise entrance keyframe, slow ease-out image scale, no choreography"
+    ],
+    "rules": [
+      { "name": "The Ink-Is-Primary Rule", "body": "New components should reach for ink for solid fills and strong text, treating --primary as legacy/shadcn-primitive territory only.", "section": "colors" },
+      { "name": "The One-Hue Rule", "body": "Only one saturated hue (accent blue) is live at any time; gold, if activated, shares rather than stacks onto that budget.", "section": "colors" },
+      { "name": "The Serif-For-Feeling Rule", "body": "Cormorant Garamond is reserved for headings that should land emotionally; it never appears in body copy, labels, or UI chrome.", "section": "typography" },
+      { "name": "The Eyebrow-At-Capacity Rule", "body": "The eyebrow label already sits above nearly every section; don't add more of them to new sections.", "section": "typography" },
+      { "name": "The Border-Not-Shadow Rule", "body": "Default state for any new card or panel is a hairline border on card background; shadow is reserved for the single expanded/active signal.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use ink for solid fills, strong text, and icon roundels",
+      "Do keep buttons as full pills at 3rem height using .btn-primary / .btn-ghost",
+      "Do default new cards/panels to a hairline border on card background",
+      "Do reserve accent-blue for one decision point per view",
+      "Do respect prefers-reduced-motion for reveal and hover-scale transitions",
+      "Do preserve or strengthen the text-shadow on hero copy over dark imagery"
+    ],
+    "donts": [
+      "Don't use raw Tailwind palette colors like bg-slate-900 for dark surfaces — use ink",
+      "Don't add another eyebrow kicker to a new section by default",
+      "Don't introduce gold or sand as ambient decoration",
+      "Don't use square or soft-radius buttons",
+      "Don't add marketplace UI like star ratings or dense filter sidebars",
+      "Don't use heavy gilt ornamentation, glitter, or superlative-stacked copy"
+    ]
+  }
+}
