@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Phone, MessageCircle, Instagram } from "lucide-react";
 
 const links = [
   { to: "/", label: "Home" },
@@ -19,6 +19,7 @@ export function Header() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const isDarkHero = !scrolled && !open && DARK_HERO_ROUTES.includes(pathname);
+  const whiteText = open || isDarkHero;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -27,24 +28,33 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
+
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled || open
-          ? "bg-background/85 backdrop-blur-xl border-b border-border"
-          : "bg-transparent"
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
+        open ? "bg-ink" : scrolled ? "bg-background/85 backdrop-blur-xl border-b border-border" : "bg-transparent"
       }`}
     >
       <div className="container-luxe flex h-16 items-center justify-between md:h-20">
         <Link to="/" className="group flex items-baseline gap-1.5" onClick={() => setOpen(false)}>
           <span className={`font-display text-2xl tracking-tight transition-colors ${
-            isDarkHero ? "text-white" : "text-ink"
+            whiteText ? "text-white" : "text-ink"
           }`}>Avori</span>
-          <span className={`font-display text-2xl tracking-tight transition-colors ${
-            isDarkHero ? "text-white/80" : "text-accent"
-          }`}>Group</span>
+          <span className="font-display text-2xl tracking-tight text-accent">Group</span>
           <span className={`eyebrow ml-2 hidden text-[0.6rem] sm:inline transition-colors ${
-            isDarkHero ? "text-white/60" : ""
+            whiteText ? "text-white/60" : ""
           }`}>Miami</span>
         </Link>
 
@@ -76,7 +86,7 @@ export function Header() {
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
             className={`grid h-11 w-11 place-items-center rounded-full border transition-colors lg:hidden ${
-              isDarkHero
+              whiteText
                 ? "border-white/30 text-white"
                 : "border-border text-ink"
             }`}
@@ -87,24 +97,63 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-background lg:hidden">
-          <nav className="container-luxe flex flex-col gap-1 py-6">
-            {links.map((l) => (
+        <div className="fixed inset-x-0 top-16 bottom-0 z-40 flex flex-col overflow-y-auto bg-ink md:top-20 lg:hidden">
+          <nav className="container-luxe flex flex-1 flex-col justify-center">
+            {links.map((l, i) => (
               <Link
                 key={l.to}
                 to={l.to}
                 onClick={() => setOpen(false)}
-                className="py-3 text-base uppercase tracking-[0.18em] text-foreground/80"
-                activeProps={{ className: "text-ink" }}
+                className="menu-item-in group flex items-center gap-4 border-b border-primary-foreground/10 py-4 font-display text-4xl text-primary-foreground/80 transition-colors first:border-t hover:text-primary-foreground sm:text-5xl"
+                style={{ animationDelay: `${i * 45}ms` }}
+                activeProps={{ className: "!text-primary-foreground" }}
                 activeOptions={{ exact: l.to === "/" }}
               >
+                <span
+                  className={`h-1.5 w-1.5 shrink-0 rounded-full bg-accent transition-opacity ${
+                    isActive(l.to) ? "opacity-100" : "opacity-0 group-hover:opacity-60"
+                  }`}
+                />
                 {l.label}
               </Link>
             ))}
-            <Link to="/contact" className="btn-primary mt-4" onClick={() => setOpen(false)}>
+          </nav>
+
+          <div
+            className="menu-item-in container-luxe flex flex-col gap-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-8"
+            style={{ animationDelay: `${links.length * 45}ms` }}
+          >
+            <Link
+              to="/contact"
+              onClick={() => setOpen(false)}
+              className="btn-primary w-full bg-primary-foreground !text-ink hover:!bg-accent hover:!text-primary-foreground"
+            >
               Book Now
             </Link>
-          </nav>
+            <div className="flex items-center justify-center gap-6 text-primary-foreground/50">
+              <a href="tel:+13055550199" aria-label="Call Avori Group" className="transition-colors hover:text-accent">
+                <Phone size={18} />
+              </a>
+              <a
+                href="https://wa.me/13055550199"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Message Avori Group on WhatsApp"
+                className="transition-colors hover:text-accent"
+              >
+                <MessageCircle size={18} />
+              </a>
+              <a
+                href="https://instagram.com/avori.group"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Avori Group on Instagram"
+                className="transition-colors hover:text-accent"
+              >
+                <Instagram size={18} />
+              </a>
+            </div>
+          </div>
         </div>
       )}
     </header>
