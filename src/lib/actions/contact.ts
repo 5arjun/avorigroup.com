@@ -127,5 +127,24 @@ export const submitContactForm = createServerFn({ method: 'POST' })
 
     if (error) throw new Error(error.message);
 
+    // Confirmation receipt to the client. Best-effort — the concierge team is
+    // already notified above, so a hiccup here shouldn't fail the submission.
+    const { error: clientError } = await resend.emails.send({
+      from: 'concierge@send.avorigroup.com',
+      replyTo: 'hello@avorigroup.com',
+      to: [email],
+      subject: `Your inquiry has been received — Avori Group Concierge`,
+      html: `
+        <div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
+          <h2 style="border-bottom:2px solid #3e7a80;padding-bottom:12px;">Thanks, ${name}!</h2>
+          <p>We've received your request for <strong>${service}</strong> on <strong>${date}</strong>.</p>
+          <p>Our concierge team will reach out shortly to confirm the details.</p>
+          <p style="margin-top:24px;font-size:12px;color:#999;">Avori Group Concierge — reply to this email if you have questions.</p>
+        </div>
+      `,
+    });
+
+    if (clientError) console.error('Failed to send client confirmation email:', clientError.message);
+
     return { ok: true };
   });
