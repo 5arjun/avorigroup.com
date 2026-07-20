@@ -131,11 +131,11 @@ export function Header() {
               Book Now
             </Link>
             <div className="flex items-center justify-center gap-6 text-primary-foreground/50">
-              <a href="tel:+13055550199" aria-label="Call Avori Group" className="transition-colors hover:text-accent">
+              <a href="tel:+17324290269" aria-label="Call Avori Group" className="transition-colors hover:text-accent">
                 <Phone size={18} />
               </a>
               <a
-                href="https://wa.me/13055550199"
+                href="https://wa.me/17324290269"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Message Avori Group on WhatsApp"

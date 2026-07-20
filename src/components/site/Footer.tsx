@@ -30,9 +30,9 @@ export function Footer() {
           <div>
             <p className="eyebrow !text-primary-foreground/50">Direct</p>
             <ul className="mt-5 space-y-3 text-sm">
-              <li><a href="tel:+13055550199" className="flex items-center gap-2 hover:text-accent"><Phone size={14}/> +1 (305) 555-0199</a></li>
+              <li><a href="tel:+17324290269" className="flex items-center gap-2 hover:text-accent"><Phone size={14}/> +1 (732) 429-0269</a></li>
               <li><a href="https://instagram.com/avori.group" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-accent"><Instagram size={14}/> @avori.group</a></li>
-              <li><a href="https://wa.me/13055550199" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-accent"><MessageCircle size={14}/> WhatsApp</a></li>
+              <li><a href="https://wa.me/17324290269" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-accent"><MessageCircle size={14}/> WhatsApp</a></li>
             </ul>
           </div>
         </div>

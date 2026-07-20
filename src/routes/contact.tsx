@@ -43,7 +43,7 @@ export const Route = createFileRoute("/contact")({
             "@type": "LocalBusiness",
             name: "Avori Group",
             url: BASE_URL,
-            telephone: "+1-305-555-0199",
+            telephone: "+1-732-429-0269",
             areaServed: "Miami",
           },
         }),
@@ -161,7 +161,7 @@ function ContactPage() {
   };
 
   return (
-    <PageShell ctaLabel="Call Concierge" ctaHref="tel:+13055550199">
+    <PageShell ctaLabel="Call Concierge" ctaHref="tel:+17324290269">
       <section className="container-luxe pt-16 md:pt-24">
         <div className="max-w-3xl">
           <p className="eyebrow">Concierge will reply as soon as possible</p>
@@ -281,9 +281,9 @@ function ContactPage() {
         </form>
 
         <aside className="flex flex-col gap-4">
-          <DirectLink href="tel:+13055550199" icon={<Phone size={18} aria-hidden="true" />} label="Call Concierge" value="+1 (305) 555-0199" />
-          <DirectLink href="sms:+13055550199" icon={<MessageCircle size={18} aria-hidden="true" />} label="iMessage / SMS" value="Text us directly" />
-          <DirectLink href="https://wa.me/13055550199" icon={<MessageCircle size={18} aria-hidden="true" />} label="WhatsApp" value="Message on Whatsapp" />
+          <DirectLink href="tel:+17324290269" icon={<Phone size={18} aria-hidden="true" />} label="Call Concierge" value="+1 (732) 429-0269" />
+          <DirectLink href="sms:+17324290269" icon={<MessageCircle size={18} aria-hidden="true" />} label="iMessage / SMS" value="Text us directly" />
+          <DirectLink href="https://wa.me/17324290269" icon={<MessageCircle size={18} aria-hidden="true" />} label="WhatsApp" value="Message on Whatsapp" />
           <DirectLink href="https://instagram.com/avori.group" icon={<Instagram size={18} aria-hidden="true" />} label="Instagram DM" value="@avori.group" />
           <div className="mt-4 rounded-2xl bg-ink p-7 text-primary-foreground">
             <p className="eyebrow !text-primary-foreground/60">Office</p>

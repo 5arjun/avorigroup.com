@@ -131,7 +131,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "Miami luxury concierge specializing in private yacht charters, exotic and luxury car rentals, and VIP nightlife access.",
           areaServed: { "@type": "City", name: "Miami" },
           address: { "@type": "PostalAddress", addressLocality: "Miami", addressRegion: "FL", addressCountry: "US" },
-          telephone: "+1-305-555-0199",
+          telephone: "+1-732-429-0269",
           priceRange: "$$$$",
           openingHours: "Mo-Su 09:00-23:00",
           currenciesAccepted: "USD",
