@@ -232,7 +232,7 @@ export const clubs: Club[] = [
   },
   {
     name: "Vendôme",
-    vibe: "Old-world supper club — dinner into dancing",
+    vibe: "Hiphop club in south beach - artists and performances",
     note: "South Beach · dinner into dancing.",
     types: ["Club", "Dinner Party"],
     genres: ["Hip-Hop"],
@@ -264,6 +264,22 @@ export const clubs: Club[] = [
     note: "Miami · reservation recommended.",
     types: ["Lounge"],
     genres: ["Hip-Hop"],
+  },
+  {
+    name: "Mynt Lounge",
+    vibe: "EDM & house music lounge",
+    note: "South Beach · Wednesday–Saturday.",
+    schedule: "Wed–Sat",
+    types: ["Lounge"],
+    genres: ["EDM"],
+  },
+  {
+    name: "Strawberry Moon",
+    vibe: "Pool party Friday–Sunday",
+    note: "Daybeds, poolside daybeds, cabanas and bungalows — including food and beverage.",
+    schedule: "Fri–Sun",
+    types: ["Day Club"],
+    genres: ["Open Format"],
   },
 ];
 
