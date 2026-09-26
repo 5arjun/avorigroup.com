@@ -103,7 +103,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       // Inventory photos/videos are served from this R2 bucket on every listing page
-      { rel: "dns-prefetch", href: "https://pub-ffee12d8734e4754ab62e41195b2330b.r2.dev" },
+      { rel: "dns-prefetch", href: "https://assets.avorigroup.com" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap",

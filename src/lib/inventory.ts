@@ -1,4 +1,4 @@
-const R2 = "https://pub-ffee12d8734e4754ab62e41195b2330b.r2.dev";
+const R2 = "https://assets.avorigroup.com";
 
 // ─── Media types ─────────────────────────────────────────────────────────────
 export type MediaItem =
@@ -31,7 +31,7 @@ const folderToSlug = (folder: string) =>
 
 // ─── CAR helper ──────────────────────────────────────────────────────────────
 const r2Car = (folder: string, count: number): MediaItem[] => {
-  const s = folder.toLowerCase();
+  const s = folder.split("/").at(-1)!.toLowerCase();
   const imgs: MediaItem[] = [{ type: "image", src: `${R2}/cars/${folder}/${s}-cover.webp` }];
   for (let i = 1; i < count; i++)
     imgs.push({ type: "image", src: `${R2}/cars/${folder}/${s}-${i}.webp` });
@@ -120,26 +120,48 @@ export const yachts: InventoryItem[] = yachtsRaw.map((y) => {
 
 // ─── CARS ─────────────────────────────────────────────────────────────────────
 const carsRaw: { name: string; tagline: string; cat: string; folder: string; count: number }[] = [
+  { name: "Audi R8 Coupe Blue",                 tagline: "Blue R8 coupe with unmistakable presence.",         cat: "Coupe",       folder: "Audi/Audi-R8-Coupe-Blue",             count: 15 },
   { name: "Audi S5 White",                      tagline: "Crisp white S5 coupe - daily-driver luxury.",          cat: "Coupe",       folder: "Audi-S5-White",                      count: 11 },
   { name: "BMW M3 Competition Blue",             tagline: "M3 Competition in signature blue.",                   cat: "Sedan",       folder: "BMW-M3-Competition-Blue",             count: 14 },
   { name: "BMW M3 Competition Frozen White",     tagline: "Matte frozen white finish, blacked-out trim.",        cat: "Sedan",       folder: "BMW-M3-Competition-Frozen-White",     count: 12 },
   { name: "BMW M3 Competition Yellow",           tagline: "Bold yellow M3 Competition, head-turner spec.",       cat: "Sedan",       folder: "BMW-M3-Competition-Yellow",           count: 18 },
+  { name: "BMW M4 Convertible Black",            tagline: "Open-top M4 with black paint and rich brown cabin.",   cat: "Convertible", folder: "BMW/BMW-M4-Convertible-Black",         count: 9 },
+  { name: "BMW M4 Convertible Blue",             tagline: "Blue M4 convertible with a warm leather interior.",   cat: "Convertible", folder: "BMW/BMW-M4-Convertible-Blue",          count: 10 },
   { name: "BMW M4 Convertible Grey",             tagline: "Top-down M4 with carbon accents.",                   cat: "Convertible", folder: "BMW-M4-Convertible-Grey",             count: 14 },
+  { name: "BMW M4 Competition Grey",             tagline: "Grey M4 Competition coupe with red leather cabin.",  cat: "Coupe",       folder: "BMW/BMW-M4-Competition-Grey",          count: 8 },
   { name: "BMW M5 Blue",                         tagline: "Twin-turbo V8 super-sedan in deep blue.",             cat: "Sedan",       folder: "BMW-M5-Blue",                         count: 14 },
   { name: "Cadillac Escalade ESV Black",         tagline: "Long-wheelbase ESV - group transfers in comfort.",    cat: "SUV",         folder: "Cadillac-Escalade-ESV-Black",         count: 14 },
+  { name: "Cadillac Escalade ESV Black Chrome",  tagline: "Black ESV with bright wheels and an expansive cabin.", cat: "SUV",       folder: "Cadillac/Cadillac-Escalade-ESV-Black-Chrome", count: 9 },
+  { name: "Cadillac Escalade Black Platinum",    tagline: "All-black Escalade with a spacious, refined cabin.", cat: "SUV",         folder: "Cadillac/Cadillac-Escalade-Black-Platinum", count: 11 },
   { name: "Corvette C8 2026 Black",              tagline: "Mid-engine C8 in stealth black.",                    cat: "Coupe",       folder: "Corvette-C8-2026-Black",              count: 10 },
+  { name: "Corvette C8 Black Aero",              tagline: "Black C8 with a rear wing and dark wheels.",        cat: "Coupe",       folder: "Chevrolet/Corvette-C8-Black-Aero",   count: 8 },
   { name: "Ferrari 296 GTS Red",                 tagline: "Hybrid V6 Spider in Rosso Corsa, top down.",         cat: "Convertible", folder: "Ferrari-296-GTS-Red",                 count: 16 },
   { name: "Ferrari F8 Black",                    tagline: "Twin-turbo V8 F8 Tributo in nero.",                  cat: "Supercar",    folder: "Ferrari-F8-Black",                    count: 12 },
   { name: "Ferrari SF90 Satin Black",            tagline: "Plug-in hybrid flagship, satin black wrap.",         cat: "Hypercar",    folder: "Ferrari-SF90-Satin-Black",            count: 10 },
   { name: "Lamborghini Evo Spider Grey",         tagline: "Huracán EVO Spider in grigio, sound on demand.",     cat: "Convertible", folder: "Lamborghini-Evo-Spider-Grey",         count: 14 },
+  { name: "Lamborghini Huracan Spyder White",    tagline: "White open-top Huracan with a dark cabin.",         cat: "Convertible", folder: "Lamborghini/Lamborghini-Huracan-Spyder-White", count: 8 },
   { name: "Lamborghini Urus Black",              tagline: "Performance SUV in stealth black.",                  cat: "SUV",         folder: "Lamborghini-Urus-Black",              count: 17 },
+  { name: "Lamborghini Urus White",              tagline: "White Urus with a bold brown leather interior.",     cat: "SUV",         folder: "Lamborghini/Lamborghini-Urus-White",  count: 8 },
   { name: "Lamborghini Urus Performante Purple", tagline: "Track-tuned Urus Performante in viola.",             cat: "SUV",         folder: "Lamborghini-Urus-Performante-Purple", count: 10 },
+  { name: "McLaren 720S Orange",                 tagline: "Bright orange 720S with signature dihedral doors.", cat: "Supercar",    folder: "Mclaren/Mclaren-720S-Orange",         count: 15 },
   { name: "McLaren 750S Spider Orange",          tagline: "Papaya orange Spider with dihedral doors.",          cat: "Supercar",    folder: "Mclaren-750S-Spider-Orange",          count: 8  },
+  { name: "McLaren Artura Orange Wrap",          tagline: "Artura in a vivid orange graphic wrap.",            cat: "Supercar",    folder: "Mclaren/Mclaren-Artura-Orange-Wrap",   count: 11 },
   { name: "Mercedes G63 AMG Black",              tagline: "G-Wagon in classic blacked-out spec.",               cat: "SUV",         folder: "Mercedes-G63-AMG-Black",              count: 13 },
+  { name: "Mercedes G63 Gloss Black",            tagline: "Gloss-black G-Wagon with bright multi-spoke wheels.", cat: "SUV",      folder: "Mercedes/Mercedes-G63-Gloss-Black",   count: 4 },
+  { name: "Mercedes G63 Satin Black",            tagline: "Satin-black G-Wagon with vivid red leather cabin.", cat: "SUV",         folder: "Mercedes/Mercedes-G63-Satin-Black",   count: 8 },
+  { name: "Mercedes GLE 53 Coupe Black",         tagline: "Black AMG GLE coupe with a dark interior.",         cat: "SUV",         folder: "Mercedes/Mercedes-GLE53-Coupe-Black", count: 13 },
+  { name: "Mercedes GLE 53 Coupe White Black",   tagline: "White GLE 53 coupe with a dark interior.",          cat: "SUV",         folder: "Mercedes/Mercedes-GLE53-Coupe-White-Black", count: 7 },
+  { name: "Mercedes GLE 53 Coupe White Red",     tagline: "White GLE 53 coupe with red interior accents.",     cat: "SUV",         folder: "Mercedes/Mercedes-GLE53-Coupe-White-Red", count: 7 },
+  { name: "Mercedes GLE 53 SUV White",           tagline: "White GLE 53 SUV with a red-and-black cabin.",      cat: "SUV",         folder: "Mercedes/Mercedes-GLE53-SUV-White", count: 9 },
   { name: "Porsche 911 Turbo S Techart White",   tagline: "Techart-tuned Turbo S in pearl white.",              cat: "Coupe",       folder: "Porsche-911-Turbo-S-Techart-White",   count: 19 },
+  { name: "Porsche 911 Cabriolet Black",         tagline: "Black 911 with the top down and open-road feel.",    cat: "Convertible", folder: "Porsche/Porsche-911-Cabriolet-Black",  count: 17 },
   { name: "Porsche GT3 992 Grey",                tagline: "Track-bred GT3 992, naturally aspirated flat-six.",  cat: "Coupe",       folder: "Porsche-GT3-992-Grey",                count: 12 },
   { name: "Porsche GTS Grey",                    tagline: "Balanced GTS spec, grey on black.",                  cat: "Coupe",       folder: "Porsche-GTS-Grey",                    count: 11 },
+  { name: "Porsche Macan Blue",                  tagline: "Vibrant blue Macan with a dark, comfortable cabin.", cat: "SUV",         folder: "Porsche/Porsche-Macan-Blue",          count: 10 },
+  { name: "Range Rover Sport Gloss Black",        tagline: "Gloss-black Range Rover Sport with a dark cabin.",  cat: "SUV",         folder: "Range-Rover/Range-Rover-Sport-Gloss-Black", count: 9 },
+  { name: "Range Rover Sport Satin Black",        tagline: "Satin-black Range Rover Sport with white leather.", cat: "SUV",         folder: "Range-Rover/Range-Rover-Sport-Satin-Black", count: 7 },
   { name: "Rolls-Royce Cullinan Black",          tagline: "Coachwork luxury, twin-turbo V12 in black.",         cat: "SUV",         folder: "Rolls-Royce-Cullinan-Black",          count: 16 },
+  { name: "Rolls-Royce Ghost White",             tagline: "White Ghost with a refined blue-accented cabin.",   cat: "Sedan",       folder: "Rolls-Royce/Rolls-Royce-Ghost-White", count: 19 },
 ];
 
 export const cars: InventoryItem[] = carsRaw.map((c) => {
