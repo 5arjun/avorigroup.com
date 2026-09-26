@@ -118,7 +118,7 @@ function CarsPage() {
         </div>
         <div className="container-luxe relative pt-6 pb-6 md:pt-24 md:pb-8">
           <div className="max-w-3xl">
-            <p className="eyebrow">Garage · 12 vehicles</p>
+            <p className="eyebrow">Garage · 42 vehicles</p>
             <h1 className="mt-4 text-5xl md:text-7xl">Cars</h1>
             <p className="mt-6 max-w-xl text-base text-muted-foreground md:text-lg">
               Marquee exotics and luxury daily-drivers, delivered to your hotel, residence,
