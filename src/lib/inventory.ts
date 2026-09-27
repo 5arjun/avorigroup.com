@@ -102,21 +102,23 @@ const yachtsRaw: {
   { name: "Warrior Flybridge",        folder: "Warrior-Flybridge",       length: "-",      images: 98, videoExts: ["mp4", "mov"] },
 ];
 
-export const yachts: InventoryItem[] = yachtsRaw.map((y) => {
-  const gallery = r2Yacht(y.folder, y.images, y.videoExts);
-  const cover = `${R2_YACHTS}/${y.folder}/${folderToSlug(y.folder)}-cover.webp`;
-  return {
-    id: slug(y.name),
-    name: y.name,
-    tagline: "",
-    cover,
-    gallery,
-    facts: [
-      ...(y.length !== "-" ? [{ label: "Length", value: y.length }] : []),
-      { label: "Experience", value: "Day & Night" },
-    ],
-  };
-});
+export const yachts: InventoryItem[] = [...yachtsRaw]
+  .sort((a, b) => (parseInt(b.length, 10) || 0) - (parseInt(a.length, 10) || 0))
+  .map((y) => {
+    const gallery = r2Yacht(y.folder, y.images, y.videoExts);
+    const cover = `${R2_YACHTS}/${y.folder}/${folderToSlug(y.folder)}-cover.webp`;
+    return {
+      id: slug(y.name),
+      name: y.name,
+      tagline: "",
+      cover,
+      gallery,
+      facts: [
+        ...(y.length !== "-" ? [{ label: "Length", value: y.length }] : []),
+        { label: "Experience", value: "Day & Night" },
+      ],
+    };
+  });
 
 // ─── CARS ─────────────────────────────────────────────────────────────────────
 const carsRaw: { name: string; tagline: string; cat: string; folder: string; count: number }[] = [
