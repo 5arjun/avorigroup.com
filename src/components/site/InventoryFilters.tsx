@@ -6,6 +6,7 @@ export type FilterGroup = {
   id: string;
   label: string;
   options: FilterOption[];
+  defaultValue?: string;
 };
 
 export function InventoryFilters({
@@ -26,8 +27,11 @@ export function InventoryFilters({
   totalCount: number;
 }) {
   const hasActive = useMemo(
-    () => query.trim().length > 0 || Object.values(values).some((v) => v && v !== "all"),
-    [query, values],
+    () => query.trim().length > 0 || groups.some((g) => {
+      const value = values[g.id];
+      return value && value !== (g.defaultValue ?? "all");
+    }),
+    [groups, query, values],
   );
 
   return (
@@ -71,7 +75,7 @@ export function InventoryFilters({
             type="button"
             onClick={() => {
               onQueryChange("");
-              groups.forEach((g) => onChange(g.id, "all"));
+              groups.forEach((g) => onChange(g.id, g.defaultValue ?? "all"));
             }}
             className="text-xs uppercase tracking-[0.22em] text-accent hover:underline"
           >

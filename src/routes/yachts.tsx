@@ -8,6 +8,9 @@ import type { InventoryItem } from "@/lib/inventory";
 import { abs, OG_IMAGES, BASE_URL } from "@/lib/seo";
 import heroYachtSunset from "@/assets/yacht-sunset-deck.jpg";
 
+const yachtLengthFt = (item: InventoryItem) =>
+  parseInt(item.facts.find((fact) => fact.label === "Length")?.value ?? "", 10) || 0;
+
 export const Route = createFileRoute("/yachts")({
   head: () => ({
     meta: [
@@ -54,13 +57,8 @@ export const Route = createFileRoute("/yachts")({
 
 function YachtsPage() {
   const [query, setQuery]   = useState("");
-  const [values, setValues] = useState<Record<string, string>>({ length: "all", guests: "all" });
+  const [values, setValues] = useState<Record<string, string>>({ length: "all", order: "desc" });
   const [selected, setSelected] = useState<InventoryItem | null>(null);
-
-  const getFact = (item: (typeof yachts)[number], label: string) =>
-    item.facts.find((f) => f.label === label)?.value ?? "";
-  const lengthFt  = (item: (typeof yachts)[number]) => parseInt(getFact(item, "Length"), 10) || 0;
-  const guestsNum = (item: (typeof yachts)[number]) => parseInt(getFact(item, "Guests"), 10) || 0;
 
   const groups: FilterGroup[] = [
     {
@@ -75,13 +73,12 @@ function YachtsPage() {
       ],
     },
     {
-      id: "guests",
-      label: "Guests",
+      id: "order",
+      label: "Sort by length",
+      defaultValue: "desc",
       options: [
-        { label: "Any size", value: "all"    },
-        { label: "Up to 10", value: "0-10"  },
-        { label: "11 \u2013 12",  value: "11-12" },
-        { label: "13+",      value: "13-999"},
+        { label: "Descending (longest first)", value: "desc" },
+        { label: "Ascending (shortest first)", value: "asc" },
       ],
     },
   ];
@@ -94,12 +91,19 @@ function YachtsPage() {
       return [min, max];
     };
     const lenRange = parseRange(values.length);
-    const gstRange = parseRange(values.guests);
-    return yachts.filter((y) => {
+    const matchingYachts = yachts.filter((y) => {
       if (q && !`${y.name} ${y.tagline}`.toLowerCase().includes(q)) return false;
-      if (lenRange && (lengthFt(y) < lenRange[0] || lengthFt(y) > lenRange[1])) return false;
-      if (gstRange && (guestsNum(y) < gstRange[0] || guestsNum(y) > gstRange[1])) return false;
+      if (lenRange && (yachtLengthFt(y) < lenRange[0] || yachtLengthFt(y) > lenRange[1])) return false;
       return true;
+    });
+
+    const direction = values.order === "asc" ? 1 : -1;
+    return matchingYachts.sort((a, b) => {
+      const aLength = yachtLengthFt(a);
+      const bLength = yachtLengthFt(b);
+      if (aLength === 0) return bLength === 0 ? 0 : 1;
+      if (bLength === 0) return -1;
+      return direction * (aLength - bLength);
     });
   }, [query, values]);
 
